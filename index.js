@@ -4,12 +4,16 @@ import Game from './game'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {Signal, keyboard} from 'bulb'
+import nanobus from 'nanobus'
 
 const CLOCK_PERIOD = 1000
 const UP = 38, DOWN = 40, LEFT = 37, RIGHT = 39
 
-const App = ({game}) => (
-  <h1 className="f-headline pa3 pa4-ns">{game.toString()}</h1>
+const App = ({bus, game}) => (
+  <div>
+    <h1 className="f-headline pa3 pa4-ns">{game.toString()}</h1>
+    <button onClick={() => bus.emit('hello')}>hello</button>
+  </div>
 )
 
 const root = document.getElementById('root')
@@ -47,11 +51,16 @@ const intentionSignal = keyboard
 
 const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
 
+const bus = nanobus()
+
+const uiSignal = Signal.fromEvent('*', bus)
+uiSignal.subscribe(a => console.log(a))
+
 const subscription = clockSignal
   .merge(intentionSignal)
   .stateMachine(transformer, {game: new Game(), intentions: []})
   .subscribe(game =>
-    ReactDOM.render(<App game={game} />, root)
+    ReactDOM.render(<App game={game} bus={bus} />, root)
   )
 
 if (module.hot) {

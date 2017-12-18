@@ -8,12 +8,12 @@ export default class Game {
       initial: 'a',
       final: 'e',
       transitions: [
-        'next: a > b > c > d > e'
+        'next: a > b > c > d > e > a'
       ],
       handlers: {
         'e': (_, fsm) => {
           console.log('done!')
-          fsm.reset()
+          // fsm.reset()
         }
       }
     })
