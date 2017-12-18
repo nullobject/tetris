@@ -1,23 +1,33 @@
-import 'tachyons'
 import './styles.scss'
+import 'tachyons'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import StateMachine from 'state-machine'
 import bulb from 'bulb'
 
 class Game {
   constructor() {
     this.time = 0
     this.intention = null
+    this.fsm = new StateMachine({
+      transitions: [
+        'next: a > b > c'
+      ],
+      handlers: {
+        'c': () => console.log('done!')
+      }
+    })
   }
 
   tick(intention) {
     this.time++
     this.intention = intention
+    this.fsm.do('next')
     return this
   }
 
   toString() {
-    return `Game (time: ${this.time}, intention: ${this.intention})`
+    return `Game (time: ${this.time}, intention: ${this.intention}, state: ${this.fsm.state})`
   }
 }
 
