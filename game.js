@@ -6,11 +6,15 @@ export default class Game {
     this.intention = null
     this.fsm = new StateMachine({
       initial: 'a',
+      final: 'e',
       transitions: [
         'next: a > b > c > d > e'
       ],
       handlers: {
-        'e': () => console.log('done!')
+        'e': (_, fsm) => {
+          console.log('done!')
+          fsm.reset()
+        }
       }
     })
   }
