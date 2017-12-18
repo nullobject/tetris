@@ -15,6 +15,10 @@ class Game {
     this.intention = intention
     return this
   }
+
+  toString() {
+    return `Game (time: ${this.time}, intention: ${this.intention})`
+  }
 }
 
 const CLOCK_PERIOD = 1000
@@ -41,7 +45,7 @@ const subscription = clockSignal()
   .merge(intentionSignal())
   .stateMachine(transformer, {game: new Game(), intentions: []})
   .subscribe(game =>
-    ReactDOM.render(<App time={game.time} />, root)
+    ReactDOM.render(<App time={game.toString()} />, root)
   )
 
 if (module.hot) {
