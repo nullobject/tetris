@@ -1,0 +1,24 @@
+{
+  "name": "parcel-test",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Josh Bassett <josh.bassett@gmail.com> (http://joshbassett.info)",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "parcel-bundler": "^1.2.0",
+    "tachyons": "^4.9.0"
+  },
+  "dependencies": {
+    "bulb": "^0.4.0",
+    "node-sass": "^4.7.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
+}
