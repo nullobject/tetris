@@ -1,28 +1,19 @@
-import StateMachine from 'state-machine'
+import nanostate from 'nanostate'
 
 export default class Game {
   constructor() {
     this.time = 0
-    this.intention = null
-    this.fsm = new StateMachine({
-      initial: 'a',
-      final: 'e',
-      transitions: [
-        'next: a > b > c > d > e > a'
-      ],
-      handlers: {
-        'e': (_, fsm) => {
-          console.log('done!')
-          // fsm.reset()
-        }
-      }
+    this.fsm = nanostate('a', {
+      a: {next: 'b'},
+      b: {next: 'c'},
+      c: {next: 'a'}
     })
   }
 
   tick(intention) {
     this.time++
     this.intention = intention
-    this.fsm.do('next')
+    this.fsm.emit('next')
     return this
   }
 

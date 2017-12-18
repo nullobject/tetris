@@ -53,12 +53,16 @@ const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
 
 const bus = nanobus()
 
+const game = new Game()
+
 const uiSignal = Signal.fromEvent('*', bus)
+
 uiSignal.subscribe(a => console.log(a))
 
 const subscription = clockSignal
   .merge(intentionSignal)
-  .stateMachine(transformer, {game: new Game(), intentions: []})
+  .stateMachine(transformer, {game, intentions: []})
+  .startWith(game)
   .subscribe(game =>
     ReactDOM.render(<App game={game} bus={bus} />, root)
   )
