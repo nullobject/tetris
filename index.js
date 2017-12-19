@@ -1,25 +1,36 @@
 import './styles.scss'
 import 'tachyons'
+import {prepend} from 'fkit'
 import Game from './game'
-import React from 'react'
-import ReactDOM from 'react-dom'
 import {Signal, keyboard} from 'bulb'
+import choo from 'choo'
+import html from 'choo/html'
 import nanobus from 'nanobus'
 import nanologger from 'nanologger'
 
 const CLOCK_PERIOD = 1000
 const UP = 38, DOWN = 40, LEFT = 37, RIGHT = 39
 
-const log = nanologger()
+const game = new Game()
 
-const App = ({bus, game}) => (
-  <div>
-    <h1 className="f-headline pa3 pa4-ns">{game.toString()}</h1>
-    <button className="f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer" onClick={() => bus.emit('hello')}>hello</button>
-  </div>
-)
+// window.initialState = {game}
 
-const root = document.getElementById('root')
+const app = choo({initialState: {game}})
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use(require('choo-devtools')())
+}
+
+const log = nanologger('game')
+
+const view = (state, emit) => {
+  return html`
+    <body class="sans-serif bg-hot-pink">
+      <h1 class="f-headline pa3 pa4-ns">${state.game.toString()}</h1>
+      <button class="f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer" onclick=${() => emit('tick')}>hello</button>
+    </body>
+  `
+}
 
 const transformer = (state, event, emit) => {
   if (event === 'tick') {
@@ -31,13 +42,15 @@ const transformer = (state, event, emit) => {
     emit.next(game)
 
     state = {...state, game}
-  } else {
+  } else if (event.startsWith('intention:')) {
     state.intentions.push(event)
   }
 
   return state
 }
 
+const busSignal = Signal.fromEvent('*', app.emitter)
+const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
 const intentionSignal = keyboard
   .keys(document)
   .stateMachine((_, keys, emit) => {
@@ -51,28 +64,23 @@ const intentionSignal = keyboard
       emit.next('move-right')
     }
   })
+  .map(prepend('intention:'))
 
-const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
+app.emitter.on('DOMContentLoaded', () => {
+  const subscription = busSignal
+    .merge(clockSignal, intentionSignal)
+    .stateMachine(transformer, {game, intentions: []})
+    .subscribe(game => {
+      app.state.game = game
+      app.emitter.emit(app.state.events.RENDER)
+    })
 
-const bus = nanobus()
+  if (module.hot) {
+    module.hot.dispose(() => {
+      subscription.unsubscribe()
+    })
+  }
+})
 
-const game = new Game()
-
-const uiSignal = Signal.fromEvent('*', bus)
-
-uiSignal.subscribe(a => log.info(a))
-
-const subscription = clockSignal
-  .merge(intentionSignal)
-  .stateMachine(transformer, {game, intentions: []})
-  .startWith(game)
-  .subscribe(game => {
-    log.info(game.toString())
-    ReactDOM.render(<App game={game} bus={bus} />, root)
-  })
-
-if (module.hot) {
-  module.hot.dispose(() => {
-    subscription.unsubscribe()
-  })
-}
+app.route('/', view)
+app.mount(document.body)
