@@ -13,6 +13,7 @@
     "sheetify": "^6.2.0"
   },
   "dependencies": {
+    "autoprefixer": "^7.2.3",
     "bulb": "^0.4.0",
     "choo": "^6.6.0",
     "choo-devtools": "^2.3.0",
@@ -20,7 +21,9 @@
     "nanobus": "^4.3.1",
     "nanologger": "^1.3.1",
     "nanostate": "^1.0.3",
-    "node-sass": "^4.7.2",
+    "postcss-color-function": "^4.0.1",
+    "postcss-modules": "^1.1.0",
+    "postcss-nesting": "^4.2.1",
     "tachyons": "^4.9.0"
   }
 }
