@@ -2,14 +2,16 @@ import 'tachyons'
 import Game from './game'
 import choo from 'choo'
 import html from 'choo/html'
-import nanobus from 'nanobus'
 import nanologger from 'nanologger'
 import styles from './styles.css'
 import {Signal, keyboard} from 'bulb'
-import {prepend} from 'fkit'
+import {elem, values} from 'fkit'
 
 const CLOCK_PERIOD = 1000
-const UP = 38, DOWN = 40, LEFT = 37, RIGHT = 39
+const UP = 38
+const DOWN = 40
+const LEFT = 37
+const RIGHT = 39
 
 const game = new Game()
 
@@ -42,7 +44,7 @@ function tetrionView (state, emit) {
 }
 
 function playfieldView (state, emit) {
-  const blocks = [{x: 0, y: 0, c: "red"}, {x: 1, y: 0, c: "green"}]
+  const blocks = [{x: 0, y: 0, c: 'red'}, {x: 1, y: 0, c: 'green'}]
   return html`
     <ul class="${styles.playfield}">
       ${blocks.map(block =>
@@ -62,7 +64,7 @@ const transformer = (state, event, emit) => {
     emit.next(game)
 
     state = {...state, game}
-  } else if (event.startsWith('intention:')) {
+  } else if (!elem(event, values(app.state.events))) {
     state.intentions.push(event)
   }
 
@@ -75,16 +77,15 @@ const intentionSignal = keyboard
   .keys(document)
   .stateMachine((_, keys, emit) => {
     if (keys.has(UP)) {
-      emit.next('rotate-right')
+      emit.next('rotateRight')
     } else if (keys.has(DOWN)) {
-      emit.next('soft-drop')
+      emit.next('softDrop')
     } else if (keys.has(LEFT)) {
-      emit.next('move-left')
+      emit.next('moveLeft')
     } else if (keys.has(RIGHT)) {
-      emit.next('move-right')
+      emit.next('moveRight')
     }
   })
-  .map(prepend('intention:'))
 
 app.emitter.on('DOMContentLoaded', () => {
   const subscription = busSignal
