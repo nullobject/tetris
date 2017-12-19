@@ -22,7 +22,7 @@ export default class Game {
       if (!this.tetrion[intention]) {
         throw new Error(`Unknown intention: ${intention}`)
       }
-      this.tetrion[intention].apply(this.tetrion)
+      this.tetrion[intention].call(this.tetrion)
     }
 
     return this

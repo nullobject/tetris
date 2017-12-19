@@ -1,3 +1,5 @@
+import Vector from './vector'
+
 /**
  * A `Tetrion` controls the game state according to the rules of Tetris.
  */
@@ -10,6 +12,7 @@ export default class Tetrion {
    */
   moveLeft () {
     console.log('moveLeft')
+    this.transform(Vector.left())
   }
 
   /**
@@ -17,6 +20,7 @@ export default class Tetrion {
    */
   moveRight () {
     console.log('moveRight')
+    this.transform(Vector.right())
   }
 
   /**
@@ -53,5 +57,12 @@ export default class Tetrion {
    * Moves the falling piece to the bottom of the playfield and immediately locks it.
    */
   hardDrop () {
+  }
+
+  /**
+   * Applies the given transform `t`.
+   */
+  transform (t) {
+    console.log('transforming...')
   }
 }
