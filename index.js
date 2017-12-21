@@ -4,7 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import log from './log'
 import nanobus from 'nanobus'
-import styles from './styles.css'
+import styles from './styles.scss'
 import {Signal, keyboard} from 'bulb'
 
 const CLOCK_PERIOD = 100
@@ -13,11 +13,11 @@ const DOWN = 40
 const LEFT = 37
 const RIGHT = 39
 const SPACE = 32
+const BLOCK_SIZE = 23
 
 const Block = ({block}) => {
-  const className = 'bg-' + block.color
-  const style = {bottom: block.y * 20, left: block.x * 20}
-  return <li className={className} style={style} />
+  const style = {bottom: block.y * BLOCK_SIZE, left: block.x * BLOCK_SIZE}
+  return <li className={styles[block.color]} style={style} />
 }
 
 const Tetromino = ({tetromino}) => (

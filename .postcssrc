@@ -1,8 +1,6 @@
 {
   "modules": true,
   "plugins": {
-    "autoprefixer": {},
-    "postcss-color-function": {},
-    "postcss-nesting": {}
+    "autoprefixer": {}
   }
 }

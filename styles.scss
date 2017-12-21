@@ -1,0 +1,50 @@
+$block_size:  23px;
+$block_inset: 3px;
+
+@mixin block($color) {
+  background-image: linear-gradient(to bottom left, lighten($color, 15%), darken($color, 15%));
+
+  border-top-color: lighten($color, 20%);
+  border-left-color: darken($color, 10%);
+  border-bottom-color: darken($color, 20%);
+  border-right-color: darken($color, 10%);
+}
+
+.cyan   { @include block(#00f0f0); }
+.blue   { @include block(#0000f0); }
+.orange { @include block(#f0a000); }
+.yellow { @include block(#f0f000); }
+.green  { @include block(#00f000); }
+.purple { @include block(#a000f0); }
+.red    { @include block(#f00000); }
+
+.tetrion {
+  overflow: hidden;
+  position: relative;
+  width: 230px;
+  height: 460px;
+
+  ul {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+
+    li {
+      position: absolute;
+      border-style: solid;
+      border-width: $block_inset;
+      width: $block_size;
+      height: $block_size;
+    }
+  }
+
+  .playfield {
+    background: black;
+  }
+
+  .fallingPiece {
+  }
+}
