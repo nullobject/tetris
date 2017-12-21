@@ -15,37 +15,60 @@ const RIGHT = 39
 const SPACE = 32
 const BLOCK_SIZE = 23
 
-const Block = ({block}) => {
-  const style = {bottom: block.y * BLOCK_SIZE, left: block.x * BLOCK_SIZE}
-  return <li className={styles[block.color]} style={style} />
+class Block extends React.PureComponent {
+  render () {
+    const {x, y, color} = this.props.block
+    const style = {bottom: y * BLOCK_SIZE, left: x * BLOCK_SIZE}
+    return <li className={styles[color]} style={style} />
+  }
 }
 
-const Tetromino = ({tetromino}) => (
-  <ul className={styles.fallingPiece}>
-    {tetromino.blocks.map(block => <Block key={block.id} block={block} />)}
-  </ul>
-)
+class Tetromino extends React.PureComponent {
+  render () {
+    const {blocks} = this.props.tetromino
+    return (
+      <ul className={styles.fallingPiece}>
+        {blocks.map(block => <Block key={block.id} block={block} />)}
+      </ul>
+    )
+  }
+}
 
-const Playfield = ({playfield}) => (
-  <ul className={styles.playfield}>
-    {playfield.blocks.map(block => <Block key={block.id} block={block} />)}
-  </ul>
-)
+class Playfield extends React.PureComponent {
+  render () {
+    const {blocks} = this.props.playfield
+    return (
+      <ul className={styles.playfield}>
+        {blocks.map(block => <Block key={block.id} block={block} />)}
+      </ul>
+    )
+  }
+}
 
-const Tetrion = ({tetrion}) => (
-  <div className={styles.tetrion}>
-    <Playfield playfield={tetrion.playfield} />
-    <Tetromino tetromino={tetrion.fallingPiece} />
-  </div>
-)
+class Tetrion extends React.PureComponent {
+  render () {
+    const {playfield, fallingPiece} = this.props.tetrion
+    return (
+      <div className={styles.tetrion}>
+        <Playfield playfield={playfield} />
+        <Tetromino tetromino={fallingPiece} />
+      </div>
+    )
+  }
+}
 
-const App = ({bus, game}) => (
-  <div>
-    <p>{game.toString()}</p>
-    <Tetrion tetrion={game.tetrion} />
-    <button className='f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('tick')}>hello</button>
-  </div>
-)
+class App extends React.PureComponent {
+  render () {
+    const {bus, game} = this.props
+    return (
+      <div>
+        <p>{game.toString()}</p>
+        <Tetrion tetrion={game.tetrion} />
+        <button className='f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('tick')}>hello</button>
+      </div>
+    )
+  }
+}
 
 const transformer = (state, event, emit) => {
   if (event === 'tick') {
