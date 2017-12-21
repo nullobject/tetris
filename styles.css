@@ -1,11 +1,10 @@
 .tetrion {
   overflow: hidden;
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 400px;
 
-  & .playfield {
-    background: color(black a(90%));
+  & ul {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -19,5 +18,12 @@
       width: 20px;
       height: 20px;
     }
+  }
+
+  & .playfield {
+    background: color(black a(90%));
+  }
+
+  & .fallingPiece {
   }
 }

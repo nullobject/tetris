@@ -7,11 +7,12 @@ import styles from './styles.css'
 import {Signal, keyboard} from 'bulb'
 import {elem, values} from 'fkit'
 
-const CLOCK_PERIOD = 1000
+const CLOCK_PERIOD = 100
 const UP = 38
 const DOWN = 40
 const LEFT = 37
 const RIGHT = 39
+const SPACE = 32
 
 const game = new Game()
 
@@ -26,29 +27,42 @@ if (process.env.NODE_ENV !== 'production') {
 const log = nanologger('game')
 
 function gameView (state, emit) {
+  const tetrion = state.game.tetrion
   return html`
     <body class="sans-serif bg-hot-pink">
-      <h1 class="f-headline pa3 pa4-ns">${state.game.toString()}</h1>
+      <p>${state.game.toString()}</p>
       <button class="f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer" onclick=${() => emit('tick')}>Pause</button>
-      ${tetrionView(state, emit)}
+      ${tetrionView(tetrion, emit)}
     </body>
   `
 }
 
-function tetrionView (state, emit) {
+function tetrionView (tetrion, emit) {
   return html`
     <div class="${styles.tetrion}">
-      ${playfieldView(state, emit)}
+      ${playfieldView(tetrion.playfield, emit)}
+      ${tetrominoView(tetrion.fallingPiece, emit)}
     </ul>
   `
 }
 
-function playfieldView (state, emit) {
-  const blocks = [{x: 0, y: 0, c: 'red'}, {x: 1, y: 0, c: 'green'}]
+function playfieldView (playfield, emit) {
+  const blocks = playfield.blocks
   return html`
     <ul class="${styles.playfield}">
       ${blocks.map(block =>
-        html`<li class="bg-${block.c}" style="bottom: 0px; left: ${block.x * 20}px;"></li>`
+        html`<li class="bg-${block.color}" style="bottom: ${block.y * 20}px; left: ${block.x * 20}px;"></li>`
+      )}
+    </ul>
+  `
+}
+
+function tetrominoView (tetromino, emit) {
+  const blocks = tetromino.blocks
+  return html`
+    <ul class="${styles.fallingPiece}">
+      ${blocks.map(block =>
+        html`<li class="bg-${block.color}" style="bottom: ${block.y * 20}px; left: ${block.x * 20}px;"></li>`
       )}
     </ul>
   `
@@ -79,11 +93,13 @@ const intentionSignal = keyboard
     if (keys.has(UP)) {
       emit.next('rotateRight')
     } else if (keys.has(DOWN)) {
-      emit.next('softDrop')
+      emit.next('moveDown')
     } else if (keys.has(LEFT)) {
       emit.next('moveLeft')
     } else if (keys.has(RIGHT)) {
       emit.next('moveRight')
+    } else if (keys.has(SPACE)) {
+      emit.next('lock')
     }
   })
 

@@ -1,34 +1,35 @@
 import Tetrion from './tetrion'
 import nanostate from 'nanostate'
+import {copy} from 'fkit'
 
 export default class Game {
   constructor () {
     this.time = 0
-    this.fsm = nanostate('a', {
-      a: {next: 'b'},
-      b: {next: 'c'},
-      c: {next: 'a'}
-    })
     this.tetrion = new Tetrion()
+
+    this.fsm = nanostate('spawning', {
+      spawning: {next: 'idling'},
+      idling: {next: 'locking'},
+      locking: {next: 'spawning'}
+    })
+
+    // this.fsm.on('next', () => {
+    //   if (this.fsm.state === 'locking') {
+    //     this.tetrion.lock()
+    //   }
+    // })
   }
 
   tick (intention) {
-    this.time++
-    this.intention = intention
-    this.fsm.emit('next')
+    // this.fsm.emit('next')
 
     // Dispatch the intention.
-    if (intention) {
-      if (!this.tetrion[intention]) {
-        throw new Error(`Unknown intention: ${intention}`)
-      }
-      this.tetrion[intention].call(this.tetrion)
-    }
+    const tetrion = intention ? this.tetrion[intention]() : this.tetrion
 
-    return this
+    return copy(this, {time: this.time + 1, tetrion})
   }
 
   toString () {
-    return `Game (time: ${this.time}, intention: ${this.intention}, state: ${this.fsm.state})`
+    return `Game (time: ${this.time}, state: ${this.fsm.state}, tetrion: ${this.tetrion})`
   }
 }
