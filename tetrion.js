@@ -1,6 +1,7 @@
 import Playfield from './playfield'
 import Tetromino from './tetromino'
 import Vector from './vector'
+import log from './log'
 import {copy} from 'fkit'
 
 /**
@@ -16,7 +17,7 @@ export default class Tetrion {
    * Moves the falling piece left.
    */
   moveLeft () {
-    console.log('moveLeft')
+    log.info('moveLeft')
     return this.transform(Vector.left())
   }
 
@@ -24,7 +25,7 @@ export default class Tetrion {
    * Moves the falling piece right.
    */
   moveRight () {
-    console.log('moveRight')
+    log.info('moveRight')
     return this.transform(Vector.right())
   }
 
@@ -32,7 +33,7 @@ export default class Tetrion {
    * Moves the falling piece down.
    */
   moveDown () {
-    console.log('moveDown')
+    log.info('moveDown')
     return this.transform(Vector.down())
   }
 
@@ -40,7 +41,7 @@ export default class Tetrion {
    * Rotates the falling piece left.
    */
   rotateLeft () {
-    console.log('rotateLeft')
+    log.info('rotateLeft')
     return this.transform(Vector.rotateLeft())
   }
 
@@ -48,7 +49,7 @@ export default class Tetrion {
    * Rotates the falling piece right.
    */
   rotateRight () {
-    console.log('rotateRight')
+    log.info('rotateRight')
     return this.transform(Vector.rotateRight())
   }
 
@@ -75,7 +76,7 @@ export default class Tetrion {
    * Locks the falling piece into the playfield and clears any completed rows.
    */
   lock () {
-    console.log('lock')
+    log.info('lock')
     return copy(this, {
       playfield: this.playfield.lock(this.fallingPiece),
       fallingPiece: new Tetromino('T')
@@ -86,7 +87,7 @@ export default class Tetrion {
    * Applies the given transform to the falling piece.
    */
   transform (vector) {
-    console.log(`transform: ${vector}`)
+    log.info(`transform: ${vector}`)
 
     // Transform the falling piece.
     const transformedFallingPiece = this.fallingPiece.transform(vector)

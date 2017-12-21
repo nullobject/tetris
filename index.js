@@ -1,11 +1,11 @@
 import 'tachyons'
 import Game from './game'
-import choo from 'choo'
-import html from 'choo/html'
-import nanologger from 'nanologger'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import log from './log'
+import nanobus from 'nanobus'
 import styles from './styles.css'
 import {Signal, keyboard} from 'bulb'
-import {elem, values} from 'fkit'
 
 const CLOCK_PERIOD = 100
 const UP = 38
@@ -14,59 +14,38 @@ const LEFT = 37
 const RIGHT = 39
 const SPACE = 32
 
-const game = new Game()
-
-window.initialState = {game}
-
-const app = choo()
-
-if (process.env.NODE_ENV !== 'production') {
-  app.use(require('choo-devtools')())
+const Block = ({block}) => {
+  const className = 'bg-' + block.color
+  const style = {bottom: block.y * 20, left: block.x * 20}
+  return <li className={className} style={style} />
 }
 
-const log = nanologger('game')
+const Tetromino = ({tetromino}) => (
+  <ul className={styles.fallingPiece}>
+    {tetromino.blocks.map(block => <Block key={block.id} block={block} />)}
+  </ul>
+)
 
-function gameView (state, emit) {
-  const tetrion = state.game.tetrion
-  return html`
-    <body class="sans-serif bg-hot-pink">
-      <p>${state.game.toString()}</p>
-      <button class="f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer" onclick=${() => emit('tick')}>Pause</button>
-      ${tetrionView(tetrion, emit)}
-    </body>
-  `
-}
+const Playfield = ({playfield}) => (
+  <ul className={styles.playfield}>
+    {playfield.blocks.map(block => <Block key={block.id} block={block} />)}
+  </ul>
+)
 
-function tetrionView (tetrion, emit) {
-  return html`
-    <div class="${styles.tetrion}">
-      ${playfieldView(tetrion.playfield, emit)}
-      ${tetrominoView(tetrion.fallingPiece, emit)}
-    </ul>
-  `
-}
+const Tetrion = ({tetrion}) => (
+  <div className={styles.tetrion}>
+    <Playfield playfield={tetrion.playfield} />
+    <Tetromino tetromino={tetrion.fallingPiece} />
+  </div>
+)
 
-function playfieldView (playfield, emit) {
-  const blocks = playfield.blocks
-  return html`
-    <ul class="${styles.playfield}">
-      ${blocks.map(block =>
-        html`<li class="bg-${block.color}" style="bottom: ${block.y * 20}px; left: ${block.x * 20}px;"></li>`
-      )}
-    </ul>
-  `
-}
-
-function tetrominoView (tetromino, emit) {
-  const blocks = tetromino.blocks
-  return html`
-    <ul class="${styles.fallingPiece}">
-      ${blocks.map(block =>
-        html`<li class="bg-${block.color}" style="bottom: ${block.y * 20}px; left: ${block.x * 20}px;"></li>`
-      )}
-    </ul>
-  `
-}
+const App = ({bus, game}) => (
+  <div>
+    <p>{game.toString()}</p>
+    <Tetrion tetrion={game.tetrion} />
+    <button className='f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('tick')}>hello</button>
+  </div>
+)
 
 const transformer = (state, event, emit) => {
   if (event === 'tick') {
@@ -78,15 +57,13 @@ const transformer = (state, event, emit) => {
     emit.next(game)
 
     state = {...state, game}
-  } else if (!elem(event, values(app.state.events))) {
+  } else {
     state.intentions.push(event)
   }
 
   return state
 }
 
-const busSignal = Signal.fromEvent('*', app.emitter)
-const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
 const intentionSignal = keyboard
   .keys(document)
   .stateMachine((_, keys, emit) => {
@@ -103,21 +80,21 @@ const intentionSignal = keyboard
     }
   })
 
-app.emitter.on('DOMContentLoaded', () => {
-  const subscription = busSignal
-    .merge(clockSignal, intentionSignal)
-    .stateMachine(transformer, {game, intentions: []})
-    .subscribe(game => {
-      app.state.game = game
-      app.emitter.emit(app.state.events.RENDER)
-    })
+const bus = nanobus()
+const busSignal = Signal.fromEvent('*', bus)
+const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
+const initialState = {game: new Game(), intentions: []}
 
-  if (module.hot) {
-    module.hot.dispose(() => {
-      subscription.unsubscribe()
-    })
-  }
-})
+const subscription = busSignal
+  .merge(clockSignal, intentionSignal)
+  .stateMachine(transformer, initialState)
+  .subscribe(game => {
+    ReactDOM.render(<App game={game} bus={bus} />, document.getElementById('root'))
+  })
 
-app.route('/', gameView)
-app.mount(document.body)
+if (module.hot) {
+  module.hot.dispose(() => {
+    log.info('Unsubscribing...')
+    subscription.unsubscribe()
+  })
+}
