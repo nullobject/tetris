@@ -10,7 +10,7 @@ import {copy} from 'fkit'
 export default class Tetrion {
   constructor () {
     this.playfield = new Playfield()
-    this.fallingPiece = new Tetromino('T')
+    this.fallingPiece = new Tetromino('I')
   }
 
   /**

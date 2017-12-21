@@ -37,7 +37,7 @@ export default class Playfield {
    */
   collide (tetromino) {
     const collideBlock = b => any(a => a.x === b.x && a.y === b.y, this.blocks)
-    const isOutside = b => b.x < 0 || b.x >= WIDTH || b.y < 0 || b.y >= HEIGHT
+    const isOutside = b => b.x < 0 || b.x >= WIDTH || b.y < 0 || b.y >= HEIGHT + 2
     return any(whereAny([collideBlock, isOutside]), tetromino.blocks)
   }
 
