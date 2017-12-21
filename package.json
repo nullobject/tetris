@@ -26,5 +26,10 @@
     "postcss-modules": "^1.1.0",
     "postcss-nesting": "^4.2.1",
     "tachyons": "^4.9.0"
+  },
+  "standard": {
+    "ignore": [
+      "srs.js"
+    ]
   }
 }
