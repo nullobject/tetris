@@ -1,7 +1,44 @@
-import {any, copy, union, whereAny} from 'fkit'
+import {any, compose, copy, dec, difference, fold, groupBy, sortBy, union, update, whereAny} from 'fkit'
 
 const WIDTH = 10
 const HEIGHT = 20
+
+/**
+ * Sorts and groups blocks by row.
+ */
+const groupBlocksByRow = compose(
+  groupBy((a, b) => a.y === b.y),
+  sortBy((a, b) => a.y - b.y)
+)
+
+/**
+ * Returns true if the given row is complete, false otherwise.
+ */
+const isComplete = row => row.length === WIDTH
+
+/**
+ * Removes completed rows from the playfield.
+ *
+ * Rows above cleared rows will be moved down.
+ */
+function clearRows (blocks) {
+  const rows = groupBlocksByRow(blocks)
+
+  fold((memo, row) => {
+    if (isComplete(row)) {
+      blocks = difference(blocks, row)
+      memo++
+    } else if (memo > 0) {
+      blocks = difference(blocks, row)
+      const newRow = row.map(update('y', dec))
+      blocks = union(blocks, newRow)
+    }
+
+    return memo
+  }, 0, rows)
+
+  return blocks
+}
 
 /**
  * The playfield is the grid in which the tetrominoes fall.
@@ -22,7 +59,10 @@ export default class Playfield {
     }
 
     // Add the tetromino's blocks to the playfield.
-    const blocks = union(this.blocks, tetromino.blocks)
+    let blocks = union(this.blocks, tetromino.blocks)
+
+    // Clear completed rows.
+    blocks = clearRows(blocks)
 
     return copy(this, {blocks})
   }
