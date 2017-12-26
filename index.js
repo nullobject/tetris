@@ -6,6 +6,7 @@ import log from './log'
 import nanobus from 'nanobus'
 import styles from './styles.scss'
 import {Signal, keyboard} from 'bulb'
+import {elem} from 'fkit'
 
 const CLOCK_PERIOD = 100
 const UP = 38
@@ -14,6 +15,7 @@ const LEFT = 37
 const RIGHT = 39
 const SPACE = 32
 const BLOCK_SIZE = 23
+const SYSTEM_EVENTS = ['tick', 'pause']
 
 class Block extends React.PureComponent {
   render () {
@@ -60,18 +62,19 @@ class Tetrion extends React.PureComponent {
 class App extends React.PureComponent {
   render () {
     const {bus, game} = this.props
+    const text = game.isPaused ? 'Resume' : 'Pause'
     return (
       <div>
         <p>{game.toString()}</p>
         <Tetrion tetrion={game.tetrion} />
-        <button className='f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('tick')}>hello</button>
+        <button className='f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('pause')}>{text}</button>
       </div>
     )
   }
 }
 
 const transformer = (state, event, emit) => {
-  if (event === 'tick') {
+  if (event === 'tick' && !state.game.isPaused) {
     // Get the next intention.
     const intention = state.intentions.shift()
     const game = state.game.tick(intention)
@@ -80,7 +83,10 @@ const transformer = (state, event, emit) => {
     emit.next(game)
 
     state = {...state, game}
-  } else {
+  } else if (event === 'pause') {
+    const game = state.game.pause()
+    state = {...state, game}
+  } else if (!elem(event, SYSTEM_EVENTS)) {
     state.intentions.push(event)
   }
 
@@ -93,7 +99,7 @@ const intentionSignal = keyboard
     if (keys.has(UP)) {
       emit.next('rotateRight')
     } else if (keys.has(DOWN)) {
-      emit.next('moveDown')
+      emit.next('softDrop')
     } else if (keys.has(LEFT)) {
       emit.next('moveLeft')
     } else if (keys.has(RIGHT)) {

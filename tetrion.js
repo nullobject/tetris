@@ -57,6 +57,8 @@ export default class Tetrion {
    * Moves the falling piece down.
    */
   softDrop () {
+    log.info('softDrop')
+    return this.transform(Vector.down())
   }
 
   /**
