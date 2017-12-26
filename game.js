@@ -71,9 +71,14 @@ export default class Game {
         state = 'locking'
         lastLock = time
       }
-    } else if (this.isIdle && intention) {
+    } else if ((this.isIdle || this.isLocking) && intention) {
       // Dispatch the intention.
       tetrion = this.tetrion[intention]()
+
+      // Abort locking if the falling piece can move down under gravity.
+      if (tetrion.canMoveDown) {
+        state = 'idle'
+      }
     }
 
     return copy(this, {time, state, tetrion, lastSpawn, lastLock, lastGravity})

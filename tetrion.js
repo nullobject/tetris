@@ -15,6 +15,13 @@ export default class Tetrion {
   }
 
   /**
+   * Returns true if the falling piece can move down, false otherwise.
+   */
+  get canMoveDown () {
+    return !this.playfield.collide(this.fallingPiece.transform(Vector.down))
+  }
+
+  /**
    * Spawns a new falling piece.
    *
    * TODO: Choose the next piece from a bag.
