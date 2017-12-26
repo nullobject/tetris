@@ -84,18 +84,24 @@ export default class Tetrion {
   }
 
   /**
-   * Applies the given transform to the falling piece.
+   * Applies the given transform `t` to the falling piece.
    */
-  transform (vector) {
-    log.info(`transform: ${vector}`)
+  transform (t) {
+    log.info(`transform: ${t}`)
 
-    // Transform the falling piece.
-    const transformedFallingPiece = this.fallingPiece.transform(vector)
+    // Try to find a wall kick transform that can be applied without colliding
+    // with the playfield.
+    const u = this.fallingPiece.calculateWallKickTransforms(t).find(u => {
+      const fallingPiece = this.fallingPiece.transform(u)
+      return !this.playfield.collide(fallingPiece)
+    })
 
-    // If it doesn't collide with anything, then set it as the new falling piece.
-    const fallingPiece = this.playfield.collide(transformedFallingPiece) ? this.fallingPiece : transformedFallingPiece
-
-    return copy(this, {fallingPiece})
+    if (u) {
+      const fallingPiece = this.fallingPiece.transform(u)
+      return copy(this, {fallingPiece})
+    } else {
+      return this
+    }
   }
 
   toString () {

@@ -1,4 +1,4 @@
-import {any, compose, copy, dec, difference, fold, groupBy, sortBy, union, update, whereAny} from 'fkit'
+import {compose, copy, dec, difference, fold, groupBy, sortBy, union, update, whereAny} from 'fkit'
 
 const WIDTH = 10
 const HEIGHT = 20
@@ -76,9 +76,9 @@ export default class Playfield {
    * @returns A boolean value.
    */
   collide (tetromino) {
-    const collideBlock = b => any(a => a.x === b.x && a.y === b.y, this.blocks)
+    const collideBlock = b => this.blocks.some(a => a.x === b.x && a.y === b.y)
     const isOutside = b => b.x < 0 || b.x >= WIDTH || b.y < 0 || b.y >= HEIGHT + 2
-    return any(whereAny([collideBlock, isOutside]), tetromino.blocks)
+    return tetromino.blocks.some(whereAny([collideBlock, isOutside]))
   }
 
   toString () {
