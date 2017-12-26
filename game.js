@@ -79,7 +79,7 @@ export default class Game {
         // Start spawning if there is no falling piece.
         state = 'spawning'
         lastSpawn = time
-      } else if (tetrion.canMoveDown) {
+      } else if (this.isLocking && tetrion.canMoveDown) {
         // Abort locking if the falling piece can move down under gravity.
         state = 'idle'
         lastGravity = time
