@@ -3,7 +3,21 @@ import Playfield from './playfield'
 import Tetromino from './tetromino'
 import Vector from './vector'
 import log from './log'
-import {copy} from 'fkit'
+import {copy, whereAny} from 'fkit'
+
+/**
+ * Collides the given tetromino with the playfield.
+ *
+ * Returns true if the given tetromino collides with any other blocks in the
+ * playfield or is outside the bounds of the playfield, false otherwise.
+ *
+ * @returns A boolean value.
+ */
+function collide (tetromino, playfield) {
+  const collideBlock = b => playfield.blocks.some(a => a.x === b.x && a.y === b.y)
+  const isOutside = b => b.x < 0 || b.x >= Playfield.WIDTH || b.y < 0 || b.y >= Playfield.HEIGHT + 2
+  return tetromino.blocks.some(whereAny([collideBlock, isOutside]))
+}
 
 /**
  * A `Tetrion` controls the game state according to the rules of Tetris.
@@ -19,7 +33,7 @@ export default class Tetrion {
    * Returns true if the falling piece can move down, false otherwise.
    */
   get canMoveDown () {
-    return !this.playfield.collide(this.fallingPiece.transform(Vector.down))
+    return !collide(this.fallingPiece.transform(Vector.down), this.playfield)
   }
 
   /**
@@ -98,6 +112,11 @@ export default class Tetrion {
    */
   lock () {
     log.info('lock')
+
+    if (collide(this.fallingPiece, this.playfield)) {
+      throw new Error('Cannot lock a colliding tetromino')
+    }
+
     return copy(this, {
       playfield: this.playfield.lock(this.fallingPiece),
       fallingPiece: null
@@ -114,7 +133,7 @@ export default class Tetrion {
     // with the playfield.
     const u = this.fallingPiece.calculateWallKickTransforms(t).find(u => {
       const fallingPiece = this.fallingPiece.transform(u)
-      return !this.playfield.collide(fallingPiece)
+      return !collide(fallingPiece, this.playfield)
     })
 
     if (u) {

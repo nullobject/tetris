@@ -1,7 +1,4 @@
-import {compose, copy, dec, difference, fold, groupBy, sortBy, union, update, whereAny} from 'fkit'
-
-const WIDTH = 10
-const HEIGHT = 20
+import {compose, copy, dec, difference, fold, groupBy, sortBy, union, update} from 'fkit'
 
 /**
  * Sorts and groups blocks by row.
@@ -14,7 +11,7 @@ const groupBlocksByRow = compose(
 /**
  * Returns true if the given row is complete, false otherwise.
  */
-const isComplete = row => row.length === WIDTH
+const isComplete = row => row.length === Playfield.WIDTH
 
 /**
  * Removes completed rows from the playfield.
@@ -43,7 +40,7 @@ function clearRows (blocks) {
 /**
  * The playfield is the grid in which the tetrominoes fall.
  */
-export default class Playfield {
+class Playfield {
   constructor () {
     this.blocks = []
   }
@@ -54,10 +51,6 @@ export default class Playfield {
    * @returns A new playfield.
    */
   lock (tetromino) {
-    if (this.collide(tetromino)) {
-      throw new Error('Cannot lock a colliding tetromino')
-    }
-
     // Add the tetromino's blocks to the playfield.
     let blocks = union(this.blocks, tetromino.blocks)
 
@@ -67,21 +60,12 @@ export default class Playfield {
     return copy(this, {blocks})
   }
 
-  /**
-   * Collides the given tetromino with the playfield.
-   *
-   * Returns true if the given tetromino collides with any other blocks in the
-   * playfield or is outside the bounds of the playfield, false otherwise.
-   *
-   * @returns A boolean value.
-   */
-  collide (tetromino) {
-    const collideBlock = b => this.blocks.some(a => a.x === b.x && a.y === b.y)
-    const isOutside = b => b.x < 0 || b.x >= WIDTH || b.y < 0 || b.y >= HEIGHT + 2
-    return tetromino.blocks.some(whereAny([collideBlock, isOutside]))
-  }
-
   toString () {
     return `Playfield (blocks: [${this.blocks}])`
   }
 }
+
+Playfield.WIDTH = 10
+Playfield.HEIGHT = 20
+
+export default Playfield
