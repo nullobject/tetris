@@ -2,6 +2,7 @@ import 'tachyons'
 import Game from './game'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import classnames from 'classnames'
 import log from './log'
 import nanobus from 'nanobus'
 import styles from './styles.scss'
@@ -33,8 +34,9 @@ class Block extends React.PureComponent {
 class Tetromino extends React.PureComponent {
   render () {
     const {blocks} = this.props.tetromino
+    const className = classnames(styles.fallingPiece, {[styles.ghostPiece]: this.props.ghost})
     return (
-      <ul className={styles.fallingPiece}>
+      <ul className={className}>
         {blocks.map(block => <Block key={block.id} block={block} />)}
       </ul>
     )
@@ -54,11 +56,12 @@ class Playfield extends React.PureComponent {
 
 class Tetrion extends React.PureComponent {
   render () {
-    const {playfield, fallingPiece} = this.props.tetrion
+    const {playfield, fallingPiece, ghostPiece} = this.props.tetrion
     return (
       <div className={styles.tetrion}>
         <Playfield playfield={playfield} />
         {fallingPiece ? <Tetromino tetromino={fallingPiece} /> : null}
+        {ghostPiece ? <Tetromino ghost tetromino={ghostPiece} /> : null}
       </div>
     )
   }

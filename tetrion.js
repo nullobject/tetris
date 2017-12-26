@@ -36,8 +36,9 @@ function drop (tetromino, playfield) {
 export default class Tetrion {
   constructor () {
     this.bag = new Bag()
-    this.playfield = new Playfield()
     this.fallingPiece = null
+    this.ghostPiece = null
+    this.playfield = new Playfield()
   }
 
   /**
@@ -54,7 +55,8 @@ export default class Tetrion {
     log.info('spawn')
     const {bag, shape} = this.bag.shift()
     const fallingPiece = new Tetromino(shape)
-    return copy(this, {bag, fallingPiece})
+    const ghostPiece = drop(fallingPiece, this.playfield)
+    return copy(this, {bag, fallingPiece, ghostPiece})
   }
 
   /**
@@ -109,6 +111,7 @@ export default class Tetrion {
    * Moves the falling piece to the bottom of the playfield.
    */
   firmDrop () {
+    log.info('firmDrop')
     const fallingPiece = drop(this.fallingPiece, this.playfield)
     return copy(this, {fallingPiece})
   }
@@ -118,25 +121,25 @@ export default class Tetrion {
    * locks it.
    */
   hardDrop () {
+    log.info('hardDrop')
     const fallingPiece = drop(this.fallingPiece, this.playfield)
-    return this.lock(fallingPiece)
+    const playfield = this.playfield.lock(fallingPiece)
+    return copy(this, {fallingPiece: null, playfield})
   }
 
   /**
    * Locks the given tetromino into the playfield and clears any completed
    * rows.
    */
-  lock (tetromino = this.fallingPiece) {
+  lock () {
     log.info('lock')
 
-    if (collide(tetromino, this.playfield)) {
-      throw new Error('Cannot lock a colliding tetromino')
+    if (collide(this.fallingPiece, this.playfield)) {
+      throw new Error('Cannot lock falling piece')
     }
 
-    return copy(this, {
-      playfield: this.playfield.lock(tetromino),
-      fallingPiece: null
-    })
+    const playfield = this.playfield.lock(this.fallingPiece)
+    return copy(this, {fallingPiece: null, playfield})
   }
 
   /**
@@ -154,7 +157,8 @@ export default class Tetrion {
 
     if (u) {
       const fallingPiece = this.fallingPiece.transform(u)
-      return copy(this, {fallingPiece})
+      const ghostPiece = drop(fallingPiece, this.playfield)
+      return copy(this, {fallingPiece, ghostPiece})
     } else {
       return this
     }
