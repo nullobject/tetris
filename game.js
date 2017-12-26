@@ -75,9 +75,14 @@ export default class Game {
       // Dispatch the intention.
       tetrion = this.tetrion[intention]()
 
-      // Abort locking if the falling piece can move down under gravity.
-      if (tetrion.canMoveDown) {
+      if (!tetrion.fallingPiece) {
+        // Start spawning if there is no falling piece.
+        state = 'spawning'
+        lastSpawn = time
+      } else if (tetrion.canMoveDown) {
+        // Abort locking if the falling piece can move down under gravity.
         state = 'idle'
+        lastGravity = time
       }
     }
 

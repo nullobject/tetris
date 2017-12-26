@@ -19,6 +19,14 @@ function collide (tetromino, playfield) {
   return tetromino.blocks.some(whereAny([collideBlock, isOutside]))
 }
 
+function drop (tetromino, playfield) {
+  const t = Vector.down
+  while (!collide(tetromino.transform(t), playfield)) {
+    tetromino = tetromino.transform(t)
+  }
+  return tetromino
+}
+
 /**
  * A `Tetrion` controls the game state according to the rules of Tetris.
  */
@@ -98,6 +106,8 @@ export default class Tetrion {
    * Moves the falling piece to the bottom of the playfield.
    */
   firmDrop () {
+    const fallingPiece = drop(this.fallingPiece, this.playfield)
+    return copy(this, {fallingPiece})
   }
 
   /**
@@ -105,20 +115,23 @@ export default class Tetrion {
    * locks it.
    */
   hardDrop () {
+    const fallingPiece = drop(this.fallingPiece, this.playfield)
+    return this.lock(fallingPiece)
   }
 
   /**
-   * Locks the falling piece into the playfield and clears any completed rows.
+   * Locks the given tetromino into the playfield and clears any completed
+   * rows.
    */
-  lock () {
+  lock (tetromino = this.fallingPiece) {
     log.info('lock')
 
-    if (collide(this.fallingPiece, this.playfield)) {
+    if (collide(tetromino, this.playfield)) {
       throw new Error('Cannot lock a colliding tetromino')
     }
 
     return copy(this, {
-      playfield: this.playfield.lock(this.fallingPiece),
+      playfield: this.playfield.lock(tetromino),
       fallingPiece: null
     })
   }

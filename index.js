@@ -10,13 +10,14 @@ import {elem} from 'fkit'
 
 const CLOCK_PERIOD = 10
 
-const X = 88
-const Z = 90
+const ENTER = 13
 const SPACE = 32
 const UP = 38
 const DOWN = 40
 const LEFT = 37
 const RIGHT = 39
+const X = 88
+const Z = 90
 
 const BLOCK_SIZE = 23
 const SYSTEM_EVENTS = ['tick', 'pause']
@@ -113,8 +114,10 @@ const intentionSignal = keyboard
       emit.next('moveLeft')
     } else if (keys.has(RIGHT)) {
       emit.next('moveRight')
+    } else if (keys.has(ENTER)) {
+      emit.next('firmDrop')
     } else if (keys.has(SPACE)) {
-      emit.next('lock')
+      emit.next('hardDrop')
     }
   })
 
