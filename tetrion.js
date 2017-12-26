@@ -19,6 +19,9 @@ function collide (tetromino, playfield) {
   return tetromino.blocks.some(whereAny([collideBlock, isOutside]))
 }
 
+/**
+ * Drops the given tetromino to the bottom of the playfield.
+ */
 function drop (tetromino, playfield) {
   const t = Vector.down
   while (!collide(tetromino.transform(t), playfield)) {
@@ -28,7 +31,7 @@ function drop (tetromino, playfield) {
 }
 
 /**
- * A `Tetrion` controls the game state according to the rules of Tetris.
+ * A tetrion controls the game state according to the rules of Tetris.
  */
 export default class Tetrion {
   constructor () {

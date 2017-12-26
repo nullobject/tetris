@@ -12,9 +12,9 @@ export default class Game {
     this.state = 'spawning'
     this.tetrion = new Tetrion()
     this.progress = new Progress()
-    this.lastSpawn = 0
-    this.lastLock = 0
-    this.lastGravity = 0
+    this.spawnTimer = 0
+    this.lockTimer = 0
+    this.gravityTimer = 0
   }
 
   /**
@@ -38,6 +38,9 @@ export default class Game {
     return this.state === 'locking'
   }
 
+  /**
+   * Returns the gravity delay in milliseconds.
+   */
   get gravityDelay () {
     return Math.round((-333.54 * Math.log(this.progress.level)) + 999.98)
   }
@@ -49,27 +52,27 @@ export default class Game {
     const time = this.time + 1
     let state = this.state
     let tetrion = this.tetrion
-    let lastSpawn = this.lastSpawn
-    let lastLock = this.lastLock
-    let lastGravity = this.lastGravity
+    let spawnTimer = this.spawnTimer
+    let lockTimer = this.lockTimer
+    let gravityTimer = this.gravityTimer
 
-    if (this.isSpawning && (time - this.lastSpawn) * this.clockPeriod >= SPAWN_DELAY) {
+    if (this.isSpawning && (time - this.spawnTimer) * this.clockPeriod >= SPAWN_DELAY) {
       tetrion = this.tetrion.spawn()
       state = 'idle'
-      lastGravity = time
-    } else if (this.isLocking && (time - this.lastLock) * this.clockPeriod >= LOCK_DELAY) {
+      gravityTimer = time
+    } else if (this.isLocking && (time - this.lockTimer) * this.clockPeriod >= LOCK_DELAY) {
       tetrion = this.tetrion.lock()
       state = 'spawning'
-      lastSpawn = time
-    } else if (this.isIdle && (time - this.lastGravity) * this.clockPeriod >= this.gravityDelay) {
+      spawnTimer = time
+    } else if (this.isIdle && (time - this.gravityTimer) * this.clockPeriod >= this.gravityDelay) {
       // Apply gravity.
       tetrion = this.tetrion.moveDown()
-      lastGravity = time
+      gravityTimer = time
 
       // Moving down failed, start locking.
       if (tetrion === this.tetrion) {
         state = 'locking'
-        lastLock = time
+        lockTimer = time
       }
     } else if ((this.isIdle || this.isLocking) && intention) {
       // Dispatch the intention.
@@ -78,15 +81,15 @@ export default class Game {
       if (!tetrion.fallingPiece) {
         // Start spawning if there is no falling piece.
         state = 'spawning'
-        lastSpawn = time
+        spawnTimer = time
       } else if (this.isLocking && tetrion.canMoveDown) {
         // Abort locking if the falling piece can move down under gravity.
         state = 'idle'
-        lastGravity = time
+        gravityTimer = time
       }
     }
 
-    return copy(this, {time, state, tetrion, lastSpawn, lastLock, lastGravity})
+    return copy(this, {time, state, tetrion, spawnTimer, lockTimer, gravityTimer})
   }
 
   toString () {
