@@ -9,11 +9,15 @@ import {Signal, keyboard} from 'bulb'
 import {elem} from 'fkit'
 
 const CLOCK_PERIOD = 10
+
+const X = 88
+const Z = 90
+const SPACE = 32
 const UP = 38
 const DOWN = 40
 const LEFT = 37
 const RIGHT = 39
-const SPACE = 32
+
 const BLOCK_SIZE = 23
 const SYSTEM_EVENTS = ['tick', 'pause']
 
@@ -97,7 +101,11 @@ const transformer = (state, event, emit) => {
 const intentionSignal = keyboard
   .keys(document)
   .stateMachine((_, keys, emit) => {
-    if (keys.has(UP)) {
+    if (keys.has(Z)) {
+      emit.next('rotateLeft')
+    } else if (keys.has(X)) {
+      emit.next('rotateRight')
+    } else if (keys.has(UP)) {
       emit.next('rotateRight')
     } else if (keys.has(DOWN)) {
       emit.next('softDrop')
