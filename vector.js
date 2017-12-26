@@ -3,13 +3,13 @@
  */
 export default class Vector {
   // Pre-canned vectors.
-  static zero () { return new Vector(0, 0, 0) }
-  static up () { return new Vector(0, 1, 0) }
-  static down () { return new Vector(0, -1, 0) }
-  static left () { return new Vector(-1, 0, 0) }
-  static right () { return new Vector(1, 0, 0) }
-  static rotateLeft () { return new Vector(0, 0, -1) }
-  static rotateRight () { return new Vector(0, 0, 1) }
+  static get zero () { return new Vector(0, 0, 0) }
+  static get up () { return new Vector(0, 1, 0) }
+  static get down () { return new Vector(0, -1, 0) }
+  static get left () { return new Vector(-1, 0, 0) }
+  static get right () { return new Vector(1, 0, 0) }
+  static get rotateLeft () { return new Vector(0, 0, -1) }
+  static get rotateRight () { return new Vector(0, 0, 1) }
 
   constructor (x = 0, y = 0, rotation = 0) {
     this.x = x

@@ -30,7 +30,7 @@ export default class Tetrion {
    */
   moveLeft () {
     log.info('moveLeft')
-    return this.transform(Vector.left())
+    return this.transform(Vector.left)
   }
 
   /**
@@ -38,7 +38,7 @@ export default class Tetrion {
    */
   moveRight () {
     log.info('moveRight')
-    return this.transform(Vector.right())
+    return this.transform(Vector.right)
   }
 
   /**
@@ -46,7 +46,7 @@ export default class Tetrion {
    */
   moveDown () {
     log.info('moveDown')
-    return this.transform(Vector.down())
+    return this.transform(Vector.down)
   }
 
   /**
@@ -54,7 +54,7 @@ export default class Tetrion {
    */
   rotateLeft () {
     log.info('rotateLeft')
-    return this.transform(Vector.rotateLeft())
+    return this.transform(Vector.rotateLeft)
   }
 
   /**
@@ -62,7 +62,7 @@ export default class Tetrion {
    */
   rotateRight () {
     log.info('rotateRight')
-    return this.transform(Vector.rotateRight())
+    return this.transform(Vector.rotateRight)
   }
 
   /**
@@ -70,7 +70,7 @@ export default class Tetrion {
    */
   softDrop () {
     log.info('softDrop')
-    return this.transform(Vector.down())
+    return this.transform(Vector.down)
   }
 
   /**
