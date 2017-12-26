@@ -8,7 +8,7 @@ import styles from './styles.scss'
 import {Signal, keyboard} from 'bulb'
 import {elem} from 'fkit'
 
-const CLOCK_PERIOD = 100
+const CLOCK_PERIOD = 10
 const UP = 38
 const DOWN = 40
 const LEFT = 37
@@ -53,7 +53,7 @@ class Tetrion extends React.PureComponent {
     return (
       <div className={styles.tetrion}>
         <Playfield playfield={playfield} />
-        <Tetromino tetromino={fallingPiece} />
+        {fallingPiece ? <Tetromino tetromino={fallingPiece} /> : null}
       </div>
     )
   }
@@ -74,7 +74,7 @@ class App extends React.PureComponent {
 }
 
 const transformer = (state, event, emit) => {
-  if (event === 'tick' && !state.game.isPaused) {
+  if (event === 'tick' && !state.paused) {
     // Get the next intention.
     const intention = state.intentions.shift()
     const game = state.game.tick(intention)
@@ -84,8 +84,9 @@ const transformer = (state, event, emit) => {
 
     state = {...state, game}
   } else if (event === 'pause') {
-    const game = state.game.pause()
-    state = {...state, game}
+    log.info('pausing')
+    const paused = state.paused
+    state = {...state, paused: !paused}
   } else if (!elem(event, SYSTEM_EVENTS)) {
     state.intentions.push(event)
   }
@@ -112,7 +113,7 @@ const intentionSignal = keyboard
 const bus = nanobus()
 const busSignal = Signal.fromEvent('*', bus)
 const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
-const initialState = {game: new Game(), intentions: []}
+const initialState = {game: new Game(CLOCK_PERIOD), intentions: [], paused: false}
 
 const subscription = busSignal
   .merge(clockSignal, intentionSignal)

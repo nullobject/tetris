@@ -1,8 +1,9 @@
 import Playfield from './playfield'
+import SRS from './srs'
 import Tetromino from './tetromino'
 import Vector from './vector'
 import log from './log'
-import {copy} from 'fkit'
+import {copy, keys, sample, set} from 'fkit'
 
 /**
  * A `Tetrion` controls the game state according to the rules of Tetris.
@@ -10,7 +11,18 @@ import {copy} from 'fkit'
 export default class Tetrion {
   constructor () {
     this.playfield = new Playfield()
-    this.fallingPiece = new Tetromino('I')
+    this.fallingPiece = null
+  }
+
+  /**
+   * Spawns a new falling piece.
+   *
+   * TODO: Choose the next piece from a bag.
+   */
+  spawn () {
+    log.info('spawn')
+    const shape = sample(1, keys(SRS))[0]
+    return set('fallingPiece', new Tetromino(shape), this)
   }
 
   /**
@@ -81,7 +93,7 @@ export default class Tetrion {
     log.info('lock')
     return copy(this, {
       playfield: this.playfield.lock(this.fallingPiece),
-      fallingPiece: new Tetromino('T')
+      fallingPiece: null
     })
   }
 
