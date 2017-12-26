@@ -1,4 +1,4 @@
-import {compose, copy, dec, difference, fold, groupBy, sortBy, union, update} from 'fkit'
+import {compose, copy, difference, fold, groupBy, sortBy, sub, union, update} from 'fkit'
 
 /**
  * Sorts and groups blocks by row.
@@ -27,7 +27,7 @@ function clearRows (blocks) {
       memo++
     } else if (memo > 0) {
       blocks = difference(blocks, row)
-      const newRow = row.map(update('y', dec))
+      const newRow = row.map(update('y', sub(memo)))
       blocks = union(blocks, newRow)
     }
 
