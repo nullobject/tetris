@@ -1,6 +1,36 @@
 import {copy} from 'fkit'
 
 /**
+ * Returns the points earned for the given number of rows cleared.
+ */
+function calculatePoints (numRows, tspin, kick) {
+  switch (numRows) {
+    case 4: // tetris
+      return 800
+    case 3: // triple
+      return tspin ? 1600 : 500
+    case 2: // double
+      return tspin ? 1200 : 300
+    case 1: // single
+      if (tspin && !kick) {
+        return 800
+      } else if (tspin) {
+        return 200
+      } else {
+        return 100
+      }
+    default:
+      if (tspin && !kick) {
+        return 400
+      } else if (tspin) {
+        return 100
+      } else {
+        return 0
+      }
+  }
+}
+
+/**
  * Represents the player progress with the level, number of lines cleared, and
  * score.
  */
@@ -57,7 +87,7 @@ export default class Progress {
    */
   clearRows (n) {
     const lines = this.lines + n
-    const score = this.score + (n * this.level)
+    const score = this.score + (calculatePoints(n, false, false) * this.level)
     return copy(this, {lines, score})
   }
 }
