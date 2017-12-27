@@ -1,4 +1,3 @@
-import Progress from './progress'
 import Tetrion from './tetrion'
 import {copy} from 'fkit'
 
@@ -14,7 +13,6 @@ export default class Game {
     this.time = 0
     this.state = 'spawning'
     this.tetrion = new Tetrion()
-    this.progress = new Progress()
     this.spawnTimer = 0
     this.lockTimer = 0
     this.gravityTimer = 0
@@ -45,7 +43,7 @@ export default class Game {
    * Returns the gravity delay in milliseconds.
    */
   get gravityDelay () {
-    return Math.round((-333.54 * Math.log(this.progress.level)) + 999.98)
+    return Math.round((-333.54 * Math.log(this.tetrion.progress.level)) + 999.98)
   }
 
   /**

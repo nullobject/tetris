@@ -1,5 +1,6 @@
 import Bag from './bag'
 import Playfield from './playfield'
+import Progress from './progress'
 import Tetromino from './tetromino'
 import Vector from './vector'
 import log from './log'
@@ -35,6 +36,7 @@ function drop (tetromino, playfield) {
  */
 export default class Tetrion {
   constructor () {
+    this.progress = new Progress()
     this.bag = new Bag()
     this.fallingPiece = null
     this.ghostPiece = null
