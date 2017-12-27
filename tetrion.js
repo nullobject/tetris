@@ -147,8 +147,8 @@ export default class Tetrion {
     log.info('hardDrop')
     const fallingPiece = drop(this.fallingPiece, this.playfield)
     const delta = this.fallingPiece.vector.y - fallingPiece.vector.y
-    const progress = this.progress.hardDrop(delta)
-    const {playfield} = this.playfield.lock(fallingPiece)
+    const {playfield, numRows} = this.playfield.lock(fallingPiece).clearRows()
+    const progress = this.progress.hardDrop(delta).clearRows(numRows)
     return copy(this, {progress, playfield, fallingPiece: null})
   }
 
@@ -165,7 +165,7 @@ export default class Tetrion {
       throw new Error('Cannot lock falling piece')
     }
 
-    const {playfield, numRows} = this.playfield.lock(this.fallingPiece)
+    const {playfield, numRows} = this.playfield.lock(this.fallingPiece).clearRows()
     const progress = this.progress.clearRows(numRows)
     return copy(this, {progress, playfield, fallingPiece: null})
   }

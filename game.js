@@ -110,6 +110,6 @@ export default class Game {
   }
 
   toString () {
-    return `Game (time: ${this.time}, state: ${this.state}, lines: ${this.lines}, level: ${this.level}, score: ${this.score})`
+    return `Game (state: ${this.state}, lines: ${this.lines}, level: ${this.level}, score: ${this.score})`
   }
 }
