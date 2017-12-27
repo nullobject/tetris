@@ -14,14 +14,15 @@ const groupBlocksByRow = compose(
 const isComplete = row => row.length === Playfield.WIDTH
 
 /**
- * Removes completed rows from the playfield.
+ * Removes completed rows from the playfield. Rows above cleared rows will be
+ * moved down.
  *
- * Rows above cleared rows will be moved down.
+ * @returns An object containing the blocks and the number of cleared rows.
  */
 function clearRows (blocks) {
   const rows = groupBlocksByRow(blocks)
 
-  fold((memo, row) => {
+  const numRows = fold((memo, row) => {
     if (isComplete(row)) {
       blocks = difference(blocks, row)
       memo++
@@ -34,7 +35,7 @@ function clearRows (blocks) {
     return memo
   }, 0, rows)
 
-  return blocks
+  return {blocks, numRows}
 }
 
 /**
@@ -48,16 +49,17 @@ class Playfield {
   /**
    * Locks the given tetromino into the playfield.
    *
+   * @param tetromino The tetromino to lock.
    * @returns A new playfield.
    */
   lock (tetromino) {
     // Add the tetromino's blocks to the playfield.
-    let blocks = union(this.blocks, tetromino.blocks)
+    const newBlocks = union(this.blocks, tetromino.blocks)
 
     // Clear completed rows.
-    blocks = clearRows(blocks)
+    const {blocks, numRows} = clearRows(newBlocks)
 
-    return copy(this, {blocks})
+    return {playfield: copy(this, {blocks}), numRows}
   }
 
   toString () {

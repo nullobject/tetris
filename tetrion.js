@@ -38,9 +38,9 @@ export default class Tetrion {
   constructor () {
     this.progress = new Progress()
     this.bag = new Bag()
+    this.playfield = new Playfield()
     this.fallingPiece = null
     this.ghostPiece = null
-    this.playfield = new Playfield()
   }
 
   /**
@@ -120,7 +120,8 @@ export default class Tetrion {
    */
   softDrop () {
     log.info('softDrop')
-    return this.transform(Vector.down)
+    const progress = this.progress.softDrop()
+    return copy(this.transform(Vector.down), {progress})
   }
 
   /**
@@ -131,7 +132,9 @@ export default class Tetrion {
   firmDrop () {
     log.info('firmDrop')
     const fallingPiece = drop(this.fallingPiece, this.playfield)
-    return copy(this, {fallingPiece})
+    const delta = this.fallingPiece.vector.y - fallingPiece.vector.y
+    const progress = this.progress.firmDrop(delta)
+    return copy(this, {progress, fallingPiece})
   }
 
   /**
@@ -143,8 +146,10 @@ export default class Tetrion {
   hardDrop () {
     log.info('hardDrop')
     const fallingPiece = drop(this.fallingPiece, this.playfield)
-    const playfield = this.playfield.lock(fallingPiece)
-    return copy(this, {fallingPiece: null, playfield})
+    const delta = this.fallingPiece.vector.y - fallingPiece.vector.y
+    const progress = this.progress.hardDrop(delta)
+    const {playfield} = this.playfield.lock(fallingPiece)
+    return copy(this, {progress, playfield, fallingPiece: null})
   }
 
   /**
@@ -160,8 +165,9 @@ export default class Tetrion {
       throw new Error('Cannot lock falling piece')
     }
 
-    const playfield = this.playfield.lock(this.fallingPiece)
-    return copy(this, {fallingPiece: null, playfield})
+    const {playfield, numRows} = this.playfield.lock(this.fallingPiece)
+    const progress = this.progress.clearRows(numRows)
+    return copy(this, {progress, playfield, fallingPiece: null})
   }
 
   /**

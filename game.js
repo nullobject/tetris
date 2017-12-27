@@ -18,6 +18,18 @@ export default class Game {
     this.gravityTimer = 0
   }
 
+  get level () {
+    return this.tetrion.progress.level
+  }
+
+  get lines () {
+    return this.tetrion.progress.lines
+  }
+
+  get score () {
+    return this.tetrion.progress.score
+  }
+
   /**
    * Returns true if the game is idle, false otherwise.
    */
@@ -43,7 +55,7 @@ export default class Game {
    * Returns the gravity delay in milliseconds.
    */
   get gravityDelay () {
-    return Math.round((-333.54 * Math.log(this.tetrion.progress.level)) + 999.98)
+    return Math.round((-333.54 * Math.log(this.level)) + 999.98)
   }
 
   /**
@@ -98,6 +110,6 @@ export default class Game {
   }
 
   toString () {
-    return `Game (time: ${this.time}, state: ${this.state})`
+    return `Game (time: ${this.time}, state: ${this.state}, lines: ${this.lines}, level: ${this.level}, score: ${this.score})`
   }
 }
