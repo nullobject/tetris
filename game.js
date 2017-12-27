@@ -5,6 +5,10 @@ import {copy} from 'fkit'
 const SPAWN_DELAY = 100
 const LOCK_DELAY = 1000
 
+/**
+ * The game is a state machine which controls a tetrion. The state is advanced
+ * by repeatedly calling the `tick` function.
+ */
 export default class Game {
   constructor () {
     this.time = 0
@@ -46,6 +50,10 @@ export default class Game {
 
   /**
    * Increments the game state and applies the given intention.
+   *
+   * @param delta The time delta.
+   * @param intention The user intention.
+   * @returns A new game.
    */
   tick (delta, intention) {
     const time = this.time + delta

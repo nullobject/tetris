@@ -50,6 +50,8 @@ export default class Tetrion {
 
   /**
    * Spawns a new falling piece.
+   *
+   * @returns A new tetrion.
    */
   spawn () {
     log.info('spawn')
@@ -61,6 +63,8 @@ export default class Tetrion {
 
   /**
    * Moves the falling piece left.
+   *
+   * @returns A new tetrion.
    */
   moveLeft () {
     log.info('moveLeft')
@@ -69,6 +73,8 @@ export default class Tetrion {
 
   /**
    * Moves the falling piece right.
+   *
+   * @returns A new tetrion.
    */
   moveRight () {
     log.info('moveRight')
@@ -77,6 +83,8 @@ export default class Tetrion {
 
   /**
    * Moves the falling piece down.
+   *
+   * @returns A new tetrion.
    */
   moveDown () {
     log.info('moveDown')
@@ -85,6 +93,8 @@ export default class Tetrion {
 
   /**
    * Rotates the falling piece left.
+   *
+   * @returns A new tetrion.
    */
   rotateLeft () {
     log.info('rotateLeft')
@@ -93,6 +103,8 @@ export default class Tetrion {
 
   /**
    * Rotates the falling piece right.
+   *
+   * @returns A new tetrion.
    */
   rotateRight () {
     log.info('rotateRight')
@@ -101,6 +113,8 @@ export default class Tetrion {
 
   /**
    * Moves the falling piece down.
+   *
+   * @returns A new tetrion.
    */
   softDrop () {
     log.info('softDrop')
@@ -109,6 +123,8 @@ export default class Tetrion {
 
   /**
    * Moves the falling piece to the bottom of the playfield.
+   *
+   * @returns A new tetrion.
    */
   firmDrop () {
     log.info('firmDrop')
@@ -119,6 +135,8 @@ export default class Tetrion {
   /**
    * Moves the falling piece to the bottom of the playfield and immediately
    * locks it.
+   *
+   * @returns A new tetrion.
    */
   hardDrop () {
     log.info('hardDrop')
@@ -130,6 +148,8 @@ export default class Tetrion {
   /**
    * Locks the given tetromino into the playfield and clears any completed
    * rows.
+   *
+   * @returns A new tetrion.
    */
   lock () {
     log.info('lock')
@@ -144,6 +164,8 @@ export default class Tetrion {
 
   /**
    * Applies the given transform `t` to the falling piece.
+   *
+   * @returns A new tetrion.
    */
   transform (t) {
     log.info(`transform: ${t}`)
