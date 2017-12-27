@@ -70,12 +70,11 @@ class Tetrion extends React.PureComponent {
 class App extends React.PureComponent {
   render () {
     const {bus, game} = this.props
-    const text = game.isPaused ? 'Resume' : 'Pause'
     return (
       <div>
         <p>{game.toString()}</p>
         <Tetrion tetrion={game.tetrion} />
-        <button className='f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('pause')}>{text}</button>
+        <button className='f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('pause')}>Pause</button>
       </div>
     )
   }
@@ -85,7 +84,7 @@ const transformer = (state, event, emit) => {
   if (event === 'tick' && !state.paused) {
     // Get the next intention.
     const intention = state.intentions.shift()
-    const game = state.game.tick(intention)
+    const game = state.game.tick(CLOCK_PERIOD, intention)
 
     // Emit the next game state.
     emit.next(game)
@@ -127,13 +126,14 @@ const intentionSignal = keyboard
 const bus = nanobus()
 const busSignal = Signal.fromEvent('*', bus)
 const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
-const initialState = {game: new Game(CLOCK_PERIOD), intentions: [], paused: false}
+const initialState = {game: new Game(), intentions: [], paused: false}
+const root = document.getElementById('root')
 
 const subscription = busSignal
   .merge(clockSignal, intentionSignal)
   .stateMachine(transformer, initialState)
   .subscribe(game => {
-    ReactDOM.render(<App game={game} bus={bus} />, document.getElementById('root'))
+    ReactDOM.render(<App game={game} bus={bus} />, root)
   })
 
 if (module.hot) {

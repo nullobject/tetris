@@ -6,8 +6,7 @@ const SPAWN_DELAY = 100
 const LOCK_DELAY = 1000
 
 export default class Game {
-  constructor (clockPeriod) {
-    this.clockPeriod = clockPeriod
+  constructor () {
     this.time = 0
     this.state = 'spawning'
     this.tetrion = new Tetrion()
@@ -48,23 +47,23 @@ export default class Game {
   /**
    * Increments the game state and applies the given intention.
    */
-  tick (intention) {
-    const time = this.time + 1
+  tick (delta, intention) {
+    const time = this.time + delta
     let state = this.state
     let tetrion = this.tetrion
     let spawnTimer = this.spawnTimer
     let lockTimer = this.lockTimer
     let gravityTimer = this.gravityTimer
 
-    if (this.isSpawning && (time - this.spawnTimer) * this.clockPeriod >= SPAWN_DELAY) {
+    if (this.isSpawning && time - this.spawnTimer >= SPAWN_DELAY) {
       tetrion = this.tetrion.spawn()
       state = 'idle'
       gravityTimer = time
-    } else if (this.isLocking && (time - this.lockTimer) * this.clockPeriod >= LOCK_DELAY) {
+    } else if (this.isLocking && time - this.lockTimer >= LOCK_DELAY) {
       tetrion = this.tetrion.lock()
       state = 'spawning'
       spawnTimer = time
-    } else if (this.isIdle && (time - this.gravityTimer) * this.clockPeriod >= this.gravityDelay) {
+    } else if (this.isIdle && time - this.gravityTimer >= this.gravityDelay) {
       // Apply gravity.
       tetrion = this.tetrion.moveDown()
       gravityTimer = time
