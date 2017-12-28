@@ -6,7 +6,7 @@ import classnames from 'classnames'
 import log from './log'
 import nanobus from 'nanobus'
 import styles from './styles.scss'
-import {Signal, keyboard} from 'bulb'
+import {Signal, keyboard, merge} from 'bulb'
 import {elem} from 'fkit'
 
 const CLOCK_PERIOD = 10
@@ -129,12 +129,9 @@ const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
 const initialState = {game: new Game(), intentions: [], paused: false}
 const root = document.getElementById('root')
 
-const subscription = busSignal
-  .merge(clockSignal, intentionSignal)
+const subscription = merge(busSignal, clockSignal, intentionSignal)
   .stateMachine(transformer, initialState)
-  .subscribe(game => {
-    ReactDOM.render(<App game={game} bus={bus} />, root)
-  })
+  .subscribe(game => ReactDOM.render(<App game={game} bus={bus} />, root))
 
 if (module.hot) {
   module.hot.dispose(() => {
