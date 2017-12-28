@@ -59,13 +59,13 @@ export default class Game {
   }
 
   /**
-   * Increments the game state and applies the given intention.
+   * Increments the game state and applies the given command.
    *
    * @param delta The time delta.
-   * @param intention The user intention.
+   * @param command The user command.
    * @returns A new game.
    */
-  tick (delta, intention) {
+  tick (delta, command) {
     const time = this.time + delta
     let state = this.state
     let tetrion = this.tetrion
@@ -91,9 +91,9 @@ export default class Game {
         state = 'locking'
         lockTimer = time
       }
-    } else if ((this.isIdle || this.isLocking) && intention) {
-      // Dispatch the intention.
-      tetrion = this.tetrion[intention]()
+    } else if ((this.isIdle || this.isLocking) && command) {
+      // Dispatch the command.
+      tetrion = this.tetrion[command]()
 
       if (!tetrion.fallingPiece) {
         // Start spawning if there is no falling piece.

@@ -82,9 +82,9 @@ class App extends React.PureComponent {
 
 const transformer = (state, event, emit) => {
   if (event === 'tick' && !state.paused) {
-    // Get the next intention.
-    const intention = state.intentions.shift()
-    const game = state.game.tick(CLOCK_PERIOD, intention)
+    // Get the next command.
+    const command = state.commands.shift()
+    const game = state.game.tick(CLOCK_PERIOD, command)
 
     // Emit the next game state.
     emit.next(game)
@@ -95,13 +95,13 @@ const transformer = (state, event, emit) => {
     const paused = state.paused
     state = {...state, paused: !paused}
   } else if (!elem(event, SYSTEM_EVENTS)) {
-    state.intentions.push(event)
+    state.commands.push(event)
   }
 
   return state
 }
 
-const intentionSignal = keyboard
+const commandSignal = keyboard
   .keys(document)
   .stateMachine((_, keys, emit) => {
     if (keys.has(Z)) {
@@ -126,10 +126,10 @@ const intentionSignal = keyboard
 const bus = nanobus()
 const busSignal = Signal.fromEvent('*', bus)
 const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
-const initialState = {game: new Game(), intentions: [], paused: false}
+const initialState = {game: new Game(), commands: [], paused: false}
 const root = document.getElementById('root')
 
-const subscription = merge(busSignal, clockSignal, intentionSignal)
+const subscription = merge(busSignal, clockSignal, commandSignal)
   .stateMachine(transformer, initialState)
   .subscribe(game => ReactDOM.render(<App game={game} bus={bus} />, root))
 
