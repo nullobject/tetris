@@ -28,6 +28,24 @@ function calculatePoints (n, tspin, kick) {
   }
 }
 
+/**
+ * Returns the message for the number of lines cleared.
+ */
+function calculateMessage (n, tspin, kick) {
+  if (tspin) {
+    return 'TSPIN'
+  } else if (n === 4) {
+    return 'TETRIS'
+  }
+}
+
+/**
+ * Represents the reward earned when dropping the falling piece or clearing
+ * lines.
+ *
+ * This is based on the Tetris DS scoring system. See
+ * http://harddrop.com/wiki/Tetris_DS for details.
+ */
 export default class Reward {
   /**
    * Rewards a soft drop.
@@ -35,7 +53,7 @@ export default class Reward {
    * @returns A new reward.
    */
   static softDrop () {
-    return new Reward(1)
+    return new Reward(1, 0)
   }
 
   /**
@@ -45,17 +63,20 @@ export default class Reward {
    * @returns A new reward.
    */
   static firmDrop (n) {
-    return new Reward(n)
+    return new Reward(n, 0)
   }
 
   /**
    * Rewards a hard drop.
    *
    * @param n The number of rows the falling piece was dropped.
+   * @param m The number of lines cleared.
    * @returns A new reward.
    */
-  static hardDrop (n) {
-    return new Reward(n * 2)
+  static hardDrop (n, cleared) {
+    const points = (n * 2) + calculatePoints(cleared, false, false)
+    const message = calculateMessage(cleared, false, false)
+    return new Reward(points, cleared, message)
   }
 
   /**
@@ -66,18 +87,11 @@ export default class Reward {
    */
   static clearLines (n, tspin = false, kick = false) {
     const points = calculatePoints(n, tspin, kick)
-    let message = null
-
-    if (tspin) {
-      message = 'TSPIN'
-    } else if (n === 4) {
-      message = 'TETRIS'
-    }
-
+    const message = calculateMessage(n, tspin, kick)
     return new Reward(points, n, message)
   }
 
-  constructor (points, lines = 0, message = null) {
+  constructor (points, lines, message = null) {
     this.points = points
     this.lines = lines
     this.message = message

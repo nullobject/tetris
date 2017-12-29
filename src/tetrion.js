@@ -157,10 +157,10 @@ export default class Tetrion {
     const fallingPiece = this.fallingPiece.drop(this.collision)
     const dropped = this.fallingPiece.vector.y - fallingPiece.vector.y
     const {playfield, cleared} = this.playfield.lock(fallingPiece.blocks).clearLines()
-    const rewards = [Reward.hardDrop(dropped), Reward.clearLines(cleared)]
-    const progress = rewards.reduce((progress, reward) => progress.add(reward), this.progress)
+    const reward = Reward.hardDrop(dropped, cleared)
+    const progress = this.progress.add(reward)
 
-    return copy(this, {progress, reward: rewards[1], playfield, fallingPiece: null})
+    return copy(this, {progress, reward, playfield, fallingPiece: null})
   }
 
   /**
