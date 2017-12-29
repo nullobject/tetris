@@ -1,3 +1,4 @@
+import Progress from './progress'
 import Tetrion from './tetrion'
 import {copy} from 'fkit'
 
@@ -16,22 +17,20 @@ export default class Game {
     this.spawnTimer = 0
     this.lockTimer = 0
     this.gravityTimer = 0
+    this.progress = new Progress()
+    this.reward = null
   }
 
   get level () {
-    return this.tetrion.progress.level
+    return this.progress.level
   }
 
   get lines () {
-    return this.tetrion.progress.lines
+    return this.progress.lines
   }
 
   get score () {
-    return this.tetrion.progress.score
-  }
-
-  get reward () {
-    return this.tetrion.reward
+    return this.progress.score
   }
 
   /**
@@ -76,18 +75,19 @@ export default class Game {
     let spawnTimer = this.spawnTimer
     let lockTimer = this.lockTimer
     let gravityTimer = this.gravityTimer
+    let progress = this.progress
+    let reward = this.reward
 
     if (this.isSpawning && time - this.spawnTimer >= SPAWN_DELAY) {
       tetrion = this.tetrion.spawn()
       state = 'idle'
       gravityTimer = time
-    } else if (this.isLocking && time - this.lockTimer >= LOCK_DELAY) {
-      tetrion = this.tetrion.lock()
-      state = 'spawning'
-      spawnTimer = time
     } else if (this.isIdle && time - this.gravityTimer >= this.gravityDelay) {
       // Apply gravity.
-      tetrion = this.tetrion.moveDown()
+      const result = this.tetrion.moveDown()
+      tetrion = result.tetrion
+
+      state = 'idle'
       gravityTimer = time
 
       // Moving down failed, start locking.
@@ -95,9 +95,26 @@ export default class Game {
         state = 'locking'
         lockTimer = time
       }
+    } else if (this.isLocking && time - this.lockTimer >= LOCK_DELAY) {
+      const result = this.tetrion.lock()
+      tetrion = result.tetrion
+      reward = result.reward
+
+      if (reward) {
+        progress = progress.add(reward)
+      }
+
+      state = 'spawning'
+      spawnTimer = time
     } else if ((this.isIdle || this.isLocking) && command) {
       // Dispatch the command.
-      tetrion = this.tetrion[command]()
+      const result = this.tetrion[command]()
+      tetrion = result.tetrion
+      reward = result.reward
+
+      if (reward) {
+        progress = progress.add(reward)
+      }
 
       if (!tetrion.fallingPiece) {
         // Start spawning if there is no falling piece.
@@ -110,7 +127,7 @@ export default class Game {
       }
     }
 
-    return copy(this, {time, state, tetrion, spawnTimer, lockTimer, gravityTimer})
+    return copy(this, {time, state, tetrion, spawnTimer, lockTimer, gravityTimer, progress, reward})
   }
 
   toString () {
