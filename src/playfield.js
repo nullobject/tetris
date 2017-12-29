@@ -30,7 +30,7 @@ export default class Playfield {
    * Returns true if a block collides with (or is outside) the playfield, false
    * otherwise.
    *
-   * @params blocks An array of blocks.
+   * @param blocks An array of blocks.
    * @returns A boolean value.
    */
   collide (blocks) {
@@ -42,7 +42,7 @@ export default class Playfield {
   /**
    * Locks the given blocks into the playfield.
    *
-   * @params blocks An array of blocks.
+   * @param blocks An array of blocks.
    * @returns A new playfield.
    */
   lock (blocks) {
@@ -51,34 +51,37 @@ export default class Playfield {
   }
 
   /**
-   * Removes completed rows from the playfield. Rows above any cleared rows
+   * Removes completed lines from the playfield. Blocks above any cleared rows
    * will be moved down.
    *
    * @returns An object containing the playfield and the number of cleared
-   * rows.
+   * lines.
    */
-  clearRows () {
+  clearLines () {
     const rows = groupBlocksByRow(this.blocks)
     let blocks = this.blocks
 
-    const numRows = fold((numRows, row) => {
+    const cleared = fold((cleared, row) => {
       if (isComplete(row)) {
         blocks = difference(blocks, row)
-        numRows++
-      } else if (numRows > 0) {
+        cleared++
+      } else if (cleared > 0) {
         blocks = difference(blocks, row)
-        const newRow = row.map(update('y', sub(numRows)))
+        const newRow = row.map(update('y', sub(cleared)))
         blocks = union(blocks, newRow)
       }
 
-      return numRows
+      return cleared
     }, 0, rows)
 
-    return {playfield: copy(this, {blocks}), numRows}
+    return {playfield: copy(this, {blocks}), cleared}
   }
 
   /**
    * Returns the blocks at the given positions `ps`.
+   *
+   * @param ps An array of positions.
+   * @returns An array of blocks.
    */
   findBlocks (ps) {
     return this.blocks.filter(b =>

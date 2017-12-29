@@ -1,6 +1,7 @@
 import Bag from './bag'
 import Playfield from './playfield'
 import Progress from './progress'
+import Reward from './reward'
 import Tetromino from './tetromino'
 import Vector from './vector'
 import log from './log'
@@ -12,11 +13,11 @@ import {copy} from 'fkit'
 export default class Tetrion {
   constructor () {
     this.progress = new Progress()
+    this.reward = null
     this.bag = new Bag()
     this.playfield = new Playfield()
     this.fallingPiece = null
     this.ghostPiece = null
-    this.lastReward = null
   }
 
   /**
@@ -32,6 +33,23 @@ export default class Tetrion {
    */
   get collision () {
     return tetromino => this.playfield.collide(tetromino.blocks)
+  }
+
+  /**
+   * Returns true if the last transform resulted in a T-spin, false otherwise.
+   */
+  get tspin () {
+    const v = this.fallingPiece.vector
+    const positions = [
+      {x: v.x - 1, y: v.y - 1},
+      {x: v.x + 1, y: v.y - 1},
+      {x: v.x - 1, y: v.y + 1},
+      {x: v.x + 1, y: v.y + 1}
+    ]
+    const adjacentBlocks = this.playfield.findBlocks(positions)
+    return this.fallingPiece.shape === 'T' &&
+      this.fallingPiece.lastTransfrom.isRotation &&
+      adjacentBlocks.length >= 3
   }
 
   /**
@@ -104,8 +122,11 @@ export default class Tetrion {
    */
   softDrop () {
     log.info('softDrop')
-    const progress = this.progress.softDrop()
-    return copy(this.transform(Vector.down), {progress})
+
+    const reward = Reward.softDrop()
+    const progress = this.progress.add(reward)
+
+    return copy(this.transform(Vector.down), {progress, reward})
   }
 
   /**
@@ -115,10 +136,13 @@ export default class Tetrion {
    */
   firmDrop () {
     log.info('firmDrop')
+
     const fallingPiece = this.fallingPiece.drop(this.collision)
-    const delta = this.fallingPiece.vector.y - fallingPiece.vector.y
-    const progress = this.progress.firmDrop(delta)
-    return copy(this, {progress, fallingPiece})
+    const dropped = this.fallingPiece.vector.y - fallingPiece.vector.y
+    const reward = Reward.firmDrop(dropped)
+    const progress = this.progress.add(reward)
+
+    return copy(this, {progress, reward, fallingPiece})
   }
 
   /**
@@ -129,11 +153,14 @@ export default class Tetrion {
    */
   hardDrop () {
     log.info('hardDrop')
+
     const fallingPiece = this.fallingPiece.drop(this.collision)
-    const delta = this.fallingPiece.vector.y - fallingPiece.vector.y
-    const {playfield, numRows} = this.playfield.lock(fallingPiece.blocks).clearRows()
-    const progress = this.progress.hardDrop(delta).clearRows(numRows)
-    return copy(this, {progress, playfield, fallingPiece: null})
+    const dropped = this.fallingPiece.vector.y - fallingPiece.vector.y
+    const {playfield, cleared} = this.playfield.lock(fallingPiece.blocks).clearLines()
+    const rewards = [Reward.hardDrop(dropped), Reward.clearLines(cleared)]
+    const progress = rewards.reduce((progress, reward) => progress.add(reward), this.progress)
+
+    return copy(this, {progress, reward: rewards[1], playfield, fallingPiece: null})
   }
 
   /**
@@ -149,9 +176,10 @@ export default class Tetrion {
       throw new Error('Cannot lock falling piece')
     }
 
-    const {playfield, numRows} = this.playfield.lock(this.fallingPiece.blocks).clearRows()
-    const progress = this.progress.clearRows(numRows)
-    return copy(this, {progress, playfield, fallingPiece: null})
+    const {playfield, cleared} = this.playfield.lock(this.fallingPiece.blocks).clearLines()
+    const reward = Reward.clearLines(cleared, this.tspin)
+    const progress = this.progress.add(reward)
+    return copy(this, {progress, reward, playfield, fallingPiece: null})
   }
 
   /**
