@@ -71,7 +71,7 @@ class App extends React.PureComponent {
   render () {
     const {bus, game} = this.props
     return (
-      <div>
+      <div className={styles.game}>
         <p>{game.toString()}</p>
         <Tetrion tetrion={game.tetrion} />
         <button className='f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('pause')}>Pause</button>

@@ -1,6 +1,26 @@
 $block_size:  23px;
 $block_inset: 3px;
 
+@font-face {
+  font-family: xenara;
+  font-weight: normal;
+  src: url("./fonts/xenara_rg-webfont.eot");
+  src: url("./fonts/xenara_rg-webfont.eot?#iefix") format("embedded-opentype"),
+       url("./fonts/xenara_rg-webfont.woff") format("woff"),
+       url("./fonts/xenara_rg-webfont.ttf") format("truetype"),
+       url("./fonts/xenara_rg-webfont.svg#XenaraRegular") format("svg");
+}
+
+@font-face {
+  font-family: xenara;
+  font-weight: bold;
+  src: url("./fonts/xenara_bd-webfont.eot");
+  src: url("./fonts/xenara_bd-webfont.eot?#iefix") format("embedded-opentype"),
+       url("./fonts/xenara_bd-webfont.woff") format("woff"),
+       url("./fonts/xenara_bd-webfont.ttf") format("truetype"),
+       url("./fonts/xenara_bd-webfont.svg#XenaraBold") format("svg");
+}
+
 @mixin block($color) {
   background-image: linear-gradient(to bottom left, lighten($color, 15%), darken($color, 15%));
 
@@ -17,6 +37,10 @@ $block_inset: 3px;
 .green  { @include block(#00f000); }
 .purple { @include block(#a000f0); }
 .red    { @include block(#f00000); }
+
+.game {
+  font-family: xenara;
+}
 
 .tetrion {
   overflow: hidden;
