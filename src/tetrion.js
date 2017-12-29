@@ -45,7 +45,7 @@ export default class Tetrion {
     ]
     const adjacentBlocks = this.playfield.findBlocks(positions)
     return this.fallingPiece.shape === 'T' &&
-      this.fallingPiece.lastTransfrom.isRotation &&
+      this.fallingPiece.lastTransform.isRotation &&
       adjacentBlocks.length >= 3
   }
 
