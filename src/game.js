@@ -30,6 +30,10 @@ export default class Game {
     return this.tetrion.progress.score
   }
 
+  get reward () {
+    return this.tetrion.reward
+  }
+
   /**
    * Returns true if the game is idle, false otherwise.
    */
@@ -110,6 +114,6 @@ export default class Game {
   }
 
   toString () {
-    return `Game (state: ${this.state}, lines: ${this.lines}, level: ${this.level}, score: ${this.score})`
+    return `Game (state: ${this.state}, lines: ${this.lines}, level: ${this.level}, score: ${this.score}, reward: ${this.reward})`
   }
 }

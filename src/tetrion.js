@@ -1,35 +1,11 @@
 import Bag from './bag'
 import Playfield from './playfield'
 import Progress from './progress'
+import Reward from './reward'
 import Tetromino from './tetromino'
 import Vector from './vector'
 import log from './log'
-import {copy, whereAny} from 'fkit'
-
-/**
- * Collides the given tetromino with the playfield.
- *
- * Returns true if the given tetromino collides with any other blocks in the
- * playfield or is outside the bounds of the playfield, false otherwise.
- *
- * @returns A boolean value.
- */
-function collide (tetromino, playfield) {
-  const collideBlock = b => playfield.blocks.some(a => a.x === b.x && a.y === b.y)
-  const isOutside = b => b.x < 0 || b.x >= Playfield.WIDTH || b.y < 0 || b.y >= Playfield.HEIGHT + 2
-  return tetromino.blocks.some(whereAny([collideBlock, isOutside]))
-}
-
-/**
- * Drops the given tetromino to the bottom of the playfield.
- */
-function drop (tetromino, playfield) {
-  const t = Vector.down
-  while (!collide(tetromino.transform(t), playfield)) {
-    tetromino = tetromino.transform(t)
-  }
-  return tetromino
-}
+import {copy} from 'fkit'
 
 /**
  * A tetrion controls the game state according to the rules of Tetris.
@@ -37,6 +13,7 @@ function drop (tetromino, playfield) {
 export default class Tetrion {
   constructor () {
     this.progress = new Progress()
+    this.reward = null
     this.bag = new Bag()
     this.playfield = new Playfield()
     this.fallingPiece = null
@@ -47,7 +24,32 @@ export default class Tetrion {
    * Returns true if the falling piece can move down, false otherwise.
    */
   get canMoveDown () {
-    return !collide(this.fallingPiece.transform(Vector.down), this.playfield)
+    return this.fallingPiece.canApplyTransform(Vector.down, this.collision)
+  }
+
+  /**
+   * Returns a collision function which collides the given tetromino with the
+   * playfield.
+   */
+  get collision () {
+    return tetromino => this.playfield.collide(tetromino.blocks)
+  }
+
+  /**
+   * Returns true if the last transform resulted in a T-spin, false otherwise.
+   */
+  get tspin () {
+    const v = this.fallingPiece.vector
+    const positions = [
+      {x: v.x - 1, y: v.y - 1},
+      {x: v.x + 1, y: v.y - 1},
+      {x: v.x - 1, y: v.y + 1},
+      {x: v.x + 1, y: v.y + 1}
+    ]
+    const adjacentBlocks = this.playfield.findBlocks(positions)
+    return this.fallingPiece.shape === 'T' &&
+      this.fallingPiece.lastTransfrom.isRotation &&
+      adjacentBlocks.length >= 3
   }
 
   /**
@@ -59,7 +61,7 @@ export default class Tetrion {
     log.info('spawn')
     const {bag, shape} = this.bag.shift()
     const fallingPiece = new Tetromino(shape)
-    const ghostPiece = drop(fallingPiece, this.playfield)
+    const ghostPiece = fallingPiece.drop(this.collision)
     return copy(this, {bag, fallingPiece, ghostPiece})
   }
 
@@ -120,8 +122,11 @@ export default class Tetrion {
    */
   softDrop () {
     log.info('softDrop')
-    const progress = this.progress.softDrop()
-    return copy(this.transform(Vector.down), {progress})
+
+    const reward = Reward.softDrop()
+    const progress = this.progress.add(reward)
+
+    return copy(this.transform(Vector.down), {progress, reward})
   }
 
   /**
@@ -131,10 +136,13 @@ export default class Tetrion {
    */
   firmDrop () {
     log.info('firmDrop')
-    const fallingPiece = drop(this.fallingPiece, this.playfield)
-    const delta = this.fallingPiece.vector.y - fallingPiece.vector.y
-    const progress = this.progress.firmDrop(delta)
-    return copy(this, {progress, fallingPiece})
+
+    const fallingPiece = this.fallingPiece.drop(this.collision)
+    const dropped = this.fallingPiece.vector.y - fallingPiece.vector.y
+    const reward = Reward.firmDrop(dropped)
+    const progress = this.progress.add(reward)
+
+    return copy(this, {progress, reward, fallingPiece})
   }
 
   /**
@@ -145,11 +153,14 @@ export default class Tetrion {
    */
   hardDrop () {
     log.info('hardDrop')
-    const fallingPiece = drop(this.fallingPiece, this.playfield)
-    const delta = this.fallingPiece.vector.y - fallingPiece.vector.y
-    const {playfield, numRows} = this.playfield.lock(fallingPiece).clearRows()
-    const progress = this.progress.hardDrop(delta).clearRows(numRows)
-    return copy(this, {progress, playfield, fallingPiece: null})
+
+    const fallingPiece = this.fallingPiece.drop(this.collision)
+    const dropped = this.fallingPiece.vector.y - fallingPiece.vector.y
+    const {playfield, cleared} = this.playfield.lock(fallingPiece.blocks).clearLines()
+    const rewards = [Reward.hardDrop(dropped), Reward.clearLines(cleared)]
+    const progress = rewards.reduce((progress, reward) => progress.add(reward), this.progress)
+
+    return copy(this, {progress, reward: rewards[1], playfield, fallingPiece: null})
   }
 
   /**
@@ -161,13 +172,14 @@ export default class Tetrion {
   lock () {
     log.info('lock')
 
-    if (collide(this.fallingPiece, this.playfield)) {
+    if (this.collision(this.fallingPiece)) {
       throw new Error('Cannot lock falling piece')
     }
 
-    const {playfield, numRows} = this.playfield.lock(this.fallingPiece).clearRows()
-    const progress = this.progress.clearRows(numRows)
-    return copy(this, {progress, playfield, fallingPiece: null})
+    const {playfield, cleared} = this.playfield.lock(this.fallingPiece.blocks).clearLines()
+    const reward = Reward.clearLines(cleared, this.tspin)
+    const progress = this.progress.add(reward)
+    return copy(this, {progress, reward, playfield, fallingPiece: null})
   }
 
   /**
@@ -178,16 +190,10 @@ export default class Tetrion {
   transform (t) {
     log.info(`transform: ${t}`)
 
-    // Try to find a wall kick transform that can be applied without colliding
-    // with the playfield.
-    const u = this.fallingPiece.calculateWallKickTransforms(t).find(u => {
-      const fallingPiece = this.fallingPiece.transform(u)
-      return !collide(fallingPiece, this.playfield)
-    })
+    const fallingPiece = this.fallingPiece.transform(t, this.collision)
 
-    if (u) {
-      const fallingPiece = this.fallingPiece.transform(u)
-      const ghostPiece = drop(fallingPiece, this.playfield)
+    if (fallingPiece !== this.fallingPiece) {
+      const ghostPiece = fallingPiece.drop(this.collision)
       return copy(this, {fallingPiece, ghostPiece})
     } else {
       return this
