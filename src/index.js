@@ -67,14 +67,20 @@ class Tetrion extends React.PureComponent {
   }
 }
 
-class App extends React.PureComponent {
+class GameView extends React.PureComponent {
   render () {
     const {bus, game} = this.props
+    const className = classnames(styles.xenara, styles.game)
     return (
-      <div className={styles.game}>
+      <div className={className}>
+        <header>
+          <span>lines: {game.progress.lines}</span>
+          <span>level: {game.progress.level}</span>
+          <span>score: {game.progress.score}</span>
+        </header>
         <p>{game.toString()}</p>
         <Tetrion tetrion={game.tetrion} />
-        <button className='f5 dim br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('pause')}>Pause</button>
+        <button className='f5 br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('pause')}>Pause</button>
       </div>
     )
   }
@@ -131,7 +137,7 @@ const root = document.getElementById('root')
 
 const subscription = merge(busSignal, clockSignal, commandSignal)
   .stateMachine(transformer, initialState)
-  .subscribe(game => ReactDOM.render(<App game={game} bus={bus} />, root))
+  .subscribe(game => ReactDOM.render(<GameView game={game} bus={bus} />, root))
 
 if (module.hot) {
   module.hot.dispose(() => {

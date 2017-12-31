@@ -33,9 +33,9 @@ function calculatePoints (n, tspin, kick) {
  */
 function calculateMessage (n, tspin, kick) {
   if (tspin) {
-    return 'TSPIN'
+    return 'tspin'
   } else if (n === 4) {
-    return 'TETRIS'
+    return 'tetris'
   }
 }
 
