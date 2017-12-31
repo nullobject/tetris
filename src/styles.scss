@@ -54,33 +54,36 @@ $block_inset: 3px;
     position: relative;
     width: 230px;
     height: 460px;
+  }
 
-    ul {
+  .blocks {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+
+    li {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      list-style-type: none;
-
-      li {
-        position: absolute;
-        border-style: solid;
-        border-width: $block_inset;
-        width: $block_size;
-        height: $block_size;
-      }
+      border-style: solid;
+      border-width: $block_inset;
+      width: $block_size;
+      height: $block_size;
     }
+  }
 
-    .playfield {
-      background: black;
-    }
+  .playfield {
+    background: black;
+  }
 
-    .fallingPiece {
-    }
+  .tetromino {
+  }
 
-    .ghostPiece {
-      opacity: 0.25;
-    }
+  .ghostPiece {
+    opacity: 0.25;
+  }
+
+  .nextPiece {
   }
 }

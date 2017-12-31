@@ -14,6 +14,13 @@ export default class Bag {
   }
 
   /**
+   * Returns the next shape in the bag.
+   */
+  get next () {
+    return head(this.shapes)
+  }
+
+  /**
    * Removes the next shape from the bag. If the bag is empty, then it is
    * refilled.
    *

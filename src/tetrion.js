@@ -15,6 +15,7 @@ export default class Tetrion {
     this.playfield = new Playfield()
     this.fallingPiece = null
     this.ghostPiece = null
+    this.nextPiece = null
   }
 
   /**
@@ -57,9 +58,10 @@ export default class Tetrion {
   spawn () {
     log.info('spawn')
     const {bag, shape} = this.bag.shift()
-    const fallingPiece = new Tetromino(shape)
+    const fallingPiece = new Tetromino(shape).spawn()
     const ghostPiece = fallingPiece.drop(this.collision)
-    return copy(this, {bag, fallingPiece, ghostPiece})
+    const nextPiece = new Tetromino(bag.next)
+    return copy(this, {bag, fallingPiece, ghostPiece, nextPiece})
   }
 
   /**

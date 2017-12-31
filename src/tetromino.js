@@ -54,14 +54,11 @@ function calculateWallKickTransforms (tetromino, t) {
  * tetrominoes are I, O, T, S, Z, J, and L.
  */
 export default class Tetromino {
-  constructor (shape) {
+  constructor (shape = 'I') {
     this.shape = shape
     this.lastTransform = null
-
-    if (shape) {
-      this.vector = new Vector(SRS[shape].spawn[0], SRS[shape].spawn[1])
-      this.blocks = calculateBlocks(this, this.vector)
-    }
+    this.vector = Vector.zero
+    this.blocks = calculateBlocks(this, this.vector)
   }
 
   /**
@@ -87,6 +84,17 @@ export default class Tetromino {
    */
   canApplyTransform (t, c) {
     return !c(applyTransform(this, t))
+  }
+
+  /**
+   * Moves the tetromino to the spawn position.
+   *
+   * @returns A new tetromino.
+   */
+  spawn () {
+    const vector = new Vector(SRS[this.shape].spawn[0], SRS[this.shape].spawn[1])
+    const blocks = calculateBlocks(this, vector)
+    return copy(this, {vector, blocks})
   }
 
   /**

@@ -34,7 +34,7 @@ class BlockView extends React.PureComponent {
 class TetrominoView extends React.PureComponent {
   render () {
     const {blocks} = this.props.tetromino
-    const className = classnames(styles.fallingPiece, {[styles.ghostPiece]: this.props.ghost})
+    const className = classnames(styles.blocks, styles.tetromino, {[styles.ghostPiece]: this.props.ghost})
     return (
       <ul className={className}>
         {blocks.map(block => <BlockView key={block.id} block={block} />)}
@@ -46,8 +46,9 @@ class TetrominoView extends React.PureComponent {
 class PlayfieldView extends React.PureComponent {
   render () {
     const {blocks} = this.props.playfield
+    const className = classnames(styles.blocks, styles.playfield)
     return (
-      <ul className={styles.playfield}>
+      <ul className={className}>
         {blocks.map(block => <BlockView key={block.id} block={block} />)}
       </ul>
     )
@@ -80,6 +81,7 @@ class GameView extends React.PureComponent {
         </header>
         <p>{game.toString()}</p>
         <TetrionView tetrion={game.tetrion} />
+        {game.tetrion.nextPiece ? <TetrominoView tetromino={game.tetrion.nextPiece} /> : null}
         <button className='f5 br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('pause')}>Pause</button>
       </div>
     )
