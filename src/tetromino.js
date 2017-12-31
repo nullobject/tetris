@@ -12,22 +12,7 @@ import {copy, zip} from 'fkit'
  */
 function applyTransform (tetromino, t) {
   const vector = tetromino.vector.add(t)
-  const blocks = calculateBlocks(tetromino, vector)
-  return copy(tetromino, {vector, blocks, lastTransform: t})
-}
-
-/**
- * Calculates the blocks for the given tetromino and transform `t`.
- *
- * @param tetromino A tetromino.
- * @param t A transform vector.
- * @returns An array of blocks.
- */
-function calculateBlocks (tetromino, t) {
-  const positions = SRS[tetromino.shape].positions[t.rotation]
-  return positions.map(([x, y]) =>
-    new Block(x + t.x, y + t.y, tetromino.color)
-  )
+  return copy(tetromino, {vector, lastTransform: t})
 }
 
 /**
@@ -58,7 +43,6 @@ export default class Tetromino {
     this.shape = shape
     this.lastTransform = null
     this.vector = Vector.zero
-    this.blocks = calculateBlocks(this, this.vector)
   }
 
   /**
@@ -73,6 +57,16 @@ export default class Tetromino {
    */
   get offsets () {
     return SRS[this.shape].offsets
+  }
+
+  /**
+   * Returns the blocks for the tetromino.
+   */
+  get blocks () {
+    const positions = SRS[this.shape].positions[this.vector.rotation]
+    return positions.map(([x, y]) =>
+      new Block(x + this.vector.x, y + this.vector.y, this.color)
+    )
   }
 
   /**
@@ -93,8 +87,7 @@ export default class Tetromino {
    */
   spawn () {
     const vector = new Vector(SRS[this.shape].spawn[0], SRS[this.shape].spawn[1])
-    const blocks = calculateBlocks(this, vector)
-    return copy(this, {vector, blocks})
+    return copy(this, {vector})
   }
 
   /**
