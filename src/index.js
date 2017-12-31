@@ -23,7 +23,7 @@ const Z = 90
 const BLOCK_SIZE = 23
 const SYSTEM_EVENTS = ['tick', 'pause']
 
-class Block extends React.PureComponent {
+class BlockView extends React.PureComponent {
   render () {
     const {x, y, color} = this.props.block
     const style = {bottom: y * BLOCK_SIZE, left: x * BLOCK_SIZE}
@@ -31,37 +31,37 @@ class Block extends React.PureComponent {
   }
 }
 
-class Tetromino extends React.PureComponent {
+class TetrominoView extends React.PureComponent {
   render () {
     const {blocks} = this.props.tetromino
     const className = classnames(styles.fallingPiece, {[styles.ghostPiece]: this.props.ghost})
     return (
       <ul className={className}>
-        {blocks.map(block => <Block key={block.id} block={block} />)}
+        {blocks.map(block => <BlockView key={block.id} block={block} />)}
       </ul>
     )
   }
 }
 
-class Playfield extends React.PureComponent {
+class PlayfieldView extends React.PureComponent {
   render () {
     const {blocks} = this.props.playfield
     return (
       <ul className={styles.playfield}>
-        {blocks.map(block => <Block key={block.id} block={block} />)}
+        {blocks.map(block => <BlockView key={block.id} block={block} />)}
       </ul>
     )
   }
 }
 
-class Tetrion extends React.PureComponent {
+class TetrionView extends React.PureComponent {
   render () {
     const {playfield, fallingPiece, ghostPiece} = this.props.tetrion
     return (
       <div className={styles.tetrion}>
-        <Playfield playfield={playfield} />
-        {fallingPiece ? <Tetromino tetromino={fallingPiece} /> : null}
-        {ghostPiece ? <Tetromino ghost tetromino={ghostPiece} /> : null}
+        <PlayfieldView playfield={playfield} />
+        {fallingPiece ? <TetrominoView tetromino={fallingPiece} /> : null}
+        {ghostPiece ? <TetrominoView ghost tetromino={ghostPiece} /> : null}
       </div>
     )
   }
@@ -79,7 +79,7 @@ class GameView extends React.PureComponent {
           <span>score: {game.progress.score}</span>
         </header>
         <p>{game.toString()}</p>
-        <Tetrion tetrion={game.tetrion} />
+        <TetrionView tetrion={game.tetrion} />
         <button className='f5 br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('pause')}>Pause</button>
       </div>
     )
