@@ -32,8 +32,12 @@ class BlockView extends React.PureComponent {
 
 class TetrominoView extends React.PureComponent {
   render () {
-    const {blocks} = this.props.tetromino
-    const className = classnames(styles.blocks, styles.tetromino, {[styles.ghostPiece]: this.props.ghost})
+    const {shape, blocks} = this.props.tetromino
+    const className = classnames(
+      styles.tetromino,
+      styles[`shape-${shape.toLowerCase()}`],
+      {[styles.ghostPiece]: this.props.ghost}
+    )
     return (
       <ul className={className}>
         {blocks.map(block => <BlockView key={block.id} block={block} />)}
@@ -45,9 +49,8 @@ class TetrominoView extends React.PureComponent {
 class PlayfieldView extends React.PureComponent {
   render () {
     const {blocks} = this.props.playfield
-    const className = classnames(styles.blocks, styles.playfield)
     return (
-      <ul className={className}>
+      <ul className={styles.playfield}>
         {blocks.map(block => <BlockView key={block.id} block={block} />)}
       </ul>
     )
@@ -60,7 +63,7 @@ class TetrionView extends React.PureComponent {
     return (
       <div className={styles.tetrion}>
         <PlayfieldView playfield={playfield} />
-        {fallingPiece ? <TetrominoView tetromino={fallingPiece} /> : null}
+        {fallingPiece ? <TetrominoView falling tetromino={fallingPiece} /> : null}
         {ghostPiece ? <TetrominoView ghost tetromino={ghostPiece} /> : null}
       </div>
     )
@@ -69,19 +72,29 @@ class TetrionView extends React.PureComponent {
 
 class GameView extends React.PureComponent {
   render () {
-    const {bus, game} = this.props
-    const className = classnames(styles.xenara, styles.game)
+    const {game} = this.props
     return (
-      <div className={className}>
-        <header>
-          <span>lines: {game.progress.lines}</span>
-          <span>level: {game.progress.level}</span>
-          <span>score: {game.progress.score}</span>
-        </header>
-        <p>{game.toString()}</p>
+      <div className={styles.game}>
+        <aside className={styles.left}>
+          <div className={styles.panel}>
+            HOLD
+          </div>
+          <dl className={styles.progress}>
+            <dt>SCORE</dt>
+            <dd>{game.progress.score}</dd>
+            <dt>LINES</dt>
+            <dd>{game.progress.lines}</dd>
+            <dt>LEVEL</dt>
+            <dd>{game.progress.level}</dd>
+          </dl>
+        </aside>
         <TetrionView tetrion={game.tetrion} />
-        {game.tetrion.nextPiece ? <TetrominoView tetromino={game.tetrion.nextPiece} /> : null}
-        <button className='f5 br-pill ph3 pv2 mb2 dib black bg-white bn pointer' onClick={() => bus.emit('pause')}>Pause</button>
+        <aside className={styles.right}>
+          <div className={styles.panel}>
+            {game.tetrion.nextPiece ? <TetrominoView next tetromino={game.tetrion.nextPiece} /> : null}
+            NEXT
+          </div>
+        </aside>
       </div>
     )
   }

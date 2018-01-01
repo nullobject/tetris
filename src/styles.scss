@@ -21,10 +21,6 @@ $block_inset: 3px;
        url("./fonts/xenara_bd-webfont.svg#XenaraBold") format("svg");
 }
 
-.xenara {
-  font-family: xenara, monospace;
-}
-
 @mixin block($color) {
   background-image: linear-gradient(to bottom left, lighten($color, 15%), darken($color, 15%));
 
@@ -32,6 +28,42 @@ $block_inset: 3px;
   border-left-color: darken($color, 10%);
   border-bottom-color: darken($color, 20%);
   border-right-color: darken($color, 10%);
+}
+
+@mixin blocks {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+
+  li {
+    position: absolute;
+    border-style: solid;
+    border-width: $block_inset;
+    box-sizing: border-box;
+    width: $block_size;
+    height: $block_size;
+  }
+}
+
+html, body {
+  height: 100%;
+}
+
+html {
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+body {
+  background-image: linear-gradient(to bottom, #FF84CB, #FFC350);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cyan   { @include block(#00f0f0); }
@@ -43,47 +75,75 @@ $block_inset: 3px;
 .red    { @include block(#f00000); }
 
 .game {
+  color: white;
+  display: flex;
   position: relative;
+  font-family: xenara, monospace;
 
-  header {
-    text-transform: uppercase;
+  aside {
+    width: 150px;
+
+    &.left {
+      padding-right: 20px;
+      text-align: right;
+    }
+
+    &.right {
+      padding-left: 20px;
+      text-align: left;
+    }
+  }
+
+  .panel {
+    overflow: hidden;
+    position: relative;
+    background: rgba(0, 0, 0, 0.8);
+    border: 4px solid #979797;
+    border-radius: 8px;
+    height: 100px;
+    font-size: 1rem;
+    margin-bottom: 4rem;
+    padding: 1rem 0;
+    text-align: center;
+
+    .tetromino {
+      bottom: 30px;
+      left: 35 + $block_size;
+
+      &.shape-o, &.shape-i { left: 35 + 0.5 * $block_size; }
+    }
+  }
+
+  .progress {
+    font-size: 1rem;
+    text-shadow: 0px 1px 0px rgba(0, 0, 0, .5);
+
+    dd {
+      font-size: 1.5rem;
+      margin-bottom: 4rem;
+    }
   }
 
   .tetrion {
     overflow: hidden;
     position: relative;
+    border: 4px solid #979797;
+    border-radius: 8px;
+    box-sizing: content-box;
     width: 230px;
     height: 460px;
   }
 
-  .blocks {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-
-    li {
-      position: absolute;
-      border-style: solid;
-      border-width: $block_inset;
-      width: $block_size;
-      height: $block_size;
-    }
-  }
-
   .playfield {
-    background: black;
+    @include blocks;
+    background: rgba(0, 0, 0, 0.8);
   }
 
   .tetromino {
+    @include blocks;
   }
 
   .ghostPiece {
     opacity: 0.25;
-  }
-
-  .nextPiece {
   }
 }
