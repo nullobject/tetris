@@ -15,6 +15,7 @@ export default class Tetrion {
     this.playfield = new Playfield()
     this.fallingPiece = null
     this.ghostPiece = null
+    this.holdPiece = null
     this.nextPiece = null
   }
 
@@ -57,11 +58,42 @@ export default class Tetrion {
    */
   spawn () {
     log.info('spawn')
-    const {bag, shape} = this.bag.shift()
+
+    let {bag, shape} = this.bag.shift()
     const fallingPiece = new Tetromino(shape).spawn()
     const ghostPiece = fallingPiece.drop(this.collision)
     const nextPiece = new Tetromino(bag.next)
-    return copy(this, {bag, fallingPiece, ghostPiece, nextPiece})
+
+    return {tetrion: copy(this, {bag, fallingPiece, ghostPiece, nextPiece})}
+  }
+
+  /**
+   * Moves the falling piece to the hold position and spawns a new falling
+   * piece.
+   *
+   * @returns A new tetrion.
+   */
+  hold () {
+    log.info('hold')
+
+    if (this.fallingPiece.wasHeld) {
+      // We can't hold a piece if the falling piece was previously held.
+      return {tetrion: this}
+    } else if (this.holdPiece) {
+      // Swap the falling piece with the hold piece.
+      const fallingPiece = this.holdPiece.spawn()
+      const ghostPiece = fallingPiece.drop(this.collision)
+      const holdPiece = this.fallingPiece.hold()
+      return {tetrion: copy(this, {fallingPiece, ghostPiece, holdPiece})}
+    } else {
+      // Hold the falling piece.
+      const {bag, shape} = this.bag.shift(this.fallingPiece.shape)
+      const fallingPiece = new Tetromino(shape).hold().spawn()
+      const ghostPiece = fallingPiece.drop(this.collision)
+      const holdPiece = this.fallingPiece.hold()
+      const nextPiece = new Tetromino(bag.next)
+      return {tetrion: copy(this, {bag, fallingPiece, ghostPiece, holdPiece, nextPiece})}
+    }
   }
 
   /**

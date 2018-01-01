@@ -79,7 +79,9 @@ export default class Game {
     let reward = this.reward
 
     if (this.isSpawning && time - this.spawnTimer >= SPAWN_DELAY) {
-      tetrion = this.tetrion.spawn()
+      const result = this.tetrion.spawn()
+      tetrion = result.tetrion
+
       state = 'idle'
       gravityTimer = time
     } else if (this.isIdle && time - this.gravityTimer >= this.gravityDelay) {

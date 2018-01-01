@@ -16,6 +16,7 @@ const UP = 38
 const DOWN = 40
 const LEFT = 37
 const RIGHT = 39
+const C = 67
 const X = 88
 const Z = 90
 
@@ -78,6 +79,7 @@ class GameView extends React.PureComponent {
         <aside className={styles.left}>
           <div className={styles.panel}>
             HOLD
+            {game.tetrion.holdPiece ? <TetrominoView tetromino={game.tetrion.holdPiece} /> : null}
           </div>
           <dl className={styles.progress}>
             <dt>SCORE</dt>
@@ -91,8 +93,8 @@ class GameView extends React.PureComponent {
         <TetrionView tetrion={game.tetrion} />
         <aside className={styles.right}>
           <div className={styles.panel}>
-            {game.tetrion.nextPiece ? <TetrominoView next tetromino={game.tetrion.nextPiece} /> : null}
             NEXT
+            {game.tetrion.nextPiece ? <TetrominoView tetromino={game.tetrion.nextPiece} /> : null}
           </div>
         </aside>
       </div>
@@ -140,6 +142,8 @@ const commandSignal = keyboard
       emit.next('firmDrop')
     } else if (key.code === SPACE) {
       emit.next('hardDrop')
+    } else if (key.code === C) {
+      emit.next('hold')
     }
   })
 

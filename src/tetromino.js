@@ -43,6 +43,7 @@ export default class Tetromino {
     this.shape = shape
     this.lastTransform = null
     this.vector = Vector.zero
+    this.wasHeld = false
   }
 
   /**
@@ -78,6 +79,15 @@ export default class Tetromino {
    */
   canApplyTransform (t, c) {
     return !c(applyTransform(this, t))
+  }
+
+  /**
+   * Resets the tetromino vector and marks it as held.
+   *
+   * @returns A new tetromino.
+   */
+  hold () {
+    return copy(this, {vector: Vector.zero, wasHeld: true})
   }
 
   /**
