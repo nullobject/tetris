@@ -34,10 +34,25 @@ export default class Tetromino {
    * Returns the blocks for the tetromino.
    */
   get blocks () {
-    const positions = SRS[this.shape].positions[this.transform.rotation]
-    return positions.map(position => {
-      return new Block(this.transform.vector.add(position), this.color)
-    })
+    if (!this._blocks) {
+      const positions = SRS[this.shape].positions[this.transform.rotation]
+      this._blocks = positions.map(position => {
+        return new Block(this.transform.vector.add(position), this.color)
+      })
+    }
+
+    return this._blocks
+  }
+
+  get transform () {
+    return this._transform
+  }
+
+  set transform (t) {
+    this._transform = t
+
+    // Clear cached blocks.
+    this._blocks = null
   }
 
   /**
