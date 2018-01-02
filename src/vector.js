@@ -1,47 +1,56 @@
 /**
- * A `Vector` represents a position and a rotation.
+ * A `Vector` represents a position.
  */
 export default class Vector {
   // Pre-canned vectors.
-  static get zero () { return new Vector(0, 0, 0) }
-  static get up () { return new Vector(0, 1, 0) }
-  static get down () { return new Vector(0, -1, 0) }
-  static get left () { return new Vector(-1, 0, 0) }
-  static get right () { return new Vector(1, 0, 0) }
-  static get rotateLeft () { return new Vector(0, 0, -1) }
-  static get rotateRight () { return new Vector(0, 0, 1) }
+  static get zero () { return new Vector(0, 0) }
 
-  constructor (x = 0, y = 0, rotation = 0) {
-    this.x = x
-    this.y = y
-    this.rotation = Math.abs((rotation + 4) % 4)
+  constructor (...args) {
+    if (args.length === 1 && Array.isArray(args[0])) {
+      this.x = args[0][0]
+      this.y = args[0][1]
+    } else {
+      this.x = args[0]
+      this.y = args[1]
+    }
   }
 
   /**
-   * Returns true if the vector represents a rotation, false otherwise.
+   * Returns true if this is a zero vector.
    */
-  get isRotation () { return this.rotation !== 0 }
-
-  /**
-   * Returns true if the vector represents a translation, false otherwise.
-   */
-  get isTranslation () { return (this.x !== 0) || (this.y !== 0) }
-
-  /**
-   * Returns true if this vector is a zero vector.
-   */
-  get isZero () { return (this.x === 0) && (this.y === 0) && (this.rotation === 0) }
+  get isZero () { return this.isEqual(Vector.zero) }
 
   /**
    * Adds the given vector.
+   *
+   * @param other A vector.
+   * @returns A new vector.
    */
   add (other) {
-    return new Vector(
-      this.x + other.x,
-      this.y + other.y,
-      this.rotation + other.rotation
-    )
+    if (Array.isArray(other)) {
+      other = new Vector(other)
+    }
+
+    return new Vector(this.x + other.x, this.y + other.y)
   }
 
-  toString () { return `(${this.x}, ${this.y}, ${this.rotation})` }
+  /**
+   * Subtracts the given vector.
+   *
+   * @param other A vector.
+   * @returns A new vector.
+   */
+  sub (other) {
+    if (Array.isArray(other)) {
+      other = new Vector(other)
+    }
+
+    return new Vector(this.x - other.x, this.y - other.y)
+  }
+
+  isEqual (other) {
+    return this.x === other.x && this.y === other.y
+  }
+
+  toString () { return `Vector (x: ${this.x}, y: ${this.y})` }
 }

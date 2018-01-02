@@ -4,12 +4,11 @@ let nextId = 1
  * A block represents a position and color.
  */
 export default class Block {
-  constructor (x, y, color) {
-    this.x = x
-    this.y = y
+  constructor (position, color) {
+    this.position = position
     this.color = color
     this.id = nextId++
   }
 
-  toString () { return `(${this.x}, ${this.y}, ${this.color})` }
+  toString () { return `Block (position: ${this.position}, color: ${this.color})` }
 }

@@ -25,8 +25,8 @@ const SYSTEM_EVENTS = ['tick', 'pause']
 
 class BlockView extends React.PureComponent {
   render () {
-    const {x, y, color} = this.props.block
-    const style = {bottom: y * BLOCK_SIZE, left: x * BLOCK_SIZE}
+    const {position, color} = this.props.block
+    const style = {bottom: position.y * BLOCK_SIZE, left: position.x * BLOCK_SIZE}
     return <li className={styles[color]} style={style} />
   }
 }
