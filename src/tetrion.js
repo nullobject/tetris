@@ -56,10 +56,15 @@ export default class Tetrion {
 
     let {bag, shape} = this.bag.shift()
     const fallingPiece = new Tetromino(shape).spawn()
-    const ghostPiece = fallingPiece.drop(this.collision)
-    const nextPiece = new Tetromino(bag.next)
 
-    return {tetrion: copy(this, {bag, fallingPiece, ghostPiece, nextPiece})}
+    if (this.collision(fallingPiece)) {
+      // We can't span a piece if it will collide.
+      return {tetrion: this}
+    } else {
+      const ghostPiece = fallingPiece.drop(this.collision)
+      const nextPiece = new Tetromino(bag.next)
+      return {tetrion: copy(this, {bag, fallingPiece, ghostPiece, nextPiece})}
+    }
   }
 
   /**
@@ -195,7 +200,6 @@ export default class Tetrion {
     }
 
     const {playfield, cleared} = this.playfield.lock(this.fallingPiece.blocks).clearLines()
-
     return {tetrion: copy(this, {playfield, fallingPiece: null}), reward: Reward.clearLines(cleared, this.tspin)}
   }
 

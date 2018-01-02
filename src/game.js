@@ -55,6 +55,13 @@ export default class Game {
   }
 
   /**
+   * Returns true if the game is finished, false otherwise.
+   */
+  get isFinished () {
+    return this.state === 'finished'
+  }
+
+  /**
    * Returns the gravity delay in milliseconds.
    */
   get gravityDelay () {
@@ -82,8 +89,13 @@ export default class Game {
       const result = this.tetrion.spawn()
       tetrion = result.tetrion
 
-      state = 'idle'
-      gravityTimer = time
+      if (tetrion === this.tetrion) {
+        console.log('game over')
+        state = 'finished'
+      } else {
+        state = 'idle'
+        gravityTimer = time
+      }
     } else if (this.isIdle && time - this.gravityTimer >= this.gravityDelay) {
       // Apply gravity.
       const result = this.tetrion.moveDown()
