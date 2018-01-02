@@ -61,11 +61,14 @@ class PlayfieldView extends React.PureComponent {
 class TetrionView extends React.PureComponent {
   render () {
     const {playfield, fallingPiece, ghostPiece} = this.props.tetrion
+    const message = this.props.message
+
     return (
       <div className={styles.tetrion}>
         <PlayfieldView playfield={playfield} />
         {fallingPiece ? <TetrominoView falling tetromino={fallingPiece} /> : null}
         {ghostPiece ? <TetrominoView ghost tetromino={ghostPiece} /> : null}
+        {message ? <div className={styles.message}>{message}</div> : null}
       </div>
     )
   }
@@ -74,6 +77,14 @@ class TetrionView extends React.PureComponent {
 class GameView extends React.PureComponent {
   render () {
     const {game} = this.props
+    let message
+
+    if (game.isFinished) {
+      message = 'game over'
+    } else if (game.reward && game.reward.message) {
+      message = game.reward.message
+    }
+
     return (
       <div className={styles.game}>
         <aside className={styles.left}>
@@ -90,7 +101,7 @@ class GameView extends React.PureComponent {
             <dd>{game.progress.level}</dd>
           </dl>
         </aside>
-        <TetrionView tetrion={game.tetrion} />
+        <TetrionView tetrion={game.tetrion} message={message} />
         <aside className={styles.right}>
           <div className={styles.panel}>
             NEXT

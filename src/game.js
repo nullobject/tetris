@@ -90,7 +90,6 @@ export default class Game {
       tetrion = result.tetrion
 
       if (tetrion === this.tetrion) {
-        console.log('game over')
         state = 'finished'
       } else {
         state = 'idle'
@@ -100,6 +99,7 @@ export default class Game {
       // Apply gravity.
       const result = this.tetrion.moveDown()
       tetrion = result.tetrion
+      reward = result.reward
 
       state = 'idle'
       gravityTimer = time
