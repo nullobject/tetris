@@ -1,6 +1,7 @@
 import Block from './block'
 import SRS from './srs'
 import Transform from './transform'
+import Vector from './vector'
 import {copy, zip} from 'fkit'
 
 /**
@@ -23,14 +24,14 @@ function applyTransform (tetromino, t) {
  * See http://harddrop.com/wiki/SRS#How_Guideline_SRS_Really_Works for details.
  *
  * @param tetromino A tetromino.
- * @param t A transform transform.
+ * @param t A transform.
  * @returns An array of transforms.
  */
 function calculateWallKickTransforms (tetromino, t) {
   const from = tetromino.offsets[tetromino.transform.rotation]
   const to = tetromino.offsets[tetromino.transform.add(t).rotation]
   return zip(from, to).map(([[x0, y0], [x1, y1]]) =>
-    t.add(new Transform(x0 - x1, y0 - y1))
+    t.add(new Transform(new Vector(x0 - x1, y0 - y1)))
   )
 }
 
@@ -65,9 +66,10 @@ export default class Tetromino {
    */
   get blocks () {
     const positions = SRS[this.shape].positions[this.transform.rotation]
-    return positions.map(([x, y]) =>
-      new Block(x + this.transform.x, y + this.transform.y, this.color)
-    )
+    return positions.map(([x, y]) => {
+      const offset = new Vector(x, y)
+      return new Block(this.transform.vector.add(offset), this.color)
+    })
   }
 
   /**
@@ -96,7 +98,8 @@ export default class Tetromino {
    * @returns A new tetromino.
    */
   spawn () {
-    const transform = new Transform(SRS[this.shape].spawn[0], SRS[this.shape].spawn[1])
+    const vector = new Vector(SRS[this.shape].spawn[0], SRS[this.shape].spawn[1])
+    const transform = new Transform(vector)
     return copy(this, {transform})
   }
 
@@ -134,6 +137,6 @@ export default class Tetromino {
   }
 
   toString () {
-    return `Tetromino (blocks: ${this.blocks})`
+    return `Tetromino (blocks: [${this.blocks}])`
   }
 }

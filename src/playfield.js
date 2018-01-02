@@ -1,4 +1,5 @@
-import {any, compose, copy, difference, fold, groupBy, sortBy, sub, union, update, whereAny} from 'fkit'
+import Vector from './vector'
+import {any, compose, copy, difference, fold, groupBy, sortBy, set, union, whereAny} from 'fkit'
 
 const WIDTH = 10
 const HEIGHT = 20
@@ -7,8 +8,8 @@ const HEIGHT = 20
  * Sorts and groups blocks by row.
  */
 const groupBlocksByRow = compose(
-  groupBy((a, b) => a.y === b.y),
-  sortBy((a, b) => a.y - b.y)
+  groupBy((a, b) => a.position.y === b.position.y),
+  sortBy((a, b) => a.position.y - b.position.y)
 )
 
 /**
@@ -34,8 +35,8 @@ export default class Playfield {
    * @returns A boolean value.
    */
   collide (blocks) {
-    const collideBlock = b => this.blocks.some(a => a.x === b.x && a.y === b.y)
-    const isOutside = b => b.x < 0 || b.x >= WIDTH || b.y < 0 || b.y >= HEIGHT + 2
+    const collideBlock = b => this.blocks.some(a => a.position.x === b.position.x && a.position.y === b.position.y)
+    const isOutside = b => b.position.x < 0 || b.position.x >= WIDTH || b.position.y < 0 || b.position.y >= HEIGHT + 2
     return blocks.some(whereAny([collideBlock, isOutside]))
   }
 
@@ -67,7 +68,9 @@ export default class Playfield {
         cleared++
       } else if (cleared > 0) {
         blocks = difference(blocks, row)
-        const newRow = row.map(update('y', sub(cleared)))
+        const newRow = row.map(block =>
+          set('position', block.position.sub(new Vector(0, cleared)), block)
+        )
         blocks = union(blocks, newRow)
       }
 
@@ -80,12 +83,12 @@ export default class Playfield {
   /**
    * Returns the blocks at the given positions `ps`.
    *
-   * @param ps An array of positions.
+   * @param vs An array of vectors.
    * @returns An array of blocks.
    */
-  findBlocks (ps) {
+  findBlocks (vs) {
     return this.blocks.filter(b =>
-      any(p => p.x === b.x && p.y === b.y, ps)
+      any(v => v.isEqual(b.position), vs)
     )
   }
 

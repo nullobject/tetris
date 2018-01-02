@@ -3,6 +3,7 @@ import Playfield from './playfield'
 import Reward from './reward'
 import Tetromino from './tetromino'
 import Transform from './transform'
+import Vector from './vector'
 import log from './log'
 import {copy} from 'fkit'
 
@@ -38,12 +39,12 @@ export default class Tetrion {
    * Returns true if the last transform resulted in a T-spin, false otherwise.
    */
   get tspin () {
-    const v = this.fallingPiece.transform
+    const v = this.fallingPiece.transform.vector
     const positions = [
-      {x: v.x - 1, y: v.y - 1},
-      {x: v.x + 1, y: v.y - 1},
-      {x: v.x - 1, y: v.y + 1},
-      {x: v.x + 1, y: v.y + 1}
+      v.add(new Vector(-1, -1)),
+      v.add(new Vector(1, -1)),
+      v.add(new Vector(-1, 1)),
+      v.add(new Vector(1, 1))
     ]
     const adjacentBlocks = this.playfield.findBlocks(positions)
     return this.fallingPiece.shape === 'T' &&
@@ -165,9 +166,9 @@ export default class Tetrion {
     log.info('firmDrop')
 
     const fallingPiece = this.fallingPiece.drop(this.collision)
-    const dropped = this.fallingPiece.transform.y - fallingPiece.transform.y
+    const delta = this.fallingPiece.transform.vector.sub(fallingPiece.transform.vector)
 
-    return {tetrion: copy(this, {fallingPiece}), reward: Reward.firmDrop(dropped)}
+    return {tetrion: copy(this, {fallingPiece}), reward: Reward.firmDrop(delta.y)}
   }
 
   /**
@@ -180,10 +181,10 @@ export default class Tetrion {
     log.info('hardDrop')
 
     const fallingPiece = this.fallingPiece.drop(this.collision)
-    const dropped = this.fallingPiece.transform.y - fallingPiece.transform.y
+    const delta = this.fallingPiece.transform.vector.sub(fallingPiece.transform.vector)
     const {playfield, cleared} = this.playfield.lock(fallingPiece.blocks).clearLines()
 
-    return {tetrion: copy(this, {playfield, fallingPiece: null}), reward: Reward.hardDrop(dropped, cleared)}
+    return {tetrion: copy(this, {playfield, fallingPiece: null}), reward: Reward.hardDrop(delta.y, cleared)}
   }
 
   /**
