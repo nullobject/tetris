@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "autoprefixer": "^7.2.3",
-    "bulb": "^0.4.0",
+    "bulb": "^1.0.0",
     "classnames": "^2.2.5",
     "fkit": "^1.1.0",
     "nanobus": "^4.3.1",

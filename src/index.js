@@ -124,25 +124,25 @@ const transformer = (state, event, emit) => {
 }
 
 const commandSignal = keyboard
-  .key(document)
+  .keys(document)
   .stateMachine((_, key, emit) => {
-    if (key.code === Z) {
+    if (key === Z) {
       emit.next('rotateLeft')
-    } else if (key.code === X) {
+    } else if (key === X) {
       emit.next('rotateRight')
-    } else if (key.code === UP) {
+    } else if (key === UP) {
       emit.next('rotateRight')
-    } else if (key.code === DOWN) {
+    } else if (key === DOWN) {
       emit.next('softDrop')
-    } else if (key.code === LEFT) {
+    } else if (key === LEFT) {
       emit.next('moveLeft')
-    } else if (key.code === RIGHT) {
+    } else if (key === RIGHT) {
       emit.next('moveRight')
-    } else if (key.code === ENTER) {
+    } else if (key === ENTER) {
       emit.next('firmDrop')
-    } else if (key.code === SPACE) {
+    } else if (key === SPACE) {
       emit.next('hardDrop')
-    } else if (key.code === C) {
+    } else if (key === C) {
       emit.next('hold')
     }
   })
