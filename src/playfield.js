@@ -1,4 +1,3 @@
-import Vector from './vector'
 import {any, compose, copy, difference, fold, groupBy, sortBy, set, union, whereAny} from 'fkit'
 
 const WIDTH = 10
@@ -35,7 +34,9 @@ export default class Playfield {
    * @returns A boolean value.
    */
   collide (blocks) {
-    const collideBlock = b => this.blocks.some(a => a.position.x === b.position.x && a.position.y === b.position.y)
+    const collideBlock = b => this.blocks.some(a =>
+      a.position.isEqual(b.position)
+    )
     const isOutside = b => b.position.x < 0 || b.position.x >= WIDTH || b.position.y < 0 || b.position.y >= HEIGHT + 2
     return blocks.some(whereAny([collideBlock, isOutside]))
   }
@@ -69,7 +70,7 @@ export default class Playfield {
       } else if (cleared > 0) {
         blocks = difference(blocks, row)
         const newRow = row.map(block =>
-          set('position', block.position.sub(new Vector(0, cleared)), block)
+          set('position', block.position.sub([0, cleared]), block)
         )
         blocks = union(blocks, newRow)
       }
@@ -88,7 +89,7 @@ export default class Playfield {
    */
   findBlocks (vs) {
     return this.blocks.filter(b =>
-      any(v => v.isEqual(b.position), vs)
+      any(a => a.isEqual(b.position), vs)
     )
   }
 

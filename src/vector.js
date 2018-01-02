@@ -5,9 +5,14 @@ export default class Vector {
   // Pre-canned vectors.
   static get zero () { return new Vector(0, 0) }
 
-  constructor (x, y) {
-    this.x = x
-    this.y = y
+  constructor (...args) {
+    if (args.length === 1 && Array.isArray(args[0])) {
+      this.x = args[0][0]
+      this.y = args[0][1]
+    } else {
+      this.x = args[0]
+      this.y = args[1]
+    }
   }
 
   /**
@@ -17,15 +22,29 @@ export default class Vector {
 
   /**
    * Adds the given vector.
+   *
+   * @param other A vector.
+   * @returns A new vector.
    */
   add (other) {
+    if (Array.isArray(other)) {
+      other = new Vector(other)
+    }
+
     return new Vector(this.x + other.x, this.y + other.y)
   }
 
   /**
    * Subtracts the given vector.
+   *
+   * @param other A vector.
+   * @returns A new vector.
    */
   sub (other) {
+    if (Array.isArray(other)) {
+      other = new Vector(other)
+    }
+
     return new Vector(this.x - other.x, this.y - other.y)
   }
 

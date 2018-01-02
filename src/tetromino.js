@@ -30,9 +30,10 @@ function applyTransform (tetromino, t) {
 function calculateWallKickTransforms (tetromino, t) {
   const from = tetromino.offsets[tetromino.transform.rotation]
   const to = tetromino.offsets[tetromino.transform.add(t).rotation]
-  return zip(from, to).map(([[x0, y0], [x1, y1]]) =>
-    t.add(new Transform(new Vector(x0 - x1, y0 - y1)))
-  )
+  return zip(from, to).map(([a, b]) => {
+    const c = new Vector(a).sub(b)
+    return t.add(new Transform(c))
+  })
 }
 
 /**
@@ -66,9 +67,8 @@ export default class Tetromino {
    */
   get blocks () {
     const positions = SRS[this.shape].positions[this.transform.rotation]
-    return positions.map(([x, y]) => {
-      const offset = new Vector(x, y)
-      return new Block(this.transform.vector.add(offset), this.color)
+    return positions.map(position => {
+      return new Block(this.transform.vector.add(position), this.color)
     })
   }
 
@@ -98,8 +98,7 @@ export default class Tetromino {
    * @returns A new tetromino.
    */
   spawn () {
-    const vector = new Vector(SRS[this.shape].spawn[0], SRS[this.shape].spawn[1])
-    const transform = new Transform(vector)
+    const transform = new Transform(SRS[this.shape].spawn)
     return copy(this, {transform})
   }
 

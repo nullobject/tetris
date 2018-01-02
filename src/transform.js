@@ -5,16 +5,21 @@ import Vector from './vector'
  */
 export default class Transform {
   // Pre-canned transforms.
-  static get zero () { return new Transform(new Vector(0, 0), 0) }
-  static get up () { return new Transform(new Vector(0, 1), 0) }
-  static get down () { return new Transform(new Vector(0, -1), 0) }
-  static get left () { return new Transform(new Vector(-1, 0), 0) }
-  static get right () { return new Transform(new Vector(1, 0), 0) }
-  static get rotateLeft () { return new Transform(new Vector(0, 0), -1) }
-  static get rotateRight () { return new Transform(new Vector(0, 0), 1) }
+  static get zero () { return new Transform([0, 0], 0) }
+  static get up () { return new Transform([0, 1], 0) }
+  static get down () { return new Transform([0, -1], 0) }
+  static get left () { return new Transform([-1, 0], 0) }
+  static get right () { return new Transform([1, 0], 0) }
+  static get rotateLeft () { return new Transform([0, 0], -1) }
+  static get rotateRight () { return new Transform([0, 0], 1) }
 
   constructor (vector = Vector.zero, rotation = 0) {
-    this.vector = vector
+    if (Array.isArray(vector)) {
+      this.vector = new Vector(vector)
+    } else {
+      this.vector = vector
+    }
+
     this.rotation = Math.abs((rotation + 4) % 4)
   }
 
@@ -37,10 +42,7 @@ export default class Transform {
    * Adds the given transform.
    */
   add (other) {
-    return new Transform(
-      this.vector.add(other.vector),
-      this.rotation + other.rotation
-    )
+    return new Transform(this.vector.add(other.vector), this.rotation + other.rotation)
   }
 
   toString () { return `Transform (vector: ${this.vector}, rotation: ${this.rotation})` }

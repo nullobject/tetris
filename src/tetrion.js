@@ -3,7 +3,6 @@ import Playfield from './playfield'
 import Reward from './reward'
 import Tetromino from './tetromino'
 import Transform from './transform'
-import Vector from './vector'
 import log from './log'
 import {copy} from 'fkit'
 
@@ -40,12 +39,7 @@ export default class Tetrion {
    */
   get tspin () {
     const v = this.fallingPiece.transform.vector
-    const positions = [
-      v.add(new Vector(-1, -1)),
-      v.add(new Vector(1, -1)),
-      v.add(new Vector(-1, 1)),
-      v.add(new Vector(1, 1))
-    ]
+    const positions = [v.add([-1, -1]), v.add([1, -1]), v.add([-1, 1]), v.add([1, 1])]
     const adjacentBlocks = this.playfield.findBlocks(positions)
     return this.fallingPiece.shape === 'T' &&
       this.fallingPiece.lastTransform.isRotation &&
