@@ -5,38 +5,6 @@ import Vector from './vector'
 import {copy, zip} from 'fkit'
 
 /**
- * Applies the given transform `t` to the tetromino.
- *
- * @param tetromino A tetromino.
- * @param t A transform transform.
- * @returns A new tetromino.
- */
-function applyTransform (tetromino, t) {
-  const transform = tetromino.transform.add(t)
-  return copy(tetromino, {transform, lastTransform: t})
-}
-
-/**
- * Calculates the wall kick transforms for the given transform `t` and
- * tetromino. These transforms should be attempted in order when trying to
- * transform a tetromino.
- *
- * See http://harddrop.com/wiki/SRS#How_Guideline_SRS_Really_Works for details.
- *
- * @param tetromino A tetromino.
- * @param t A transform.
- * @returns An array of transforms.
- */
-function calculateWallKickTransforms (tetromino, t) {
-  const from = tetromino.offsets[tetromino.transform.rotation]
-  const to = tetromino.offsets[tetromino.transform.add(t).rotation]
-  return zip(from, to).map(([a, b]) => {
-    const c = new Vector(a).sub(b)
-    return t.add(new Transform(c))
-  })
-}
-
-/**
  * A tetromino is a polyomino made of four square blocks. The seven one-sided
  * tetrominoes are I, O, T, S, Z, J, and L.
  */
@@ -80,7 +48,7 @@ export default class Tetromino {
    * @returns A boolean.
    */
   canApplyTransform (t, c) {
-    return !c(applyTransform(this, t))
+    return !c(this.applyTransformWithoutCollisions(t))
   }
 
   /**
@@ -117,22 +85,54 @@ export default class Tetromino {
       t = u
     }
 
-    return applyTransform(this, t)
+    return this.applyTransformWithoutCollisions(t)
   }
 
   /**
-   * Applies the given transform `t` if it doesn't collide.
+   * Applies the given transform `t` to the tetromino. If there is a collision,
+   * then the wall kick transforms will attempted before giving up.
    *
-   * @param t A transform transform.
+   * @param t A transform.
    * @param c A collision function.
    * @returns A new tetromino.
    */
   applyTransform (t, c) {
     // Find the first wall kick that doesn't collide.
-    const u = calculateWallKickTransforms(this, t)
+    const u = this.calculateWallKickTransforms(t)
       .find(u => this.canApplyTransform(u, c))
 
-    return u ? applyTransform(this, u) : this
+    return u ? this.applyTransformWithoutCollisions(u) : this
+  }
+
+  /**
+   * Applies the given transform `t` to the tetromino without detecting
+   * collisions.
+   *
+   * @param t A transform.
+   * @returns A new tetromino.
+   */
+  applyTransformWithoutCollisions (t) {
+    const transform = this.transform.add(t)
+    return copy(this, {transform, lastTransform: t})
+  }
+
+  /**
+   * Calculates the wall kick transforms for the given transform `t`. These
+   * transforms should be attempted in order when trying to transform a
+   * tetromino.
+   *
+   * See http://harddrop.com/wiki/SRS#How_Guideline_SRS_Really_Works for details.
+   *
+   * @param t A transform.
+   * @returns An array of transforms.
+   */
+  calculateWallKickTransforms (t) {
+    const from = this.offsets[this.transform.rotation]
+    const to = this.offsets[this.transform.add(t).rotation]
+    return zip(from, to).map(([a, b]) => {
+      const c = new Vector(a).sub(b)
+      return t.add(new Transform(c))
+    })
   }
 
   toString () {
