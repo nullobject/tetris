@@ -2,7 +2,7 @@ import Bag from './bag'
 import Playfield from './playfield'
 import Reward from './reward'
 import Tetromino from './tetromino'
-import Vector from './vector'
+import Transform from './transform'
 import log from './log'
 import {copy} from 'fkit'
 
@@ -23,7 +23,7 @@ export default class Tetrion {
    * Returns true if the falling piece can move down, false otherwise.
    */
   get canMoveDown () {
-    return this.fallingPiece.canApplyTransform(Vector.down, this.collision)
+    return this.fallingPiece.canApplyTransform(Transform.down, this.collision)
   }
 
   /**
@@ -38,7 +38,7 @@ export default class Tetrion {
    * Returns true if the last transform resulted in a T-spin, false otherwise.
    */
   get tspin () {
-    const v = this.fallingPiece.vector
+    const v = this.fallingPiece.transform
     const positions = [
       {x: v.x - 1, y: v.y - 1},
       {x: v.x + 1, y: v.y - 1},
@@ -103,7 +103,7 @@ export default class Tetrion {
    */
   moveLeft () {
     log.info('moveLeft')
-    return {tetrion: this.transform(Vector.left)}
+    return {tetrion: this.transform(Transform.left)}
   }
 
   /**
@@ -113,7 +113,7 @@ export default class Tetrion {
    */
   moveRight () {
     log.info('moveRight')
-    return {tetrion: this.transform(Vector.right)}
+    return {tetrion: this.transform(Transform.right)}
   }
 
   /**
@@ -123,7 +123,7 @@ export default class Tetrion {
    */
   moveDown () {
     log.info('moveDown')
-    return {tetrion: this.transform(Vector.down)}
+    return {tetrion: this.transform(Transform.down)}
   }
 
   /**
@@ -133,7 +133,7 @@ export default class Tetrion {
    */
   rotateLeft () {
     log.info('rotateLeft')
-    return {tetrion: this.transform(Vector.rotateLeft)}
+    return {tetrion: this.transform(Transform.rotateLeft)}
   }
 
   /**
@@ -143,7 +143,7 @@ export default class Tetrion {
    */
   rotateRight () {
     log.info('rotateRight')
-    return {tetrion: this.transform(Vector.rotateRight)}
+    return {tetrion: this.transform(Transform.rotateRight)}
   }
 
   /**
@@ -153,7 +153,7 @@ export default class Tetrion {
    */
   softDrop () {
     log.info('softDrop')
-    return {tetrion: this.transform(Vector.down), reward: Reward.softDrop()}
+    return {tetrion: this.transform(Transform.down), reward: Reward.softDrop()}
   }
 
   /**
@@ -165,7 +165,7 @@ export default class Tetrion {
     log.info('firmDrop')
 
     const fallingPiece = this.fallingPiece.drop(this.collision)
-    const dropped = this.fallingPiece.vector.y - fallingPiece.vector.y
+    const dropped = this.fallingPiece.transform.y - fallingPiece.transform.y
 
     return {tetrion: copy(this, {fallingPiece}), reward: Reward.firmDrop(dropped)}
   }
@@ -180,7 +180,7 @@ export default class Tetrion {
     log.info('hardDrop')
 
     const fallingPiece = this.fallingPiece.drop(this.collision)
-    const dropped = this.fallingPiece.vector.y - fallingPiece.vector.y
+    const dropped = this.fallingPiece.transform.y - fallingPiece.transform.y
     const {playfield, cleared} = this.playfield.lock(fallingPiece.blocks).clearLines()
 
     return {tetrion: copy(this, {playfield, fallingPiece: null}), reward: Reward.hardDrop(dropped, cleared)}
@@ -210,7 +210,7 @@ export default class Tetrion {
    * @returns A new tetrion.
    */
   transform (t) {
-    const fallingPiece = this.fallingPiece.transform(t, this.collision)
+    const fallingPiece = this.fallingPiece.applyTransform(t, this.collision)
 
     if (fallingPiece !== this.fallingPiece) {
       const ghostPiece = fallingPiece.drop(this.collision)
