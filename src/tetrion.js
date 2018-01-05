@@ -153,7 +153,11 @@ export default class Tetrion {
    */
   softDrop () {
     log.info('softDrop')
-    return {tetrion: this.transform(Transform.down), reward: Reward.softDrop()}
+
+    return {
+      tetrion: this.transform(Transform.down),
+      reward: Reward.softDrop()
+    }
   }
 
   /**
@@ -167,7 +171,10 @@ export default class Tetrion {
     const fallingPiece = this.fallingPiece.drop(this.collision)
     const delta = this.fallingPiece.transform.vector.sub(fallingPiece.transform.vector)
 
-    return {tetrion: copy(this, {fallingPiece}), reward: Reward.firmDrop(delta.y)}
+    return {
+      tetrion: copy(this, {fallingPiece}),
+      reward: Reward.firmDrop(delta.y)
+    }
   }
 
   /**
@@ -183,7 +190,10 @@ export default class Tetrion {
     const delta = this.fallingPiece.transform.vector.sub(fallingPiece.transform.vector)
     const {playfield, cleared} = this.playfield.lock(fallingPiece.blocks).clearLines()
 
-    return {tetrion: copy(this, {playfield, fallingPiece: null}), reward: Reward.hardDrop(delta.y, cleared)}
+    return {
+      tetrion: copy(this, {playfield, fallingPiece: null}),
+      reward: Reward.hardDrop(delta.y, cleared)
+    }
   }
 
   /**
@@ -200,7 +210,11 @@ export default class Tetrion {
     }
 
     const {playfield, cleared} = this.playfield.lock(this.fallingPiece.blocks).clearLines()
-    return {tetrion: copy(this, {playfield, fallingPiece: null}), reward: Reward.clearLines(cleared, this.tspin)}
+
+    return {
+      tetrion: copy(this, {playfield, fallingPiece: null}),
+      reward: Reward.clearLines(cleared, this.tspin)
+    }
   }
 
   /**
