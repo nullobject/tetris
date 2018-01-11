@@ -42,6 +42,7 @@ export default class Tetrion {
     const positions = [v.add([-1, -1]), v.add([1, -1]), v.add([-1, 1]), v.add([1, 1])]
     const adjacentBlocks = this.playfield.findBlocks(positions)
     return this.fallingPiece.shape === 'T' &&
+      this.fallingPiece.lastTransform &&
       this.fallingPiece.lastTransform.isRotation &&
       adjacentBlocks.length >= 3
   }
