@@ -1,5 +1,7 @@
-$block_size:  23px;
+$block_size: 23px;
 $block_inset: 3px;
+$bg_color_1: fade-out(#ff84cb, 0.08);
+$bg_color_2: fade-out(#ffc350, 0.02);
 
 @font-face {
   font-family: xenara;
@@ -58,7 +60,7 @@ html {
 }
 
 body {
-  background-image: linear-gradient(to bottom, #FF84CB, #FFC350);
+  background-image: linear-gradient(to bottom, $bg_color_1, $bg_color_2), url("./images/pattern.png");
   display: flex;
   align-items: center;
   justify-content: center;
