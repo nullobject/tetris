@@ -22,7 +22,7 @@ const X = 88
 const Z = 90
 
 const BLOCK_SIZE = 23
-const SYSTEM_EVENTS = ['tick', 'pause']
+const SYSTEM_EVENTS = ['pause', 'tick']
 
 class BlockView extends React.PureComponent {
   render () {
@@ -77,7 +77,7 @@ class TetrionView extends React.PureComponent {
 
 class GameView extends React.PureComponent {
   render () {
-    const {game} = this.props
+    const {bus, game} = this.props
     let message
 
     if (game.isFinished) {
@@ -90,45 +90,110 @@ class GameView extends React.PureComponent {
       <div className={styles.game}>
         <aside className={styles.left}>
           <div className={styles.panel}>
-            HOLD
+            <h6>Hold</h6>
             {game.tetrion.holdPiece ? <TetrominoView tetromino={game.tetrion.holdPiece} /> : null}
           </div>
-          <dl className={styles.progress}>
-            <dt>SCORE</dt>
-            <dd>{game.progress.score}</dd>
-            <dt>LINES</dt>
-            <dd>{game.progress.lines}</dd>
-            <dt>LEVEL</dt>
-            <dd>{game.progress.level}</dd>
-          </dl>
+          <div className={styles.progress}>
+            <h6>Score</h6>
+            <p>{game.progress.score}</p>
+            <h6>Lines</h6>
+            <p>{game.progress.lines}</p>
+            <h6>Level</h6>
+            <p>{game.progress.level}</p>
+          </div>
         </aside>
         <TetrionView tetrion={game.tetrion} message={message} />
         <aside className={styles.right}>
           <div className={styles.panel}>
-            NEXT
+            <h6>Next</h6>
             {game.tetrion.nextPiece ? <TetrominoView tetromino={game.tetrion.nextPiece} /> : null}
           </div>
+          <nav>
+            <a href='#' onClick={() => bus.emit('pause')}>Help</a>
+          </nav>
         </aside>
       </div>
     )
   }
 }
 
-const transformer = (state, event, emit) => {
+class HelpView extends React.PureComponent {
+  render () {
+    const {bus} = this.props
+
+    return (
+      <div className={styles.modal}>
+        <h1>How to Play</h1>
+
+        <p>The goal of Tetris is to score as many points as possible by
+        clearing horizontal lines of blocks. The player must rotate, move, and
+        drop the falling tetriminos inside the playfield. Lines are cleared when
+        they are filled with blocks and have no empty spaces.</p>
+
+        <p>As lines are cleared, the level increases and tetriminos fall
+        faster, making the game progressively more challenging. If the blocks
+        land above the top of the playfield, then the game is over.</p>
+
+        <dl>
+          <dt>LEFT</dt>
+          <dd>Move the falling tetromino left.</dd>
+
+          <dt>RIGHT</dt>
+          <dd>Move the falling tetromino right.</dd>
+
+          <dt>DOWN</dt>
+          <dd>Move the falling tetromino down (soft drop).</dd>
+
+          <dt>Z</dt>
+          <dd>Rotate the falling tetromino left.</dd>
+
+          <dt>X/UP</dt>
+          <dd>Rotate the falling tetromino right.</dd>
+
+          <dt>C</dt>
+          <dd>Store the falling tetromino for later use.</dd>
+
+          <dt>SPACE</dt>
+          <dd>Drop the falling tetromino to the bottom of the playfield and lock it immediately (hard drop).</dd>
+
+          <dt>RETURN</dt>
+          <dd>Drop the falling tetromino to the bottom of the playfield, but don't lock it (firm drop).</dd>
+        </dl>
+
+        <h1>Credits</h1>
+
+        <p>Copyright © 2018 Josh Bassett</p>
+
+        <p className={styles.center}><button onClick={() => bus.emit('pause')}>Resume</button></p>
+      </div>
+    )
+  }
+}
+
+class RootView extends React.PureComponent {
+  render () {
+    const {bus, state} = this.props
+
+    return (
+      <div className={styles.container}>
+        <GameView bus={bus} game={state.game} />
+        {state.paused ? <HelpView bus={bus} /> : null}
+      </div>
+    )
+  }
+}
+
+function transformer (state, event) {
   if (event === 'tick' && !state.paused) {
     // Get the next command.
     const command = state.commands.shift()
     const game = state.game.tick(CLOCK_PERIOD, command)
 
-    // Emit the next game state.
-    emit.next(game)
-
     state = {...state, game}
   } else if (event === 'pause') {
-    log.info('pausing')
     const paused = state.paused
     state = {...state, paused: !paused}
-  } else if (!elem(event, SYSTEM_EVENTS)) {
+  } else if (!elem(event, SYSTEM_EVENTS) && !state.paused) {
     state.commands.push(event)
   }
 
@@ -166,8 +231,8 @@ const initialState = {game: new Game(), commands: [], paused: false}
 const root = document.getElementById('root')
 
 const subscription = merge(busSignal, clockSignal, commandSignal)
-  .stateMachine(transformer, initialState)
-  .subscribe(game => ReactDOM.render(<GameView game={game} bus={bus} />, root))
+  .scan(transformer, initialState)
+  .subscribe(state => ReactDOM.render(<RootView bus={bus} state={state} />, root))
 
 if (module.hot) {
   module.hot.dispose(() => {
