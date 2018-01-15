@@ -1,0 +1,27 @@
+button {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  padding: .375rem .75rem;
+  font-family: inherit;
+  font-size: 1rem;
+  letter-spacing: inherit;
+  line-height: 1.5;
+  border-radius: .25rem;
+  text-transform: uppercase;
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+
+  &:hover {
+    background-color: white;
+    border-color: white;
+    color: black;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+}

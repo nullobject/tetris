@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '../styles.scss'
+import styles from '../stylesheets/styles.scss'
 
 export default class HelpView extends React.PureComponent {
   render () {

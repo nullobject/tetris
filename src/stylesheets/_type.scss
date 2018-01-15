@@ -1,0 +1,70 @@
+@font-face {
+  font-family: xenara;
+  font-weight: normal;
+  src: url("../fonts/xenara_rg-webfont.eot");
+  src: url("../fonts/xenara_rg-webfont.eot?#iefix") format("embedded-opentype"),
+       url("../fonts/xenara_rg-webfont.woff") format("woff"),
+       url("../fonts/xenara_rg-webfont.ttf") format("truetype"),
+       url("../fonts/xenara_rg-webfont.svg#XenaraRegular") format("svg");
+}
+
+@font-face {
+  font-family: xenara;
+  font-weight: bold;
+  src: url("../fonts/xenara_bd-webfont.eot");
+  src: url("../fonts/xenara_bd-webfont.eot?#iefix") format("embedded-opentype"),
+       url("../fonts/xenara_bd-webfont.woff") format("woff"),
+       url("../fonts/xenara_bd-webfont.ttf") format("truetype"),
+       url("../fonts/xenara_bd-webfont.svg#XenaraBold") format("svg");
+}
+
+html, body {
+  height: 100%;
+}
+
+html {
+  font-family: xenara, monospace;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+body {
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: .5rem;
+  text-transform: uppercase;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+dl {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 0;
+  margin-bottom: .5rem;
+
+  dt {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+
+  dd {
+    flex: 0 0 75%;
+    margin-bottom: .5rem;
+    margin-left: 0;
+    max-width: 75%;
+  }
+}

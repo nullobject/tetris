@@ -1,7 +1,7 @@
 import BlockView from './block_view'
 import React from 'react'
 import classnames from 'classnames'
-import styles from '../styles.scss'
+import styles from '../stylesheets/styles.scss'
 
 export default class TetrominoView extends React.PureComponent {
   render () {

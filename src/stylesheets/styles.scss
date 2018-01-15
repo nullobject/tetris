@@ -1,0 +1,28 @@
+$block_size: 23px;
+$block_inset: 3px;
+
+$bg_color_1: fade-out(#ff84cb, .08);
+$bg_color_2: fade-out(#ffc350, .02);
+
+$playfield_color: rgba(0, 0, 0, .75);
+
+@import "./animations";
+@import "./buttons";
+@import "./game";
+@import "./modal";
+@import "./type";
+
+html {
+  color: white;
+}
+
+body {
+  align-items: center;
+  background-image: linear-gradient(to bottom, $bg_color_1, $bg_color_2), url("../images/pattern.png");
+  display: flex;
+  justify-content: center;
+}
+
+.center {
+  text-align: center;
+}

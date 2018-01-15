@@ -1,6 +1,6 @@
 import BlockView from './block_view'
 import React from 'react'
-import styles from '../styles.scss'
+import styles from '../stylesheets/styles.scss'
 
 export default class PlayfieldView extends React.PureComponent {
   render () {

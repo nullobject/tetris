@@ -1,7 +1,7 @@
 import React from 'react'
 import TetrionView from './tetrion_view'
 import TetrominoView from './tetromino_view'
-import styles from '../styles.scss'
+import styles from '../stylesheets/styles.scss'
 
 export default class GameView extends React.PureComponent {
   render () {

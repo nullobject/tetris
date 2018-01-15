@@ -1,0 +1,130 @@
+@mixin block($color) {
+  background-image: linear-gradient(to bottom left, lighten($color, 15%), darken($color, 15%));
+
+  border-top-color: lighten($color, 20%);
+  border-left-color: darken($color, 10%);
+  border-bottom-color: darken($color, 20%);
+  border-right-color: darken($color, 10%);
+}
+
+.cyan   { @include block(#00f0f0); }
+.blue   { @include block(#0000f0); }
+.orange { @include block(#f0a000); }
+.yellow { @include block(#f0f000); }
+.green  { @include block(#00f000); }
+.purple { @include block(#a000f0); }
+.red    { @include block(#f00000); }
+
+.game {
+  display: flex;
+  position: relative;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+  text-transform: uppercase;
+  text-align: center;
+
+  h1 {
+    font-size: 5rem;
+    font-weight: normal;
+  }
+
+  nav a {
+    color: inherit;
+    display: block;
+    margin-bottom: 1rem;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  aside {
+    width: 150px;
+
+    &.left {
+      padding-right: 20px;
+      text-align: right;
+    }
+
+    &.right {
+      padding-left: 20px;
+      text-align: left;
+    }
+  }
+
+  .panel {
+    overflow: hidden;
+    position: relative;
+    background: $playfield_color;
+    border: 4px solid #979797;
+    border-radius: 8px;
+    height: 100px;
+    margin-bottom: 4rem;
+    padding: 1rem 0;
+    text-align: center;
+
+    .tetromino {
+      bottom: 30px;
+      left: 35 + $block_size;
+
+      &.shape-o, &.shape-i { left: 35 + .5 * $block_size; }
+    }
+  }
+
+  .progress {
+    h6 {
+      margin-bottom: 0;
+    }
+
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+  }
+
+  .tetrion {
+    overflow: hidden;
+    position: relative;
+    border: 4px solid #979797;
+    border-radius: 8px;
+    box-sizing: content-box;
+    width: 230px;
+    height: 460px;
+  }
+
+  .playfield, .tetromino {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+
+    li {
+      position: absolute;
+      border-style: solid;
+      border-width: $block_inset;
+      box-sizing: border-box;
+      width: $block_size;
+      height: $block_size;
+    }
+  }
+
+  .playfield {
+    background: $playfield_color;
+  }
+
+  .ghostPiece {
+    opacity: .25;
+  }
+
+  .message {
+    position: absolute;
+    font-size: 2.5rem;
+    animation: puff .9s ease-out .1s both;
+    top: 0; left: 0; bottom: 0; right: 0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+}
