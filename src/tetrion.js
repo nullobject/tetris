@@ -155,10 +155,15 @@ export default class Tetrion {
   softDrop () {
     log.info('softDrop')
 
-    return {
-      tetrion: this.transform(Transform.down),
-      reward: Reward.softDrop()
+    const tetrion = this.transform(Transform.down)
+    let reward
+
+    // Reward the soft drop if the tetrion changed.
+    if (tetrion !== this) {
+      reward = Reward.softDrop()
     }
+
+    return {tetrion, reward}
   }
 
   /**
