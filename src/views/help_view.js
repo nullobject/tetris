@@ -3,12 +3,12 @@ import styles from '../stylesheets/styles.scss'
 
 export default class HelpView extends React.PureComponent {
   render () {
-    const {bus} = this.props
+    const bus = this.props.bus
 
     return (
       <div className={styles.modal}>
         <div className={styles.container}>
-          <h1>How to Play</h1>
+          <h2>How to Play</h2>
 
           <p>The goal of Tetris is to score as many points as possible by
           clearing horizontal lines of blocks. The player must rotate, move, and
@@ -45,7 +45,7 @@ export default class HelpView extends React.PureComponent {
             <dd>Drop the falling tetromino to the bottom of the playfield, but don't lock it (firm drop).</dd>
           </dl>
 
-          <h1>Credits</h1>
+          <h2>Credits</h2>
 
           <p>Copyright © 2018 Josh Bassett</p>
 

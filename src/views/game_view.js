@@ -19,6 +19,7 @@ export default class GameView extends React.PureComponent {
             <h6>Hold</h6>
             {game.tetrion.holdPiece ? <TetrominoView tetromino={game.tetrion.holdPiece} /> : null}
           </div>
+
           <div className={styles.progress}>
             <h6>Score</h6>
             <p>{game.progress.score}</p>
@@ -28,12 +29,15 @@ export default class GameView extends React.PureComponent {
             <p>{game.progress.level}</p>
           </div>
         </aside>
-        <TetrionView bus={bus} gameOver={game.isFinished} message={message} tetrion={game.tetrion} />
+
+        <TetrionView message={message} tetrion={game.tetrion} />
+
         <aside className={styles.right}>
           <div className={styles.panel}>
             <h6>Next</h6>
             {game.tetrion.nextPiece ? <TetrominoView tetromino={game.tetrion.nextPiece} /> : null}
           </div>
+
           <nav>
             <a href='#' onClick={() => bus.emit('pause')}>Help</a>
           </nav>

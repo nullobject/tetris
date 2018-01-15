@@ -27,13 +27,20 @@ html, body {
   height: 100%;
 }
 
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding: 1rem;
+}
+
 .center {
   text-align: center;
 }
 
-.container {
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 1rem;
-  padding-left: 1rem;
+.row {
+  display: flex;
+}
+
+.align-self-center {
+  align-self: center !important;
 }
