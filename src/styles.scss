@@ -26,6 +26,18 @@ $playfield_color: rgba(0, 0, 0, .75);
        url("./fonts/xenara_bd-webfont.svg#XenaraBold") format("svg");
 }
 
+@keyframes puff {
+	0%   { transform: scale(0, 0); opacity: 0; }
+	50%  { opacity: 1; }
+	100% { transform: scale(1.2, 1.2); opacity: 0; }
+}
+
+@keyframes zoom-in {
+	0%   { transform: scale(0, 0); opacity: 0; }
+	50%  { transform: scale(1, 1); }
+	100% { opacity: 1; }
+}
+
 @mixin block($color) {
   background-image: linear-gradient(to bottom left, lighten($color, 15%), darken($color, 15%));
 
@@ -155,13 +167,11 @@ button {
 
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+  top: 0; left: 0; bottom: 0; right: 0;
   padding: 1rem;
   overflow-y: auto;
   background: rgba(0, 0, 0, .9);
+  animation: zoom-in .2s ease-out both;
 }
 
 .game {
@@ -256,10 +266,11 @@ button {
 
   .message {
     position: absolute;
-    top: 50%;
-    width: 100%;
-    transform: translate(0, -50%);
     font-size: 2.5rem;
-    text-align: center;
+    animation: puff .9s ease-out .1s both;
+    top: 0; left: 0; bottom: 0; right: 0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
   }
 }

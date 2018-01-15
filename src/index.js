@@ -81,7 +81,7 @@ class GameView extends React.PureComponent {
     let message
 
     if (game.isFinished) {
-      message = 'game over'
+      message = 'Game Over'
     } else if (game.reward && game.reward.message) {
       message = game.reward.message
     }
