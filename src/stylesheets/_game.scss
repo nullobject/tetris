@@ -126,9 +126,27 @@
     position: absolute;
     font-size: 2.5rem;
     animation: puff .9s ease-out .1s both;
-    top: 0; left: 0; bottom: 0; right: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     align-items: center;
     display: flex;
     justify-content: center;
+  }
+
+
+  .overlay {
+    background: rgba(0, 0, 0, .8);
+    position: absolute;
+    font-size: 2rem;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }

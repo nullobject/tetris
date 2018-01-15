@@ -20,7 +20,7 @@ const C = 67
 const X = 88
 const Z = 90
 
-const SYSTEM_EVENTS = ['pause', 'tick']
+const SYSTEM_EVENTS = ['pause', 'restart', 'tick']
 
 function transformer (state, event) {
   if (event === 'tick' && !state.paused) {
@@ -30,6 +30,9 @@ function transformer (state, event) {
   } else if (event === 'pause') {
     const paused = state.paused
     state = {...state, paused: !paused}
+  } else if (event === 'restart') {
+    const game = new Game()
+    state = {...state, game}
   } else if (!elem(event, SYSTEM_EVENTS) && !state.paused) {
     state.commands.push(event)
   }

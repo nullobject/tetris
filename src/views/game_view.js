@@ -8,9 +8,7 @@ export default class GameView extends React.PureComponent {
     const {bus, game} = this.props
     let message
 
-    if (game.isFinished) {
-      message = 'Game Over'
-    } else if (game.reward && game.reward.message) {
+    if (game.reward && game.reward.message) {
       message = game.reward.message
     }
 
@@ -30,7 +28,7 @@ export default class GameView extends React.PureComponent {
             <p>{game.progress.level}</p>
           </div>
         </aside>
-        <TetrionView tetrion={game.tetrion} message={message} />
+        <TetrionView bus={bus} gameOver={game.isFinished} message={message} tetrion={game.tetrion} />
         <aside className={styles.right}>
           <div className={styles.panel}>
             <h6>Next</h6>
