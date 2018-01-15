@@ -1,29 +1,45 @@
 @font-face {
-  font-family: xenara;
-  font-weight: normal;
-  src: url("../fonts/xenara_rg-webfont.eot");
-  src: url("../fonts/xenara_rg-webfont.eot?#iefix") format("embedded-opentype"),
-       url("../fonts/xenara_rg-webfont.woff") format("woff"),
-       url("../fonts/xenara_rg-webfont.ttf") format("truetype"),
-       url("../fonts/xenara_rg-webfont.svg#XenaraRegular") format("svg");
+  font-family: proxima-nova;
+  font-weight: 100;
+  src: url('../fonts/proxima-nova-thin.eot');
+  src: url('../fonts/proxima-nova-thin.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/proxima-nova-thin.woff2') format('woff2'),
+       url('../fonts/proxima-nova-thin.woff') format('woff'),
+       url('../fonts/proxima-nova-thin.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: xenara;
-  font-weight: bold;
-  src: url("../fonts/xenara_bd-webfont.eot");
-  src: url("../fonts/xenara_bd-webfont.eot?#iefix") format("embedded-opentype"),
-       url("../fonts/xenara_bd-webfont.woff") format("woff"),
-       url("../fonts/xenara_bd-webfont.ttf") format("truetype"),
-       url("../fonts/xenara_bd-webfont.svg#XenaraBold") format("svg");
+  font-family: proxima-nova;
+  font-weight: 300;
+  src: url('../fonts/proxima-nova-light.eot');
+  src: url('../fonts/proxima-nova-light.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/proxima-nova-light.woff2') format('woff2'),
+       url('../fonts/proxima-nova-light.woff') format('woff'),
+       url('../fonts/proxima-nova-light.ttf') format('truetype');
 }
 
-html, body {
-  height: 100%;
+@font-face {
+  font-family: proxima-nova;
+  font-weight: 400;
+  src: url('../fonts/proxima-nova-regular.eot');
+  src: url('../fonts/proxima-nova-regular.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/proxima-nova-regular.woff2') format('woff2'),
+       url('../fonts/proxima-nova-regular.woff') format('woff'),
+       url('../fonts/proxima-nova-regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: proxima-nova;
+  font-weight: 700;
+  src: url('../fonts/proxima-nova-bold.eot');
+  src: url('../fonts/proxima-nova-bold.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/proxima-nova-bold.woff2') format('woff2'),
+       url('../fonts/proxima-nova-bold.woff') format('woff'),
+       url('../fonts/proxima-nova-bold.ttf') format('truetype');
 }
 
 html {
-  font-family: xenara, monospace;
+  font-family: proxima-nova, sans-serif;
   font-size: 16px;
   letter-spacing: 2px;
 }
@@ -34,7 +50,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   text-transform: uppercase;
 }
 
@@ -54,7 +70,7 @@ dl {
   display: flex;
   flex-wrap: wrap;
   margin-top: 0;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 
   dt {
     flex: 0 0 25%;
@@ -63,7 +79,7 @@ dl {
 
   dd {
     flex: 0 0 75%;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
     margin-left: 0;
     max-width: 75%;
   }

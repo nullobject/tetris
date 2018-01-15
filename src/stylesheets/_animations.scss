@@ -9,3 +9,8 @@
 	50%  { transform: scale(1, 1); }
 	100% { opacity: 1; }
 }
+
+@keyframes slide-down {
+	from { transform: translate(0, -100%); opacity: 0; }
+	to   { transform: translate(0, 0); opacity: 1; }
+}

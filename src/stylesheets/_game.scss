@@ -18,7 +18,7 @@
 .game {
   display: flex;
   position: relative;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
   text-transform: uppercase;
   text-align: center;
 
@@ -67,12 +67,13 @@
       bottom: 30px;
       left: 35 + $block_size;
 
-      &.shape-o, &.shape-i { left: 35 + .5 * $block_size; }
+      &.shape-o, &.shape-i { left: 35 + 0.5 * $block_size; }
     }
   }
 
   .progress {
     h6 {
+      font-weight: 100;
       margin-bottom: 0;
     }
 
@@ -119,13 +120,13 @@
   }
 
   .ghostPiece {
-    opacity: .25;
+    opacity: 0.25;
   }
 
   .message {
     position: absolute;
     font-size: 2.5rem;
-    animation: puff .9s ease-out .1s both;
+    animation: puff 0.9s ease-out 0.1s both;
     top: 0;
     right: 0;
     bottom: 0;
@@ -137,9 +138,10 @@
 
 
   .overlay {
-    background: rgba(0, 0, 0, .8);
+    background: rgba(0, 0, 0, 0.8);
     position: absolute;
     font-size: 2rem;
+    animation: slide-down 0.3s ease-out both;
     top: 0;
     right: 0;
     bottom: 0;

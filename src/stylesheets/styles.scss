@@ -1,10 +1,10 @@
 $block_size: 23px;
 $block_inset: 3px;
 
-$bg_color_1: fade-out(#ff84cb, .08);
-$bg_color_2: fade-out(#ffc350, .02);
+$bg_color_1: fade-out(#ff84cb, 0.08);
+$bg_color_2: fade-out(#ffc350, 0.02);
 
-$playfield_color: rgba(0, 0, 0, .8);
+$playfield_color: rgba(0, 0, 0, 0.8);
 
 @import "./animations";
 @import "./buttons";
@@ -21,6 +21,10 @@ body {
   align-items: center;
   display: flex;
   justify-content: center;
+}
+
+html, body {
+  height: 100%;
 }
 
 .center {
