@@ -17,12 +17,19 @@ html {
 }
 
 body {
-  align-items: center;
   background-image: linear-gradient(to bottom, $bg_color_1, $bg_color_2), url("../images/pattern.png");
+  align-items: center;
   display: flex;
   justify-content: center;
 }
 
 .center {
   text-align: center;
+}
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 1rem;
+  padding-left: 1rem;
 }
