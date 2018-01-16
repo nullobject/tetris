@@ -18,8 +18,8 @@
     "standard": "^10.0.3"
   },
   "dependencies": {
-    "autoprefixer": "^7.2.4",
-    "bulb": "^1.0.0",
+    "autoprefixer": "^7.2.5",
+    "bulb": "^1.1.0",
     "classnames": "^2.2.5",
     "fkit": "^1.1.0",
     "nanobus": "^4.3.2",
