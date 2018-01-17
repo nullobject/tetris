@@ -16,26 +16,25 @@
 .red    { @include block(#f00000); }
 
 .game {
-  display: flex;
   position: relative;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-wrap: wrap;
+  width: 578px;
   text-transform: uppercase;
-  text-align: center;
 
-  h1 {
-    font-size: 5rem;
-    font-weight: normal;
+  footer {
+    font-size: 1.25rem;
+    margin-top: 2rem;
+    width: 100%;
+    text-align: center;
+
+    a {
+      padding: 0 0.25rem;
+    }
   }
 
-  nav a {
-    color: inherit;
-    display: block;
-    margin-bottom: 1rem;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
+  nav {
+    margin-top: 4rem;
   }
 
   aside {
@@ -44,11 +43,13 @@
     &.left {
       padding-right: 20px;
       text-align: right;
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     }
 
     &.right {
+      font-size: 2rem;
       padding-left: 20px;
-      text-align: left;
+      text-align: center;
     }
   }
 
@@ -59,7 +60,6 @@
     border: 4px solid #979797;
     border-radius: 8px;
     height: 100px;
-    margin-bottom: 4rem;
     padding: 1rem 0;
     text-align: center;
 
@@ -72,6 +72,8 @@
   }
 
   .progress {
+    margin-top: 4rem;
+
     h6 {
       margin-bottom: 0;
     }

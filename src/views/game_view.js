@@ -39,9 +39,15 @@ export default class GameView extends React.PureComponent {
           </div>
 
           <nav>
-            <a href='#' onClick={() => bus.emit('pause')}>Help</a>
+            <a href='#' onClick={() => bus.emit('pause')}><span className={styles['icon-help']} /></a>
           </nav>
         </aside>
+
+        <footer>
+          <a href='#'><span className={styles['icon-facebook']} /></a>
+          <a href='#'><span className={styles['icon-twitter']} /></a>
+          <a href='https://github.com/nullobject/tetris'><span className={styles['icon-github']} /></a>
+        </footer>
       </div>
     )
   }
