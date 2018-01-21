@@ -17,13 +17,19 @@ button {
   color: white;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 
+  &:focus {
+    outline: 0;
+  }
+
   &:hover {
     background-color: white;
     border-color: white;
     color: black;
   }
 
-  &:focus {
-    outline: 0;
+  &:active {
+    background-color: inherit;
+    border-color: inherit;
+    color: inherit;
   }
 }
