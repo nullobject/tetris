@@ -110,7 +110,7 @@ export default class Game {
         lockTimer = time
       }
     } else if (this.isLocking && time - this.lockTimer >= LOCK_DELAY) {
-      const result = this.tetrion.lock()
+      const result = this.tetrion.lock(this.level)
       tetrion = result.tetrion
       reward = result.reward
 
@@ -122,7 +122,7 @@ export default class Game {
       spawnTimer = time
     } else if ((this.isIdle || this.isLocking) && command) {
       // Dispatch the command.
-      const result = this.tetrion[command]()
+      const result = this.tetrion[command](this.level)
       tetrion = result.tetrion
       reward = result.reward
 

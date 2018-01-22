@@ -17,7 +17,7 @@ export default class Tetrion {
     this.ghostPiece = null
     this.holdPiece = null
     this.nextPiece = null
-    this.combo = false
+    this.difficult = false
   }
 
   /**
@@ -153,7 +153,7 @@ export default class Tetrion {
    *
    * @returns A new tetrion.
    */
-  softDrop () {
+  softDrop (level) {
     log.info('softDrop')
 
     const tetrion = this.transform(Transform.down)
@@ -161,7 +161,7 @@ export default class Tetrion {
 
     // Reward the soft drop if the tetrion changed.
     if (tetrion !== this) {
-      reward = Reward.softDrop()
+      reward = Reward.softDrop(level)
     }
 
     return {tetrion, reward}
@@ -172,15 +172,15 @@ export default class Tetrion {
    *
    * @returns A new tetrion.
    */
-  firmDrop () {
+  firmDrop (level) {
     log.info('firmDrop')
 
     const fallingPiece = this.fallingPiece.drop(this.collision)
-    const delta = this.fallingPiece.transform.vector.sub(fallingPiece.transform.vector)
+    const dropped = this.fallingPiece.transform.vector.sub(fallingPiece.transform.vector).y
 
     return {
       tetrion: copy(this, {fallingPiece}),
-      reward: Reward.firmDrop(delta.y)
+      reward: Reward.firmDrop(dropped, level)
     }
   }
 
@@ -190,18 +190,18 @@ export default class Tetrion {
    *
    * @returns A new tetrion.
    */
-  hardDrop () {
+  hardDrop (level) {
     log.info('hardDrop')
 
     const fallingPiece = this.fallingPiece.drop(this.collision)
-    const delta = this.fallingPiece.transform.vector.sub(fallingPiece.transform.vector)
+    const dropped = this.fallingPiece.transform.vector.sub(fallingPiece.transform.vector).y
     const {playfield, cleared} = this.playfield.lock(fallingPiece.blocks).clearLines()
     const difficult = (cleared === 4)
     const combo = this.difficult && difficult
 
     return {
       tetrion: copy(this, {playfield, fallingPiece: null, difficult}),
-      reward: Reward.hardDrop(delta.y, cleared, combo)
+      reward: Reward.hardDrop(dropped, cleared, level, combo)
     }
   }
 
@@ -211,7 +211,7 @@ export default class Tetrion {
    *
    * @returns A new tetrion.
    */
-  lock () {
+  lock (level) {
     log.info('lock')
 
     if (this.collision(this.fallingPiece)) {
@@ -225,7 +225,7 @@ export default class Tetrion {
 
     return {
       tetrion: copy(this, {playfield, fallingPiece: null, difficult}),
-      reward: Reward.clearLines(cleared, tspin, combo)
+      reward: Reward.clearLines(cleared, level, tspin, combo)
     }
   }
 

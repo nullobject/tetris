@@ -35,33 +35,36 @@ export default class Reward {
   /**
    * Rewards a soft drop.
    *
+   * @param level The current level.
    * @returns A new reward.
    */
-  static softDrop () {
-    return new Reward(1, 0)
+  static softDrop (level) {
+    return new Reward(level, 0)
   }
 
   /**
    * Rewards a firm drop.
    *
-   * @param n The number of rows the falling piece was dropped.
+   * @param dropped The number of rows the falling piece was dropped.
+   * @param level The current level.
    * @returns A new reward.
    */
-  static firmDrop (n) {
-    return new Reward(n, 0)
+  static firmDrop (dropped, level) {
+    return new Reward(dropped * level, 0)
   }
 
   /**
    * Rewards a hard drop.
    *
-   * @param n The number of rows the falling piece was dropped.
+   * @param dropped The number of rows the falling piece was dropped.
    * @param cleared The number of lines cleared.
+   * @param level The current level.
    * @param combo True if the combo bonus should be applied, false otherwise.
    * @returns A new reward.
    */
-  static hardDrop (n, cleared, combo) {
+  static hardDrop (dropped, cleared, level, combo) {
     const multiplier = combo ? 1.5 : 1
-    const points = ((n * 2) + calculatePoints(cleared, false)) * multiplier
+    const points = ((dropped * 2) + calculatePoints(cleared, false)) * level * multiplier
     const message = calculateMessage(cleared, false)
     return new Reward(points, cleared, message)
   }
@@ -69,16 +72,17 @@ export default class Reward {
   /**
    * Rewards clearing the given number of lines.
    *
-   * @param n The number of lines cleared.
+   * @param cleared The number of lines cleared.
+   * @param level The current level.
    * @param tspin True if the last transform was a T-spin, false otherwise.
    * @param combo True if the combo bonus should be applied, false otherwise.
    * @returns A new reward.
    */
-  static clearLines (n, tspin, combo) {
+  static clearLines (cleared, level, tspin, combo) {
     const multiplier = combo ? 1.5 : 1
-    const points = calculatePoints(n, tspin) * multiplier
-    const message = calculateMessage(n, tspin)
-    return new Reward(points, n, message)
+    const points = calculatePoints(cleared, tspin) * level * multiplier
+    const message = calculateMessage(cleared, tspin)
+    return new Reward(points, cleared, message)
   }
 
   constructor (points, lines, message = null) {
