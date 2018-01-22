@@ -19,7 +19,7 @@ export default class Progress {
 
   add (reward) {
     const lines = this.lines + reward.lines
-    const score = this.score + reward.points
+    const score = this.score + (reward.points * this.level)
     return copy(this, {lines, score})
   }
 }

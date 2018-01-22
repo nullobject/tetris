@@ -35,7 +35,7 @@ export default class Tetrion {
   }
 
   /**
-   * Returns true if the last transform resulted in a T-spin, false otherwise.
+   * Returns true if the last transform was a T-spin, false otherwise.
    */
   get tspin () {
     const v = this.fallingPiece.transform.vector

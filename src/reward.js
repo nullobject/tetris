@@ -1,7 +1,7 @@
 /**
  * Returns the points earned for clearing the given number of lines.
  */
-function calculatePoints (n, tspin, kick) {
+function calculatePoints (n, tspin) {
   switch (n) {
     case 4: // tetris
       return 800
@@ -10,28 +10,16 @@ function calculatePoints (n, tspin, kick) {
     case 2: // double
       return tspin ? 1200 : 300
     case 1: // single
-      if (tspin && !kick) {
-        return 800
-      } else if (tspin) {
-        return 200
-      } else {
-        return 100
-      }
+      return tspin ? 800 : 100
     default:
-      if (tspin && !kick) {
-        return 400
-      } else if (tspin) {
-        return 100
-      } else {
-        return 0
-      }
+      return tspin ? 400 : 0
   }
 }
 
 /**
  * Returns the message for the number of lines cleared.
  */
-function calculateMessage (n, tspin, kick) {
+function calculateMessage (n, tspin) {
   if (tspin) {
     return 'tspin'
   } else if (n === 4) {
@@ -42,9 +30,6 @@ function calculateMessage (n, tspin, kick) {
 /**
  * Represents the reward earned when dropping the falling piece or clearing
  * lines.
- *
- * This is based on the Tetris DS scoring system. See
- * http://harddrop.com/wiki/Tetris_DS for details.
  */
 export default class Reward {
   /**
@@ -70,12 +55,12 @@ export default class Reward {
    * Rewards a hard drop.
    *
    * @param n The number of rows the falling piece was dropped.
-   * @param m The number of lines cleared.
+   * @param cleared The number of lines cleared.
    * @returns A new reward.
    */
   static hardDrop (n, cleared) {
-    const points = (n * 2) + calculatePoints(cleared, false, false)
-    const message = calculateMessage(cleared, false, false)
+    const points = (n * 2) + calculatePoints(cleared, false)
+    const message = calculateMessage(cleared, false)
     return new Reward(points, cleared, message)
   }
 
@@ -83,11 +68,12 @@ export default class Reward {
    * Rewards clearing the given number of lines.
    *
    * @param n The number of lines cleared.
+   * @param tspin True if the last transform was a T-spin, false otherwise.
    * @returns A new reward.
    */
-  static clearLines (n, tspin = false, kick = false) {
-    const points = calculatePoints(n, tspin, kick)
-    const message = calculateMessage(n, tspin, kick)
+  static clearLines (n, tspin) {
+    const points = calculatePoints(n, tspin)
+    const message = calculateMessage(n, tspin)
     return new Reward(points, n, message)
   }
 
