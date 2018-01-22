@@ -17,6 +17,7 @@ export default class Tetrion {
     this.ghostPiece = null
     this.holdPiece = null
     this.nextPiece = null
+    this.combo = false
   }
 
   /**
@@ -195,10 +196,12 @@ export default class Tetrion {
     const fallingPiece = this.fallingPiece.drop(this.collision)
     const delta = this.fallingPiece.transform.vector.sub(fallingPiece.transform.vector)
     const {playfield, cleared} = this.playfield.lock(fallingPiece.blocks).clearLines()
+    const difficult = (cleared === 4)
+    const combo = this.difficult && difficult
 
     return {
-      tetrion: copy(this, {playfield, fallingPiece: null}),
-      reward: Reward.hardDrop(delta.y, cleared)
+      tetrion: copy(this, {playfield, fallingPiece: null, difficult}),
+      reward: Reward.hardDrop(delta.y, cleared, combo)
     }
   }
 
@@ -215,11 +218,14 @@ export default class Tetrion {
       throw new Error('Cannot lock falling piece')
     }
 
+    const tspin = this.tspin
     const {playfield, cleared} = this.playfield.lock(this.fallingPiece.blocks).clearLines()
+    const difficult = (cleared === 4) || (cleared > 0 && tspin)
+    const combo = this.difficult && difficult
 
     return {
-      tetrion: copy(this, {playfield, fallingPiece: null}),
-      reward: Reward.clearLines(cleared, this.tspin)
+      tetrion: copy(this, {playfield, fallingPiece: null, difficult}),
+      reward: Reward.clearLines(cleared, tspin, combo)
     }
   }
 

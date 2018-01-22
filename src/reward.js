@@ -56,10 +56,12 @@ export default class Reward {
    *
    * @param n The number of rows the falling piece was dropped.
    * @param cleared The number of lines cleared.
+   * @param combo True if the combo bonus should be applied, false otherwise.
    * @returns A new reward.
    */
-  static hardDrop (n, cleared) {
-    const points = (n * 2) + calculatePoints(cleared, false)
+  static hardDrop (n, cleared, combo) {
+    const multiplier = combo ? 1.5 : 1
+    const points = ((n * 2) + calculatePoints(cleared, false)) * multiplier
     const message = calculateMessage(cleared, false)
     return new Reward(points, cleared, message)
   }
@@ -69,10 +71,12 @@ export default class Reward {
    *
    * @param n The number of lines cleared.
    * @param tspin True if the last transform was a T-spin, false otherwise.
+   * @param combo True if the combo bonus should be applied, false otherwise.
    * @returns A new reward.
    */
-  static clearLines (n, tspin) {
-    const points = calculatePoints(n, tspin)
+  static clearLines (n, tspin, combo) {
+    const multiplier = combo ? 1.5 : 1
+    const points = calculatePoints(n, tspin) * multiplier
     const message = calculateMessage(n, tspin)
     return new Reward(points, n, message)
   }
