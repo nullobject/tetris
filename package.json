@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "parcel index.html",
+    "start": "parcel -p 4000 index.html",
     "build": "parcel build index.html --public-url ./",
     "test": "node_modules/.bin/standard \"**/*.js\""
   },
