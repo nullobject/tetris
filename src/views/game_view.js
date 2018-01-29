@@ -1,7 +1,7 @@
 import React from 'react'
 import TetrionView from './tetrion_view'
 import TetrominoView from './tetromino_view'
-import styles from '../stylesheets/styles.scss'
+import styles from '../../assets/stylesheets/styles.scss'
 
 const GITHUB_URL = 'https://github.com/nullobject/tetris'
 const TWITTER_URL = 'https://twitter.com/intent/tweet?text=Wanna%20play%20some%20Tetris%3F&url=https%3A%2F%2Fjoshbassett.info%2Ftetris'

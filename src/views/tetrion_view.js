@@ -1,7 +1,7 @@
 import PlayfieldView from './playfield_view'
 import TetrominoView from './tetromino_view'
 import React from 'react'
-import styles from '../stylesheets/styles.scss'
+import styles from '../../assets/stylesheets/styles.scss'
 
 export default class TetrionView extends React.PureComponent {
   render () {

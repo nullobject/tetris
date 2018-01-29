@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '../stylesheets/styles.scss'
+import styles from '../../assets/stylesheets/styles.scss'
 
 const BLOCK_SIZE = 23
 
