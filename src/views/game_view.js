@@ -4,7 +4,7 @@ import TetrominoView from './tetromino_view'
 import styles from '../../assets/stylesheets/styles.scss'
 
 const GITHUB_URL = 'https://github.com/nullobject/tetris'
-const TWITTER_URL = 'https://twitter.com/intent/tweet?text=Wanna%20play%20some%20Tetris%3F&url=https%3A%2F%2Fjoshbassett.info%2Ftetris'
+const TWITTER_URL = 'https://twitter.com/intent/tweet?text=Wanna%20play%20some%20Tetris%3F&url=https%3A%2F%2Ftetris.joshbassett.info'
 
 export default class GameView extends React.PureComponent {
   render () {
@@ -48,7 +48,7 @@ export default class GameView extends React.PureComponent {
 
         <footer>
           <a href={TWITTER_URL}><span className={styles['icon-twitter']} /></a>
-          <a href={GITHUB_URL}><span className={styles['icon-github']} /></a>
+          <a href={GITHUB_URL} target='_blank'><span className={styles['icon-github']} /></a>
         </footer>
       </div>
     )
