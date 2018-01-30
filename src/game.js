@@ -57,7 +57,7 @@ export default class Game {
   /**
    * Returns true if the game is finished, false otherwise.
    */
-  get isFinished () {
+  get over () {
     return this.state === 'finished'
   }
 
