@@ -2,16 +2,12 @@ import PlayfieldView from './playfield_view'
 import React from 'react'
 import TetrominoView from './tetromino_view'
 import styles from '../../assets/stylesheets/styles.scss'
-import {CSSTransition, TransitionGroup} from 'react-transition-group'
+import {Transition, TransitionGroup} from 'react-transition-group'
 
 const Message = ({text, ...props}) => (
-  <CSSTransition
-    {...props}
-    timeout={1000}
-    classNames='fade'
-  >
+  <Transition {...props} timeout={1000}>
     <div className={styles.message}>{text}</div>
-  </CSSTransition>
+  </Transition>
 )
 
 export default class TetrionView extends React.PureComponent {
