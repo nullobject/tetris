@@ -5,10 +5,10 @@ let nextId = 1
  */
 export default class Block {
   constructor (position, color) {
+    this.id = nextId++
     this.position = position
     this.color = color
-    this.id = nextId++
   }
 
-  toString () { return `Block (position: ${this.position}, color: ${this.color})` }
+  toString () { return `Block (id: ${this.id}, position: ${this.position}, color: ${this.color})` }
 }
