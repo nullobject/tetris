@@ -28,7 +28,8 @@
     "normalize.css": "^7.0.0",
     "postcss-modules": "^1.1.0",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "react-transition-group": "^2.2.1"
   },
   "standard": {
     "ignore": [
