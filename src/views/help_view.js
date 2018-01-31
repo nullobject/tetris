@@ -8,6 +8,8 @@ export default class HelpView extends React.PureComponent {
     return (
       <div className={styles.modal}>
         <div className={styles.container}>
+          <h1>Tetris</h1>
+
           <h2>How to Play</h2>
 
           <p>The goal of Tetris is to score as many points as possible by
@@ -47,7 +49,7 @@ export default class HelpView extends React.PureComponent {
 
           <h2>Credits</h2>
 
-          <p>Copyright © 2018 Josh Bassett</p>
+          <p>© 2018 Josh Bassett</p>
 
           <p className={styles.center}><button onClick={() => bus.emit('pause')}>Resume</button></p>
         </div>
