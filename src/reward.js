@@ -1,3 +1,5 @@
+import Message from './message'
+
 /**
  * Returns the points earned for clearing the given number of lines.
  */
@@ -21,9 +23,9 @@ function calculatePoints (n, tspin) {
  */
 function calculateMessage (n, tspin) {
   if (tspin) {
-    return 'tspin'
+    return new Message('tspin')
   } else if (n === 4) {
-    return 'tetris'
+    return new Message('tetris')
   }
 }
 
