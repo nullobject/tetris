@@ -6,9 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "parcel -p 4000 index.html",
-    "build": "parcel build index.html --public-url ./",
-    "test": "node_modules/.bin/standard \"**/*.js\""
+    "start": "make start",
+    "test": "make test"
   },
   "devDependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
