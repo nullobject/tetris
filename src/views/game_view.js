@@ -3,9 +3,6 @@ import TetrionView from './tetrion_view'
 import TetrominoView from './tetromino_view'
 import styles from '../../assets/stylesheets/styles.scss'
 
-const GITHUB_URL = 'https://github.com/nullobject/tetris'
-const TWITTER_URL = 'https://twitter.com/intent/tweet?text=Wanna%20play%20some%20Tetris%3F&url=https%3A%2F%2Ftetris.joshbassett.info'
-
 export default class GameView extends React.PureComponent {
   render () {
     const {bus, game} = this.props
@@ -45,11 +42,6 @@ export default class GameView extends React.PureComponent {
             <a href='#' onClick={() => bus.emit('pause')}><span className={styles['icon-help']} /></a>
           </nav>
         </aside>
-
-        <footer>
-          <a href={TWITTER_URL} target='_blank'><span className={styles['icon-twitter']} /></a>
-          <a href={GITHUB_URL} target='_blank'><span className={styles['icon-github']} /></a>
-        </footer>
       </div>
     )
   }
