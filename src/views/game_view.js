@@ -47,7 +47,7 @@ export default class GameView extends React.PureComponent {
         </aside>
 
         <footer>
-          <a href={TWITTER_URL}><span className={styles['icon-twitter']} /></a>
+          <a href={TWITTER_URL} target='_blank'><span className={styles['icon-twitter']} /></a>
           <a href={GITHUB_URL} target='_blank'><span className={styles['icon-github']} /></a>
         </footer>
       </div>
