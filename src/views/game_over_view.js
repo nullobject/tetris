@@ -1,10 +1,7 @@
 import React from 'react'
+import SocialView from './social_view'
 import classnames from 'classnames'
 import styles from '../../assets/stylesheets/styles.scss'
-
-const TWITTER_URL = 'https://twitter.com/intent/tweet?text=Wanna%20play%20some%20Tetris%3F&url=https%3A%2F%2Ftetris.joshbassett.info'
-const FACEBOOK_URL = 'http://www.facebook.com/sharer.php?u=https%3A%2F%2Ftetris.joshbassett.info'
-const GITHUB_URL = 'https://github.com/nullobject/tetris'
 
 export default class GameOverView extends React.PureComponent {
   render () {
@@ -13,14 +10,10 @@ export default class GameOverView extends React.PureComponent {
     return (
       <div className={classnames(styles.modal, styles.row)}>
         <div className={classnames(styles.container, styles.center, styles['align-self-center'])}>
-          <section>
-            <h1>Game Over</h1>
-            <button onClick={() => bus.emit('restart')}>Play Again</button>
-          </section>
+          <h1>Game Over</h1>
           <footer>
-            <a href={TWITTER_URL} target='_blank'><span className={styles['icon-twitter']} /></a>
-            <a href={FACEBOOK_URL} target='_blank'><span className={styles['icon-facebook']} /></a>
-            <a href={GITHUB_URL} target='_blank'><span className={styles['icon-github']} /></a>
+            <button onClick={() => bus.emit('restart')}>Play Again</button>
+            <SocialView />
           </footer>
         </div>
       </div>

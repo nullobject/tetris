@@ -1,4 +1,5 @@
 import React from 'react'
+import SocialView from './social_view'
 import styles from '../../assets/stylesheets/styles.scss'
 
 export default class HelpView extends React.PureComponent {
@@ -51,7 +52,10 @@ export default class HelpView extends React.PureComponent {
 
           <p>© 2018 Josh Bassett</p>
 
-          <p className={styles.center}><button onClick={() => bus.emit('pause')}>Resume</button></p>
+          <footer>
+            <p><button onClick={() => bus.emit('pause')}>Resume</button></p>
+            <SocialView />
+          </footer>
         </div>
       </div>
     )

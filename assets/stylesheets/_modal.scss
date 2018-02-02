@@ -10,11 +10,16 @@
   animation: zoom-in 0.2s ease-out both;
 
   footer {
-    font-size: 2rem;
-    margin-top: 4rem;
+    text-align: center;
+    margin-top: 2rem;
+  }
+}
 
-    a {
-      padding: 0 0.25rem;
-    }
+.social {
+  font-size: 2rem;
+  margin-top: 4rem;
+
+  a {
+    padding: 0 0.25rem;
   }
 }
