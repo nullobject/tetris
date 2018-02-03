@@ -35,6 +35,13 @@ function calculateMessage (n, tspin) {
  */
 export default class Reward {
   /**
+   * Returns an empty reward.
+   */
+  static get zero () {
+    return new Reward(0, 0)
+  }
+
+  /**
    * Rewards a soft drop.
    *
    * @param level The current level.
