@@ -80,13 +80,13 @@ export default class Tetrion {
 
     if (this.fallingPiece.wasHeld) {
       // We can't hold a piece if the falling piece was previously held.
-      return {tetrion: this}
+      return {tetrion: this, reward: Reward.zero}
     } else if (this.holdPiece) {
       // Swap the falling piece with the hold piece.
       const fallingPiece = this.holdPiece.spawn()
       const ghostPiece = fallingPiece.drop(this.collision)
       const holdPiece = this.fallingPiece.hold()
-      return {tetrion: copy(this, {fallingPiece, ghostPiece, holdPiece})}
+      return {tetrion: copy(this, {fallingPiece, ghostPiece, holdPiece}), reward: Reward.zero}
     } else {
       // Hold the falling piece.
       const {bag, shape} = this.bag.shift(this.fallingPiece.shape)
@@ -94,7 +94,7 @@ export default class Tetrion {
       const ghostPiece = fallingPiece.drop(this.collision)
       const holdPiece = this.fallingPiece.hold()
       const nextPiece = new Tetromino(bag.next)
-      return {tetrion: copy(this, {bag, fallingPiece, ghostPiece, holdPiece, nextPiece})}
+      return {tetrion: copy(this, {bag, fallingPiece, ghostPiece, holdPiece, nextPiece}), reward: Reward.zero}
     }
   }
 
@@ -105,7 +105,7 @@ export default class Tetrion {
    */
   moveLeft () {
     log.info('moveLeft')
-    return {tetrion: this.transform(Transform.left)}
+    return {tetrion: this.transform(Transform.left), reward: Reward.zero}
   }
 
   /**
@@ -115,7 +115,7 @@ export default class Tetrion {
    */
   moveRight () {
     log.info('moveRight')
-    return {tetrion: this.transform(Transform.right)}
+    return {tetrion: this.transform(Transform.right), reward: Reward.zero}
   }
 
   /**
@@ -125,7 +125,7 @@ export default class Tetrion {
    */
   moveDown () {
     log.info('moveDown')
-    return {tetrion: this.transform(Transform.down)}
+    return {tetrion: this.transform(Transform.down), reward: Reward.zero}
   }
 
   /**
@@ -135,7 +135,7 @@ export default class Tetrion {
    */
   rotateLeft () {
     log.info('rotateLeft')
-    return {tetrion: this.transform(Transform.rotateLeft)}
+    return {tetrion: this.transform(Transform.rotateLeft), reward: Reward.zero}
   }
 
   /**
@@ -145,7 +145,7 @@ export default class Tetrion {
    */
   rotateRight () {
     log.info('rotateRight')
-    return {tetrion: this.transform(Transform.rotateRight)}
+    return {tetrion: this.transform(Transform.rotateRight), reward: Reward.zero}
   }
 
   /**
@@ -157,12 +157,7 @@ export default class Tetrion {
     log.info('softDrop')
 
     const tetrion = this.transform(Transform.down)
-    let reward
-
-    // Reward the soft drop if the tetrion changed.
-    if (tetrion !== this) {
-      reward = Reward.softDrop(level)
-    }
+    const reward = tetrion !== this ? Reward.softDrop(level) : Reward.zero
 
     return {tetrion, reward}
   }
@@ -207,7 +202,7 @@ export default class Tetrion {
 
   /**
    * Locks the given tetromino into the playfield and clears any completed
-   * rows.
+   * lines.
    *
    * @returns A new tetrion.
    */
