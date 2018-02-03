@@ -1,6 +1,6 @@
-import sounds from '../sounds.mp3'
+import sounds from '../assets/sounds.mp3'
 import {Howl} from 'howler'
-import {sprite} from '../sounds.json'
+import {sprite} from '../assets/sounds.json'
 
 const sound = new Howl({src: [sounds], sprite})
 

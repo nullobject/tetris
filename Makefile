@@ -3,14 +3,14 @@
 node_modules:
 	@npm install
 
-start: node_modules sounds.json sounds.mp3
+start: node_modules
 	@./node_modules/.bin/parcel -p 4000 index.html
 
-build: node_modules sounds.json sounds.mp3
+build: node_modules
 	@./node_modules/.bin/parcel build index.html --public-url ./
 
-sounds.%:
-	@./node_modules/.bin/audiosprite -e mp3 -f howler -o sounds assets/sounds/*.wav
+sounds:
+	@./node_modules/.bin/audiosprite -e mp3 -f howler -o assets/sounds assets/sounds/*.wav
 
 deploy: build
 	@aws s3 sync ./dist/ s3://tetris.joshbassett.info/ --acl public-read --delete --cache-control 'max-age=300'
@@ -21,4 +21,4 @@ lint: node_modules
 	@node_modules/.bin/standard "src/**/*.js"
 
 clean:
-	@rm -rf dist node_modules sounds.*
+	@rm -rf dist node_modules
