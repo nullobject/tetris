@@ -5,6 +5,7 @@ import RootView from './views/root_view'
 import log from './log'
 import nanobus from 'nanobus'
 import {Signal, keyboard, merge} from 'bulb'
+import {append, head, tail} from 'fkit'
 
 const CLOCK_PERIOD = 10
 
@@ -19,24 +20,22 @@ const X = 88
 const Z = 90
 
 function transformer (state, event) {
+  let {game, commands} = state
+
   if (event === 'tick') {
-    const command = state.commands.shift()
-    const game = state.game.tick(CLOCK_PERIOD, command)
-    state = {...state, game}
+    game = game.tick(CLOCK_PERIOD, head(commands))
+    commands = tail(commands)
   } else if (event === 'pause') {
-    const game = state.game.pause()
-    state = {...state, game}
+    game = game.pause()
   } else if (event === 'mute') {
-    const game = state.game.mute()
-    state = {...state, game}
+    game = game.mute()
   } else if (event === 'restart') {
-    const game = new Game()
-    state = {...state, game}
-  } else if (!state.game.paused) {
-    state.commands.push(event)
+    game = new Game()
+  } else if (!game.paused) {
+    commands = append(event, commands)
   }
 
-  return state
+  return {...state, game, commands}
 }
 
 const commandSignal = keyboard
