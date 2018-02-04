@@ -191,6 +191,8 @@ export default class Game {
           return play('drop')
         case 'lock':
           return play('lock')
+        case 'hold':
+          return play('hold')
       }
     }
   }
