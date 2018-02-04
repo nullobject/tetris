@@ -97,6 +97,7 @@ export default class Game {
       tetrion = result.tetrion
 
       if (tetrion === this.tetrion) {
+        this.playSound('gameOver')
         state = 'finished'
       } else {
         state = 'idle'
@@ -196,6 +197,8 @@ export default class Game {
           return play('lock')
         case 'hold':
           return play('hold')
+        case 'gameOver':
+          return play('game-over')
       }
     }
   }
