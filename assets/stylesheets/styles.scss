@@ -10,6 +10,8 @@ $playfield_color: rgba(0, 0, 0, 0.8);
 @import "./buttons";
 @import "./game";
 @import "./modal";
+@import "./nav";
+@import "./social";
 @import "./type";
 
 * {
@@ -17,11 +19,8 @@ $playfield_color: rgba(0, 0, 0, 0.8);
   user-select: none;
 }
 
-html {
-  color: white;
-}
-
 body {
+  color: white;
   background-image: linear-gradient(to bottom, $bg_color_1, $bg_color_2), url("../images/pattern.png");
   align-items: center;
   display: flex;

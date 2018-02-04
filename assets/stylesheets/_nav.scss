@@ -1,0 +1,16 @@
+nav {
+  a {
+    border: none;
+    padding: 0 0.25rem;
+    text-decoration: none;
+    transition: text-shadow 0.15s ease-in-out;
+
+    &:hover {
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    }
+
+    &:active {
+      text-shadow: none;
+    }
+  }
+}

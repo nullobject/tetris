@@ -8,11 +8,11 @@ const GITHUB_URL = 'https://github.com/nullobject/tetris'
 export default class HelpView extends React.PureComponent {
   render () {
     return (
-      <div className={styles.social}>
+      <nav className={styles.social}>
         <a href={TWITTER_URL} target='_blank'><span className={styles['icon-twitter']} /></a>
         <a href={FACEBOOK_URL} target='_blank'><span className={styles['icon-facebook']} /></a>
         <a href={GITHUB_URL} target='_blank'><span className={styles['icon-github']} /></a>
-      </div>
+      </nav>
     )
   }
 }
