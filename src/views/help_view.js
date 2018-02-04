@@ -58,6 +58,8 @@ export default class HelpView extends React.PureComponent {
 
           <p>Made with love by <a href='https://joshbassett.info'>Josh Bassett</a>, 2018.</p>
 
+          <p>Special thanks to <a href='https:/kouky.org'>Michael Koukoullis</a> for inspiring me to work on Tetris in the first place. This work is based on a project we started, but never finished.</p>
+
           <footer>
             <p><button onClick={() => bus.emit('pause')}>Resume</button></p>
             <SocialView />
