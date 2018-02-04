@@ -11,11 +11,11 @@ const LOCK_DELAY = 1000
  * by repeatedly calling the `tick` function.
  */
 export default class Game {
-  constructor () {
+  constructor (muted = false) {
     this.time = 0
     this.state = 'spawning'
     this.paused = false
-    this.muted = false
+    this.muted = muted
     this.tetrion = new Tetrion()
     this.spawnTimer = 0
     this.lockTimer = 0

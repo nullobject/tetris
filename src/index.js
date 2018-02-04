@@ -19,25 +19,6 @@ const C = 67
 const X = 88
 const Z = 90
 
-function transformer (state, event) {
-  let {game, commands} = state
-
-  if (event === 'tick') {
-    game = game.tick(CLOCK_PERIOD, head(commands))
-    commands = tail(commands)
-  } else if (event === 'pause') {
-    game = game.pause()
-  } else if (event === 'mute') {
-    game = game.mute()
-  } else if (event === 'restart') {
-    game = new Game()
-  } else if (!game.paused) {
-    commands = append(event, commands)
-  }
-
-  return {...state, game, commands}
-}
-
 const commandSignal = keyboard
   .keys(document)
   .stateMachine((_, key, emit) => {
@@ -65,7 +46,8 @@ const commandSignal = keyboard
 const bus = nanobus()
 const busSignal = Signal.fromEvent('*', bus)
 const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
-const initialState = {game: new Game(), commands: []}
+const muted = window.localStorage.getItem('muted') === 'true'
+const initialState = {game: new Game(muted), commands: []}
 const root = document.getElementById('root')
 
 const subscription = merge(busSignal, clockSignal, commandSignal)
@@ -77,4 +59,24 @@ if (module.hot) {
     log.info('Unsubscribing...')
     subscription.unsubscribe()
   })
+}
+
+function transformer (state, event) {
+  let {game, commands} = state
+
+  if (event === 'tick') {
+    game = game.tick(CLOCK_PERIOD, head(commands))
+    commands = tail(commands)
+  } else if (event === 'pause') {
+    game = game.pause()
+  } else if (event === 'mute') {
+    game = game.mute()
+    window.localStorage.setItem('muted', game.muted)
+  } else if (event === 'restart') {
+    game = new Game()
+  } else if (!game.paused) {
+    commands = append(event, commands)
+  }
+
+  return {...state, game, commands}
 }
