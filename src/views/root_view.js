@@ -6,12 +6,12 @@ import React from 'react'
 
 export default class RootView extends React.PureComponent {
   render () {
-    const {bus, state: {game, paused}} = this.props
+    const {bus, state: {game}} = this.props
 
     return (
       <React.Fragment>
         <GameView bus={bus} game={game} />
-        {paused ? <HelpView bus={bus} /> : null}
+        {game.paused ? <HelpView bus={bus} /> : null}
         {game.over ? <GameOverView bus={bus} /> : null}
       </React.Fragment>
     )

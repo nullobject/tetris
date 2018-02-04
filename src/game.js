@@ -14,13 +14,14 @@ export default class Game {
   constructor () {
     this.time = 0
     this.state = 'spawning'
+    this.paused = false
+    this.muted = false
     this.tetrion = new Tetrion()
     this.spawnTimer = 0
     this.lockTimer = 0
     this.gravityTimer = 0
     this.progress = new Progress()
     this.reward = null
-    this.muted = false
   }
 
   get level () {
@@ -78,6 +79,10 @@ export default class Game {
    * @returns A new game.
    */
   tick (delta, command) {
+    if (this.paused) {
+      return this
+    }
+
     const time = this.time + delta
     let state = this.state
     let tetrion = this.tetrion
@@ -149,7 +154,14 @@ export default class Game {
   }
 
   /**
-   * Toggles the muted state for the game audio.
+   * Pauses/unpauses the game.
+   */
+  pause () {
+    return copy(this, {paused: !this.paused})
+  }
+
+  /**
+   * Mutes/unmutes the game audio.
    *
    * @returns A new game.
    */

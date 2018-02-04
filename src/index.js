@@ -5,7 +5,6 @@ import RootView from './views/root_view'
 import log from './log'
 import nanobus from 'nanobus'
 import {Signal, keyboard, merge} from 'bulb'
-import {elem} from 'fkit'
 
 const CLOCK_PERIOD = 10
 
@@ -19,23 +18,21 @@ const C = 67
 const X = 88
 const Z = 90
 
-const SYSTEM_EVENTS = ['pause', 'restart', 'tick']
-
 function transformer (state, event) {
-  if (event === 'tick' && !state.paused) {
+  if (event === 'tick') {
     const command = state.commands.shift()
     const game = state.game.tick(CLOCK_PERIOD, command)
     state = {...state, game}
   } else if (event === 'pause') {
-    const paused = state.paused
-    state = {...state, paused: !paused}
+    const game = state.game.pause()
+    state = {...state, game}
   } else if (event === 'mute') {
     const game = state.game.mute()
     state = {...state, game}
   } else if (event === 'restart') {
     const game = new Game()
     state = {...state, game}
-  } else if (!elem(event, SYSTEM_EVENTS) && !state.paused) {
+  } else if (!state.game.paused) {
     state.commands.push(event)
   }
 
@@ -69,7 +66,7 @@ const commandSignal = keyboard
 const bus = nanobus()
 const busSignal = Signal.fromEvent('*', bus)
 const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
-const initialState = {game: new Game(), commands: [], paused: false}
+const initialState = {game: new Game(), commands: []}
 const root = document.getElementById('root')
 
 const subscription = merge(busSignal, clockSignal, commandSignal)
