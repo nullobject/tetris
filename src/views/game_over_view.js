@@ -9,7 +9,7 @@ export default class GameOverView extends React.PureComponent {
 
     return (
       <div className={classnames(styles.modal, styles.row)}>
-        <div className={classnames(styles.container, styles.center, styles['align-self-center'])}>
+        <div className={classnames(styles.container, styles['align-self-center'])}>
           <h1>Game Over</h1>
           <footer>
             <button onClick={() => bus.emit('restart')}>Play Again</button>
