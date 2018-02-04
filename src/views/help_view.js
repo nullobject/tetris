@@ -46,11 +46,17 @@ export default class HelpView extends React.PureComponent {
 
             <dt>RETURN</dt>
             <dd>Drop the falling tetromino to the bottom of the playfield, but don't lock it (firm drop).</dd>
+
+            <dt>H</dt>
+            <dd>Toggle the help screen.</dd>
+
+            <dt>M</dt>
+            <dd>Toggle the game audio.</dd>
           </dl>
 
           <h2>Credits</h2>
 
-          <p>© 2018 Josh Bassett</p>
+          <p>Made with love by <a href='https://joshbassett.info'>Josh Bassett</a>, 2018.</p>
 
           <footer>
             <p><button onClick={() => bus.emit('pause')}>Resume</button></p>

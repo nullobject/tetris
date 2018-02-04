@@ -16,6 +16,8 @@ const DOWN = 40
 const LEFT = 37
 const RIGHT = 39
 const C = 67
+const H = 72
+const M = 77
 const X = 88
 const Z = 90
 
@@ -40,6 +42,10 @@ const commandSignal = keyboard
       emit.next('hardDrop')
     } else if (key === C) {
       emit.next('hold')
+    } else if (key === H) {
+      emit.next('pause')
+    } else if (key === M) {
+      emit.next('mute')
     }
   })
 
