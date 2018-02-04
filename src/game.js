@@ -132,12 +132,15 @@ export default class Game {
     } else if ((this.isIdle || this.isLocking) && command) {
       // Dispatch the command.
       const result = this.tetrion[command](this.level)
+      const oldTetrion = tetrion
       tetrion = result.tetrion
       reward = result.reward
-
       const oldProgress = progress
       progress = progress.add(reward)
-      this.playSound(command, reward.lines > 0, progress.level > oldProgress.level)
+
+      if (tetrion !== oldTetrion) {
+        this.playSound(command, reward.lines > 0, progress.level > oldProgress.level)
+      }
 
       if (!tetrion.fallingPiece) {
         // Start spawning if there is no falling piece.
