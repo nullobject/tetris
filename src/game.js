@@ -1,35 +1,10 @@
-import * as sound from './sound'
 import Progress from './progress'
 import Tetrion from './tetrion'
 import {copy} from 'fkit'
+import {play} from './sound'
 
 const SPAWN_DELAY = 100
 const LOCK_DELAY = 1000
-
-function calculateSound (command, clearLine, levelUp) {
-  if (levelUp) {
-    return 'level-up'
-  } else if (clearLine) {
-    return 'clear-line'
-  } else {
-    switch (command) {
-      case 'moveLeft':
-      case 'moveRight':
-      case 'softDrop':
-        return 'move'
-      case 'rotateLeft':
-      case 'rotateRight':
-        return 'rotate'
-      case 'firmDrop':
-      case 'hardDrop':
-        return 'drop'
-      case 'lock':
-        return 'lock'
-      default:
-        return null
-    }
-  }
-}
 
 /**
  * The game is a state machine which controls a tetrion. The state is advanced
@@ -45,6 +20,7 @@ export default class Game {
     this.gravityTimer = 0
     this.progress = new Progress()
     this.reward = null
+    this.muted = false
   }
 
   get level () {
@@ -127,7 +103,7 @@ export default class Game {
       tetrion = result.tetrion
       reward = result.reward
 
-      sound.play('move')
+      this.playSound('moveDown')
 
       state = 'idle'
       gravityTimer = time
@@ -144,11 +120,7 @@ export default class Game {
 
       const oldProgress = progress
       progress = progress.add(reward)
-      const soundId = calculateSound('lock', reward.lines > 0, progress.level > oldProgress.level)
-
-      if (soundId) {
-        sound.play(soundId)
-      }
+      this.playSound('lock', reward.lines > 0, progress.level > oldProgress.level)
 
       state = 'spawning'
       spawnTimer = time
@@ -160,11 +132,7 @@ export default class Game {
 
       const oldProgress = progress
       progress = progress.add(reward)
-      const soundId = calculateSound(command, reward.lines > 0, progress.level > oldProgress.level)
-
-      if (soundId) {
-        sound.play(soundId)
-      }
+      this.playSound(command, reward.lines > 0, progress.level > oldProgress.level)
 
       if (!tetrion.fallingPiece) {
         // Start spawning if there is no falling piece.
@@ -178,6 +146,41 @@ export default class Game {
     }
 
     return copy(this, {time, state, tetrion, spawnTimer, lockTimer, gravityTimer, progress, reward})
+  }
+
+  /**
+   * Toggles the muted state for the game audio.
+   *
+   * @returns A new game.
+   */
+  mute () {
+    return copy(this, {muted: !this.muted})
+  }
+
+  playSound (command, clearLine = false, levelUp = false) {
+    if (this.muted) {
+      // Do nothing.
+    } else if (levelUp) {
+      return play('level-up')
+    } else if (clearLine) {
+      return play('clear-line')
+    } else {
+      switch (command) {
+        case 'moveLeft':
+        case 'moveRight':
+        case 'moveDown':
+        case 'softDrop':
+          return play('move')
+        case 'rotateLeft':
+        case 'rotateRight':
+          return play('rotate')
+        case 'firmDrop':
+        case 'hardDrop':
+          return play('drop')
+        case 'lock':
+          return play('lock')
+      }
+    }
   }
 
   toString () {

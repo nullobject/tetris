@@ -5,5 +5,7 @@ import {sprite} from '../assets/sounds.json'
 const sound = new Howl({src: [sounds], sprite})
 
 export function play (id) {
-  sound.play(id)
+  if (id) {
+    sound.play(id)
+  }
 }

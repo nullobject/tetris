@@ -29,6 +29,9 @@ function transformer (state, event) {
   } else if (event === 'pause') {
     const paused = state.paused
     state = {...state, paused: !paused}
+  } else if (event === 'mute') {
+    const game = state.game.mute()
+    state = {...state, game}
   } else if (event === 'restart') {
     const game = new Game()
     state = {...state, game}
