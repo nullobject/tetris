@@ -3,9 +3,7 @@ import React from 'react'
 import classnames from 'classnames'
 import styles from '../../assets/stylesheets/styles.scss'
 
-export default class TetrominoView extends React.PureComponent {
-  render () {
-    const {shape, blocks} = this.props.tetromino
+export default ({tetromino: {shape, blocks}}) => {
     const className = classnames(
       styles.tetromino,
       styles[`shape-${shape.toLowerCase()}`],
@@ -16,5 +14,4 @@ export default class TetrominoView extends React.PureComponent {
         {blocks.map(block => <BlockView key={block.id} block={block} />)}
       </ul>
     )
-  }
 }

@@ -2,11 +2,7 @@ import React from 'react'
 import SocialView from './social_view'
 import styles from '../../assets/stylesheets/styles.scss'
 
-export default class HelpView extends React.PureComponent {
-  render () {
-    const bus = this.props.bus
-
-    return (
+export default ({bus}) =>
       <div className={styles.modal}>
         <div className={styles.container}>
           <h1>Tetris</h1>
@@ -66,6 +62,3 @@ export default class HelpView extends React.PureComponent {
           </footer>
         </div>
       </div>
-    )
-  }
-}

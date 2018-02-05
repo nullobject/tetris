@@ -10,9 +10,7 @@ const Message = ({text, ...props}) => (
   </Transition>
 )
 
-export default class TetrionView extends React.PureComponent {
-  render () {
-    const {message, tetrion} = this.props
+export default ({message, tetrion}) => {
     const {playfield, fallingPiece, ghostPiece} = tetrion
 
     return (
@@ -26,5 +24,4 @@ export default class TetrionView extends React.PureComponent {
         </TransitionGroup>
       </div>
     )
-  }
 }
