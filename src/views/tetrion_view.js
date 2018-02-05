@@ -11,17 +11,17 @@ const Message = ({text, ...props}) => (
 )
 
 export default ({message, tetrion}) => {
-    const {playfield, fallingPiece, ghostPiece} = tetrion
+  const {playfield, fallingPiece, ghostPiece} = tetrion
 
-    return (
-      <div className={styles.tetrion}>
-        <PlayfieldView playfield={playfield} />
-        {fallingPiece ? <TetrominoView falling tetromino={fallingPiece} /> : null}
-        {ghostPiece ? <TetrominoView ghost tetromino={ghostPiece} /> : null}
+  return (
+    <div className={styles.tetrion}>
+      <PlayfieldView playfield={playfield} />
+      {fallingPiece ? <TetrominoView falling tetromino={fallingPiece} /> : null}
+      {ghostPiece ? <TetrominoView ghost tetromino={ghostPiece} /> : null}
 
-        <TransitionGroup>
-          {message ? <Message key={message.id} text={message.text} /> : null}
-        </TransitionGroup>
-      </div>
-    )
+      <TransitionGroup>
+        {message ? <Message key={message.id} text={message.text} /> : null}
+      </TransitionGroup>
+    </div>
+  )
 }

@@ -4,14 +4,14 @@ import classnames from 'classnames'
 import styles from '../../assets/stylesheets/styles.scss'
 
 export default ({tetromino: {shape, blocks}}) => {
-    const className = classnames(
-      styles.tetromino,
-      styles[`shape-${shape.toLowerCase()}`],
-      {[styles.ghostPiece]: this.props.ghost}
-    )
-    return (
-      <ul className={className}>
-        {blocks.map(block => <BlockView key={block.id} block={block} />)}
-      </ul>
-    )
+  const className = classnames(
+    styles.tetromino,
+    styles[`shape-${shape.toLowerCase()}`],
+    {[styles.ghostPiece]: this.props.ghost}
+  )
+  return (
+    <ul className={className}>
+      {blocks.map(block => <BlockView key={block.id} block={block} />)}
+    </ul>
+  )
 }

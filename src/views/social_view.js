@@ -6,8 +6,8 @@ const FACEBOOK_URL = 'http://www.facebook.com/sharer.php?u=https%3A%2F%2Ftetris.
 const GITHUB_URL = 'https://github.com/nullobject/tetris'
 
 export default () =>
-      <nav className={styles.social}>
-        <a href={TWITTER_URL} target='_blank'><span className={styles['icon-twitter']} /></a>
-        <a href={FACEBOOK_URL} target='_blank'><span className={styles['icon-facebook']} /></a>
-        <a href={GITHUB_URL} target='_blank'><span className={styles['icon-github']} /></a>
-      </nav>
+  <nav className={styles.social}>
+    <a href={TWITTER_URL} target='_blank'><span className={styles['icon-twitter']} /></a>
+    <a href={FACEBOOK_URL} target='_blank'><span className={styles['icon-facebook']} /></a>
+    <a href={GITHUB_URL} target='_blank'><span className={styles['icon-github']} /></a>
+  </nav>
