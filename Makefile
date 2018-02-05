@@ -3,7 +3,7 @@
 node_modules:
 	@npm install
 
-start: node_modules sounds
+start: node_modules
 	@./node_modules/.bin/parcel -p 4000 index.html
 
 build: node_modules
