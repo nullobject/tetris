@@ -9,6 +9,7 @@ export default ({ghost, tetromino: {shape, blocks}}) => {
     styles[`shape-${shape.toLowerCase()}`],
     {[styles.ghostPiece]: ghost}
   )
+
   return (
     <ul className={className}>
       {blocks.map(block => <BlockView key={block.id} block={block} />)}
