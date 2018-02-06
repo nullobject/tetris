@@ -3,7 +3,7 @@ import SocialView from './social_view'
 import styles from '../../assets/stylesheets/styles.scss'
 
 export default ({bus}) =>
-  <div className={styles.modal}>
+  <div className={styles.modal} onClick={() => bus.emit('pause')}>
     <div className={styles.container}>
       <h1>Tetris</h1>
 
@@ -57,7 +57,6 @@ export default ({bus}) =>
       <p>Special thanks to <a href='https:/kouky.org'>Michael Koukoullis</a> for inspiring me to work on Tetris in the first place. This work is based on a project we started, but never finished.</p>
 
       <footer>
-        <p><button onClick={() => bus.emit('pause')}>Resume</button></p>
         <SocialView />
       </footer>
     </div>
