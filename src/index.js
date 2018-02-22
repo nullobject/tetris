@@ -67,6 +67,13 @@ if (module.hot) {
   })
 }
 
+/**
+ * Applies an event to yield a new state.
+ *
+ * @param state The current state.
+ * @param event An event.
+ * @returns A new game.
+ */
 function transformer (state, event) {
   let {game, commands} = state
 
