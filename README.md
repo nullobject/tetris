@@ -4,14 +4,7 @@
 
 This is an implementation of the popular game Tetris.
 
-The goal of Tetris is to score as many points as possible by clearing
-horizontal lines of blocks. The player must rotate, move, and drop the falling
-tetriminos inside the playfield. Lines are cleared when they are filled with
-blocks and have no empty spaces.
-
-As lines are cleared, the level increases and tetriminos fall faster, making
-the game progressively more challenging. If the blocks land above the top of
-the playfield, then the game is over.
+It is written as a reactive JavaScript application using [FKit](https://github.com/nullobject/fkit) and [Bulb](https://github.com/nullobject/bulb).
 
 ## Development
 
