@@ -4,7 +4,7 @@ import Reward from './reward'
 import Tetromino from './tetromino'
 import Transform from './transform'
 import log from './log'
-import {copy} from 'fkit'
+import { copy } from 'fkit'
 
 /**
  * A tetrion controls the game state according to the rules of Tetris.
@@ -56,16 +56,16 @@ export default class Tetrion {
   spawn () {
     log.info('spawn')
 
-    let {bag, shape} = this.bag.shift()
+    let { bag, shape } = this.bag.shift()
     const fallingPiece = new Tetromino(shape).spawn()
 
     if (this.collision(fallingPiece)) {
       // We can't span a piece if it will collide.
-      return {tetrion: this}
+      return { tetrion: this }
     } else {
       const ghostPiece = fallingPiece.drop(this.collision)
       const nextPiece = new Tetromino(bag.next)
-      return {tetrion: copy(this, {bag, fallingPiece, ghostPiece, nextPiece})}
+      return { tetrion: copy(this, { bag, fallingPiece, ghostPiece, nextPiece }) }
     }
   }
 
@@ -80,21 +80,21 @@ export default class Tetrion {
 
     if (this.fallingPiece.wasHeld) {
       // We can't hold a piece if the falling piece was previously held.
-      return {tetrion: this, reward: Reward.zero}
+      return { tetrion: this, reward: Reward.zero }
     } else if (this.holdPiece) {
       // Swap the falling piece with the hold piece.
       const fallingPiece = this.holdPiece.spawn()
       const ghostPiece = fallingPiece.drop(this.collision)
       const holdPiece = this.fallingPiece.hold()
-      return {tetrion: copy(this, {fallingPiece, ghostPiece, holdPiece}), reward: Reward.zero}
+      return { tetrion: copy(this, { fallingPiece, ghostPiece, holdPiece }), reward: Reward.zero }
     } else {
       // Hold the falling piece.
-      const {bag, shape} = this.bag.shift(this.fallingPiece.shape)
+      const { bag, shape } = this.bag.shift(this.fallingPiece.shape)
       const fallingPiece = new Tetromino(shape).hold().spawn()
       const ghostPiece = fallingPiece.drop(this.collision)
       const holdPiece = this.fallingPiece.hold()
       const nextPiece = new Tetromino(bag.next)
-      return {tetrion: copy(this, {bag, fallingPiece, ghostPiece, holdPiece, nextPiece}), reward: Reward.zero}
+      return { tetrion: copy(this, { bag, fallingPiece, ghostPiece, holdPiece, nextPiece }), reward: Reward.zero }
     }
   }
 
@@ -105,7 +105,7 @@ export default class Tetrion {
    */
   moveLeft () {
     log.info('moveLeft')
-    return {tetrion: this.transform(Transform.left), reward: Reward.zero}
+    return { tetrion: this.transform(Transform.left), reward: Reward.zero }
   }
 
   /**
@@ -115,7 +115,7 @@ export default class Tetrion {
    */
   moveRight () {
     log.info('moveRight')
-    return {tetrion: this.transform(Transform.right), reward: Reward.zero}
+    return { tetrion: this.transform(Transform.right), reward: Reward.zero }
   }
 
   /**
@@ -125,7 +125,7 @@ export default class Tetrion {
    */
   moveDown () {
     log.info('moveDown')
-    return {tetrion: this.transform(Transform.down), reward: Reward.zero}
+    return { tetrion: this.transform(Transform.down), reward: Reward.zero }
   }
 
   /**
@@ -135,7 +135,7 @@ export default class Tetrion {
    */
   rotateLeft () {
     log.info('rotateLeft')
-    return {tetrion: this.transform(Transform.rotateLeft), reward: Reward.zero}
+    return { tetrion: this.transform(Transform.rotateLeft), reward: Reward.zero }
   }
 
   /**
@@ -145,7 +145,7 @@ export default class Tetrion {
    */
   rotateRight () {
     log.info('rotateRight')
-    return {tetrion: this.transform(Transform.rotateRight), reward: Reward.zero}
+    return { tetrion: this.transform(Transform.rotateRight), reward: Reward.zero }
   }
 
   /**
@@ -159,7 +159,7 @@ export default class Tetrion {
     const tetrion = this.transform(Transform.down)
     const reward = tetrion !== this ? Reward.softDrop(level) : Reward.zero
 
-    return {tetrion, reward}
+    return { tetrion, reward }
   }
 
   /**
@@ -174,7 +174,7 @@ export default class Tetrion {
     const dropped = this.fallingPiece.transform.vector.sub(fallingPiece.transform.vector).y
 
     return {
-      tetrion: copy(this, {fallingPiece}),
+      tetrion: copy(this, { fallingPiece }),
       reward: Reward.firmDrop(dropped, level)
     }
   }
@@ -190,12 +190,12 @@ export default class Tetrion {
 
     const fallingPiece = this.fallingPiece.drop(this.collision)
     const dropped = this.fallingPiece.transform.vector.sub(fallingPiece.transform.vector).y
-    const {playfield, cleared} = this.playfield.lock(fallingPiece.blocks).clearLines()
+    const { playfield, cleared } = this.playfield.lock(fallingPiece.blocks).clearLines()
     const difficult = (cleared === 4)
     const combo = this.difficult && difficult
 
     return {
-      tetrion: copy(this, {playfield, fallingPiece: null, difficult}),
+      tetrion: copy(this, { playfield, fallingPiece: null, difficult }),
       reward: Reward.hardDrop(dropped, cleared, level, combo)
     }
   }
@@ -214,12 +214,12 @@ export default class Tetrion {
     }
 
     const tspin = this.tspin
-    const {playfield, cleared} = this.playfield.lock(this.fallingPiece.blocks).clearLines()
+    const { playfield, cleared } = this.playfield.lock(this.fallingPiece.blocks).clearLines()
     const difficult = (cleared === 4) || (cleared > 0 && tspin)
     const combo = this.difficult && difficult
 
     return {
-      tetrion: copy(this, {playfield, fallingPiece: null, difficult}),
+      tetrion: copy(this, { playfield, fallingPiece: null, difficult }),
       reward: Reward.clearLines(cleared, level, tspin, combo)
     }
   }
@@ -234,7 +234,7 @@ export default class Tetrion {
 
     if (fallingPiece !== this.fallingPiece) {
       const ghostPiece = fallingPiece.drop(this.collision)
-      return copy(this, {fallingPiece, ghostPiece})
+      return copy(this, { fallingPiece, ghostPiece })
     } else {
       return this
     }

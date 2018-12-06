@@ -1,5 +1,5 @@
 import SRS from './srs'
-import {copy, empty, head, keys, shuffle, tail} from 'fkit'
+import { copy, empty, head, keys, shuffle, tail } from 'fkit'
 
 /**
  * Returns an array of all the shapes randomly shuffled.
@@ -34,6 +34,6 @@ export default class Bag {
       shapes = refill()
     }
 
-    return {bag: copy(this, {shapes}), shape}
+    return { bag: copy(this, { shapes }), shape }
   }
 }

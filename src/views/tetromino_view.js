@@ -3,11 +3,11 @@ import React from 'react'
 import classnames from 'classnames'
 import styles from '../../assets/stylesheets/styles.scss'
 
-export default ({ghost, tetromino: {shape, blocks}}) => {
+export default ({ ghost, tetromino: { shape, blocks } }) => {
   const className = classnames(
     styles.tetromino,
     styles[`shape-${shape.toLowerCase()}`],
-    {[styles.ghostPiece]: ghost}
+    { [styles.ghostPiece]: ghost }
   )
 
   return (

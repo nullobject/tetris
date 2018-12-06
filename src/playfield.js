@@ -1,4 +1,4 @@
-import {any, compose, copy, difference, fold, groupBy, sortBy, set, union, whereAny} from 'fkit'
+import { any, compose, copy, difference, fold, groupBy, sortBy, set, union, whereAny } from 'fkit'
 
 const WIDTH = 10
 const HEIGHT = 20
@@ -49,7 +49,7 @@ export default class Playfield {
    */
   lock (blocks) {
     blocks = union(this.blocks, blocks)
-    return copy(this, {blocks})
+    return copy(this, { blocks })
   }
 
   /**
@@ -78,7 +78,7 @@ export default class Playfield {
       return cleared
     }, 0, rows)
 
-    return {playfield: copy(this, {blocks}), cleared}
+    return { playfield: copy(this, { blocks }), cleared }
   }
 
   /**

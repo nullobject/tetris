@@ -1,4 +1,4 @@
-import {copy} from 'fkit'
+import { copy } from 'fkit'
 
 /**
  * Represents the player progress with the level, number of lines cleared, and
@@ -20,6 +20,6 @@ export default class Progress {
   add (reward) {
     const lines = this.lines + reward.lines
     const score = this.score + reward.points
-    return copy(this, {lines, score})
+    return copy(this, { lines, score })
   }
 }

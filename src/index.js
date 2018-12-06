@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom'
 import RootView from './views/root_view'
 import log from './log'
 import nanobus from 'nanobus'
-import {Signal, keyboard, merge} from 'bulb'
-import {append, head, tail} from 'fkit'
+import { Signal, keyboard, merge } from 'bulb'
+import { append, head, tail } from 'fkit'
 
 const CLOCK_PERIOD = 10
 
@@ -53,7 +53,7 @@ const bus = nanobus()
 const busSignal = Signal.fromEvent('*', bus)
 const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
 const muted = window.localStorage.getItem('muted') === 'true'
-const initialState = {game: new Game(muted), commands: []}
+const initialState = { game: new Game(muted), commands: [] }
 const root = document.getElementById('root')
 
 const subscription = merge(busSignal, clockSignal, commandSignal)
@@ -75,7 +75,7 @@ if (module.hot) {
  * @returns A new game.
  */
 function transformer (state, event) {
-  let {game, commands} = state
+  let { game, commands } = state
 
   if (event === 'tick') {
     game = game.tick(CLOCK_PERIOD, head(commands))
@@ -91,5 +91,5 @@ function transformer (state, event) {
     commands = append(event, commands)
   }
 
-  return {...state, game, commands}
+  return { ...state, game, commands }
 }
