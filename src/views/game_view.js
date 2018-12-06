@@ -3,7 +3,7 @@ import TetrionView from './tetrion_view'
 import TetrominoView from './tetromino_view'
 import styles from '../../assets/stylesheets/styles.scss'
 
-export default ({bus, game}) => {
+export default ({ bus, game }) => {
   let message
 
   if (game.reward && game.reward.message) {

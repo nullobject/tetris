@@ -2,7 +2,7 @@ import Block from './block'
 import SRS from './srs'
 import Transform from './transform'
 import Vector from './vector'
-import {copy, zip} from 'fkit'
+import { copy, zip } from 'fkit'
 
 /**
  * A tetromino is a polyomino made of four square blocks. The seven one-sided
@@ -72,7 +72,7 @@ export default class Tetromino {
    * @returns A new tetromino.
    */
   hold () {
-    return copy(this, {transform: Transform.zero, wasHeld: true})
+    return copy(this, { transform: Transform.zero, wasHeld: true })
   }
 
   /**
@@ -82,7 +82,7 @@ export default class Tetromino {
    */
   spawn () {
     const transform = new Transform(SRS[this.shape].spawn)
-    return copy(this, {transform})
+    return copy(this, { transform })
   }
 
   /**
@@ -128,7 +128,7 @@ export default class Tetromino {
    */
   applyTransformWithoutCollisions (t) {
     const transform = this.transform.add(t)
-    return copy(this, {transform, lastTransform: t})
+    return copy(this, { transform, lastTransform: t })
   }
 
   /**

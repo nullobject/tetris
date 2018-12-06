@@ -1,7 +1,7 @@
 import Progress from './progress'
 import Tetrion from './tetrion'
-import {copy} from 'fkit'
-import {play} from './sound'
+import { copy } from 'fkit'
+import { play } from './sound'
 
 const SPAWN_DELAY = 100
 const LOCK_DELAY = 1000
@@ -154,14 +154,14 @@ export default class Game {
       }
     }
 
-    return copy(this, {time, state, tetrion, spawnTimer, lockTimer, gravityTimer, progress, reward})
+    return copy(this, { time, state, tetrion, spawnTimer, lockTimer, gravityTimer, progress, reward })
   }
 
   /**
    * Pauses/unpauses the game.
    */
   pause () {
-    return copy(this, {paused: !this.paused})
+    return copy(this, { paused: !this.paused })
   }
 
   /**
@@ -170,7 +170,7 @@ export default class Game {
    * @returns A new game.
    */
   mute () {
-    return copy(this, {muted: !this.muted})
+    return copy(this, { muted: !this.muted })
   }
 
   playSound (command, clearLine = false, levelUp = false) {
