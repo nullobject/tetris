@@ -1,5 +1,6 @@
-import PlayfieldView from './playfield_view'
 import React from 'react'
+
+import PlayfieldView from './playfield_view'
 import TetrominoView from './tetromino_view'
 import styles from '../../assets/stylesheets/styles.scss'
 import { Transition, TransitionGroup } from 'react-transition-group'

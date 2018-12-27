@@ -1,10 +1,11 @@
+import { copy } from 'fkit'
+
 import Bag from './bag'
 import Playfield from './playfield'
 import Reward from './reward'
 import Tetromino from './tetromino'
 import Transform from './transform'
 import log from './log'
-import { copy } from 'fkit'
 
 /**
  * A tetrion controls the game state according to the rules of Tetris.

@@ -1,11 +1,12 @@
-import Game from './game'
 import React from 'react'
-import ReactDOM from 'react-dom'
-import RootView from './views/root_view'
-import log from './log'
+import { render } from 'react-dom'
 import nanobus from 'nanobus'
 import { Signal, keyboard, merge } from 'bulb'
 import { append, head, tail } from 'fkit'
+
+import Game from './game'
+import RootView from './views/root_view'
+import log from './log'
 
 const CLOCK_PERIOD = 10
 
@@ -58,7 +59,7 @@ const root = document.getElementById('root')
 
 const subscription = merge(busSignal, clockSignal, commandSignal)
   .scan(transformer, initialState)
-  .subscribe(state => ReactDOM.render(<RootView bus={bus} state={state} />, root))
+  .subscribe(state => render(<RootView bus={bus} state={state} />, root))
 
 if (module.hot) {
   module.hot.dispose(() => {

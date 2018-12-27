@@ -1,5 +1,6 @@
-import SRS from './srs'
 import { copy, empty, head, keys, shuffle, tail } from 'fkit'
+
+import SRS from './srs'
 
 /**
  * Returns an array of all the shapes randomly shuffled.
