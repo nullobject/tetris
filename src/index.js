@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from 'react-dom'
 import nanobus from 'nanobus'
-import { Signal, keyboard, merge } from 'bulb'
+import { Signal, keyboardKeys, merge } from 'bulb'
 import { append, head, tail } from 'fkit'
 
 import Game from './game'
@@ -22,31 +22,30 @@ const M = 77
 const X = 88
 const Z = 90
 
-const commandSignal = keyboard
-  .keys(document)
+const commandSignal = keyboardKeys(document)
   .stateMachine((_, key, emit) => {
     if (key === Z) {
-      emit.next('rotateLeft')
+      emit.value('rotateLeft')
     } else if (key === X) {
-      emit.next('rotateRight')
+      emit.value('rotateRight')
     } else if (key === UP) {
-      emit.next('rotateRight')
+      emit.value('rotateRight')
     } else if (key === DOWN) {
-      emit.next('softDrop')
+      emit.value('softDrop')
     } else if (key === LEFT) {
-      emit.next('moveLeft')
+      emit.value('moveLeft')
     } else if (key === RIGHT) {
-      emit.next('moveRight')
+      emit.value('moveRight')
     } else if (key === ENTER) {
-      emit.next('firmDrop')
+      emit.value('firmDrop')
     } else if (key === SPACE) {
-      emit.next('hardDrop')
+      emit.value('hardDrop')
     } else if (key === C) {
-      emit.next('hold')
+      emit.value('hold')
     } else if (key === H) {
-      emit.next('pause')
+      emit.value('pause')
     } else if (key === M) {
-      emit.next('mute')
+      emit.value('mute')
     }
   })
 
