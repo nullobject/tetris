@@ -1,7 +1,8 @@
 import React from 'react'
 import { render } from 'react-dom'
 import nanobus from 'nanobus'
-import { Signal, keyboardKeys, merge } from 'bulb'
+import { Signal } from 'bulb'
+import { Keyboard } from 'bulb-input'
 import { append, head, tail } from 'fkit'
 
 import Game from './game'
@@ -22,7 +23,8 @@ const M = 77
 const X = 88
 const Z = 90
 
-const commandSignal = keyboardKeys(document)
+const commandSignal = Keyboard
+  .keys(document)
   .stateMachine((_, key, emit) => {
     if (key === Z) {
       emit.value('rotateLeft')
@@ -56,7 +58,8 @@ const muted = window.localStorage.getItem('muted') === 'true'
 const initialState = { game: new Game(muted), commands: [] }
 const root = document.getElementById('root')
 
-const subscription = merge(busSignal, clockSignal, commandSignal)
+const subscription = Signal
+  .merge(busSignal, clockSignal, commandSignal)
   .scan(transformer, initialState)
   .subscribe(state => render(<RootView bus={bus} state={state} />, root))
 
