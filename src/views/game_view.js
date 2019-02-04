@@ -38,8 +38,8 @@ export default ({ bus, game }) => {
         </div>
 
         <nav>
-          <a href='#' onClick={() => bus.emit('pause')}><span className={styles['icon-help']} /></a>
-          <a href='#' onClick={() => bus.emit('mute')}><span className={game.muted ? styles['icon-bell-slash'] : styles['icon-bell']} /></a>
+          <a href='#' onClick={() => bus.value('pause')}><span className={styles['icon-help']} /></a>
+          <a href='#' onClick={() => bus.value('mute')}><span className={game.muted ? styles['icon-bell-slash'] : styles['icon-bell']} /></a>
         </nav>
       </aside>
     </div>

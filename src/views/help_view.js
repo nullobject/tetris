@@ -4,7 +4,7 @@ import SocialView from './social_view'
 import styles from '../../assets/stylesheets/styles.scss'
 
 export default ({ bus }) =>
-  <div className={styles.modal} onClick={() => bus.emit('pause')}>
+  <div className={styles.modal} onClick={() => bus.value('pause')}>
     <div className={styles.container}>
       <h1>Tetris</h1>
 

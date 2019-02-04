@@ -1,9 +1,8 @@
 import React from 'react'
-import { render } from 'react-dom'
-import nanobus from 'nanobus'
-import { Signal } from 'bulb'
+import { Bus, Signal } from 'bulb'
 import { Keyboard } from 'bulb-input'
 import { append, head, tail } from 'fkit'
+import { render } from 'react-dom'
 
 import Game from './game'
 import RootView from './views/root_view'
@@ -22,6 +21,8 @@ const H = 72
 const M = 77
 const X = 88
 const Z = 90
+
+const root = document.getElementById('root')
 
 const commandSignal = Keyboard
   .keys(document)
@@ -51,22 +52,27 @@ const commandSignal = Keyboard
     }
   })
 
-const bus = nanobus()
-const busSignal = Signal.fromEvent('*', bus)
+const bus = new Bus()
 const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
 const muted = window.localStorage.getItem('muted') === 'true'
 const initialState = { game: new Game(muted), commands: [] }
-const root = document.getElementById('root')
+const stateSignal = bus.scan(transformer, initialState)
 
-const subscription = Signal
-  .merge(busSignal, clockSignal, commandSignal)
-  .scan(transformer, initialState)
-  .subscribe(state => render(<RootView bus={bus} state={state} />, root))
+const subscriptions = [
+  // Forward events from the clock signal to the bus.
+  bus.connect(clockSignal),
+
+  // Forward events from the command signal to the bus.
+  bus.connect(commandSignal),
+
+  // Render the UI whenever the state changes.
+  stateSignal.subscribe(state => render(<RootView bus={bus} state={state} />, root))
+]
 
 if (module.hot) {
   module.hot.dispose(() => {
     log.info('Unsubscribing...')
-    subscription.unsubscribe()
+    subscriptions.forEach(s => s.unsubscribe())
   })
 }
 
