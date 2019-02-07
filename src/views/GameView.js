@@ -1,7 +1,7 @@
 import React from 'react'
 
-import TetrionView from './tetrion_view'
-import TetrominoView from './tetromino_view'
+import TetrionView from './TetrionView'
+import TetrominoView from './TetrominoView'
 import styles from '../../assets/stylesheets/styles.scss'
 
 export default ({ bus, game }) => {

@@ -1,4 +1,4 @@
-import Message from './message'
+import Message from './Message'
 
 /**
  * Returns the points earned for clearing the given number of lines.

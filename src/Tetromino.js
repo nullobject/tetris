@@ -1,9 +1,9 @@
 import { copy, zip } from 'fkit'
 
-import Block from './block'
+import Block from './Block'
 import SRS from './srs'
-import Transform from './transform'
-import Vector from './vector'
+import Transform from './Transform'
+import Vector from './Vector'
 
 /**
  * A tetromino is a polyomino made of four square blocks. The seven one-sided

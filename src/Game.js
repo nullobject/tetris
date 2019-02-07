@@ -1,7 +1,7 @@
 import { copy } from 'fkit'
 
-import Progress from './progress'
-import Tetrion from './tetrion'
+import Progress from './Progress'
+import Tetrion from './Tetrion'
 import { play } from './sound'
 
 const SPAWN_DELAY = 100

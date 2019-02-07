@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 
-import BlockView from './block_view'
+import BlockView from './BlockView'
 import styles from '../../assets/stylesheets/styles.scss'
 
 export default ({ ghost, tetromino: { shape, blocks } }) => {

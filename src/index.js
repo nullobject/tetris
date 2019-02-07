@@ -4,8 +4,8 @@ import { Keyboard } from 'bulb-input'
 import { append, head, tail } from 'fkit'
 import { render } from 'react-dom'
 
-import Game from './game'
-import RootView from './views/root_view'
+import Game from './Game'
+import RootView from './views/RootView'
 import log from './log'
 
 const CLOCK_PERIOD = 10

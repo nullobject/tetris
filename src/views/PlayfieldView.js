@@ -1,6 +1,6 @@
 import React from 'react'
 
-import BlockView from './block_view'
+import BlockView from './BlockView'
 import styles from '../../assets/stylesheets/styles.scss'
 
 export default ({ playfield: { blocks } }) =>

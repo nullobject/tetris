@@ -9,7 +9,7 @@
  */
 export default {
   I: {
-    color:     "cyan",
+    color:     'cyan',
     spawn:     [4, 19],
     positions: [[[-1,  0], [ 0,  0], [ 1,  0], [ 2,  0]],
                 [[ 0, -2], [ 0, -1], [ 0,  0], [ 0,  1]],
@@ -22,7 +22,7 @@ export default {
   },
 
   J: {
-    color:     "blue",
+    color:     'blue',
     spawn:     [4, 19],
     positions: [[[-1,  0], [ 0,  0], [ 1,  0], [-1,  1]],
                 [[ 0, -1], [ 0,  0], [ 0,  1], [ 1,  1]],
@@ -35,7 +35,7 @@ export default {
   },
 
   L: {
-    color:     "orange",
+    color:     'orange',
     spawn:     [4, 19],
     positions: [[[-1,  0], [ 0,  0], [ 1,  0], [ 1,  1]],
                 [[ 0, -1], [ 1, -1], [ 0,  0], [ 0,  1]],
@@ -48,7 +48,7 @@ export default {
   },
 
   O: {
-    color:     "yellow",
+    color:     'yellow',
     spawn:     [4, 19],
     positions: [[[ 0,  0], [ 1,  0], [ 0,  1], [ 1,  1]],
                 [[ 0, -1], [ 1, -1], [ 0,  0], [ 1,  0]],
@@ -61,7 +61,7 @@ export default {
   },
 
   S: {
-    color:     "green",
+    color:     'green',
     spawn:     [4, 19],
     positions: [[[-1,  0], [ 0,  0], [ 0,  1], [ 1,  1]],
                 [[ 1, -1], [ 0,  0], [ 1,  0], [ 0,  1]],
@@ -74,7 +74,7 @@ export default {
   },
 
   T: {
-    color:     "purple",
+    color:     'purple',
     spawn:     [4, 19],
     positions: [[[-1,  0], [ 0,  0], [ 1,  0], [ 0,  1]],
                 [[ 0, -1], [ 0,  0], [ 1,  0], [ 0,  1]],
@@ -87,7 +87,7 @@ export default {
   },
 
   Z: {
-    color:     "red",
+    color:     'red',
     spawn:     [4, 19],
     positions: [[[ 0,  0], [ 1,  0], [-1,  1], [ 0,  1]],
                 [[ 0, -1], [ 0,  0], [ 1,  0], [ 1,  1]],

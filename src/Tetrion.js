@@ -1,10 +1,10 @@
 import { copy } from 'fkit'
 
-import Bag from './bag'
-import Playfield from './playfield'
-import Reward from './reward'
-import Tetromino from './tetromino'
-import Transform from './transform'
+import Bag from './Bag'
+import Playfield from './Playfield'
+import Reward from './Reward'
+import Tetromino from './Tetromino'
+import Transform from './Transform'
 import log from './log'
 
 /**

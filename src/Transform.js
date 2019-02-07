@@ -1,4 +1,4 @@
-import Vector from './vector'
+import Vector from './Vector'
 
 /**
  * A `Transform` represents a position and a rotation.
