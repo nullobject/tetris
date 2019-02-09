@@ -9,7 +9,7 @@ export default ({ bus }) =>
     <div className={classnames(styles.container, styles['align-self-center'])}>
       <h1>Game Over</h1>
       <footer>
-        <button onClick={() => bus.value('restart')}>Play Again</button>
+        <button onClick={() => bus.next('restart')}>Play Again</button>
         <SocialView />
       </footer>
     </div>

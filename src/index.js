@@ -28,27 +28,27 @@ const commandSignal = Keyboard
   .keys(document)
   .stateMachine((_, key, emit) => {
     if (key === Z) {
-      emit.value('rotateLeft')
+      emit.next('rotateLeft')
     } else if (key === X) {
-      emit.value('rotateRight')
+      emit.next('rotateRight')
     } else if (key === UP) {
-      emit.value('rotateRight')
+      emit.next('rotateRight')
     } else if (key === DOWN) {
-      emit.value('softDrop')
+      emit.next('softDrop')
     } else if (key === LEFT) {
-      emit.value('moveLeft')
+      emit.next('moveLeft')
     } else if (key === RIGHT) {
-      emit.value('moveRight')
+      emit.next('moveRight')
     } else if (key === ENTER) {
-      emit.value('firmDrop')
+      emit.next('firmDrop')
     } else if (key === SPACE) {
-      emit.value('hardDrop')
+      emit.next('hardDrop')
     } else if (key === C) {
-      emit.value('hold')
+      emit.next('hold')
     } else if (key === H) {
-      emit.value('pause')
+      emit.next('pause')
     } else if (key === M) {
-      emit.value('mute')
+      emit.next('mute')
     }
   })
 
