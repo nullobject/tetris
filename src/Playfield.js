@@ -1,4 +1,4 @@
-import { any, compose, copy, difference, fold, groupBy, sortBy, set, union, whereAny } from 'fkit'
+import { any, chunkBy, compose, copy, difference, fold, sortBy, set, union, whereAny } from 'fkit'
 
 const WIDTH = 10
 const HEIGHT = 20
@@ -7,7 +7,7 @@ const HEIGHT = 20
  * Sorts and groups blocks by row.
  */
 const groupBlocksByRow = compose(
-  groupBy((a, b) => a.position.y === b.position.y),
+  chunkBy((a, b) => a.position.y === b.position.y),
   sortBy((a, b) => a.position.y - b.position.y)
 )
 

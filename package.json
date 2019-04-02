@@ -30,7 +30,7 @@
     "bulb": "^5.0.0",
     "bulb-input": "^5.0.0",
     "classnames": "^2.2.6",
-    "fkit": "^2.0.0",
+    "fkit": "^3.0.1",
     "howler": "^2.1.1",
     "nanologger": "^1.3.1",
     "node-sass": "^4.9.0",

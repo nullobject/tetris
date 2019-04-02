@@ -81,7 +81,7 @@ if (module.hot) {
  *
  * @param state The current state.
  * @param event An event.
- * @returns A new game.
+ * @returns A new state.
  */
 function transformer (state, event) {
   let { game, commands } = state
