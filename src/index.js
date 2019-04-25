@@ -56,7 +56,7 @@ const bus = new Bus()
 const clockSignal = Signal.periodic(CLOCK_PERIOD).always('tick')
 const muted = window.localStorage.getItem('muted') === 'true'
 const initialState = { game: new Game(muted), commands: [] }
-const stateSignal = bus.scan(transformer, initialState)
+const stateSignal = bus.scan(reducer, initialState)
 
 const subscriptions = [
   // Forward events from the clock signal to the bus.
@@ -83,7 +83,7 @@ if (module.hot) {
  * @param event An event.
  * @returns A new state.
  */
-function transformer (state, event) {
+function reducer (state, event) {
   let { game, commands } = state
 
   if (event === 'tick') {
